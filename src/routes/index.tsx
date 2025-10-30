@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { authClient } from "@/lib/auth-client";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   Zap,
   Server,
@@ -8,7 +9,15 @@ import {
   Sparkles,
 } from "lucide-react";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    const session = await authClient.getSession();
+    if (!session?.data?.session) {
+      throw redirect({ to: "/login" });
+    }
+  },
+  component: App,
+});
 
 function App() {
   const features = [
