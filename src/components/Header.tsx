@@ -25,13 +25,17 @@ export default function Header() {
   const { data: session } = authClient.useSession();
 
   const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          navigate({ to: "/login" });
+    try {
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            navigate({ to: "/login" });
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (

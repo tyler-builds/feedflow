@@ -47,7 +47,6 @@ function LoginPage() {
 
         if (result.error) {
           setError(result.error.message || "Sign up failed");
-          setLoading(false);
           return;
         }
       } else {
@@ -58,7 +57,6 @@ function LoginPage() {
 
         if (result.error) {
           setError(result.error.message || "Sign in failed");
-          setLoading(false);
           return;
         }
       }
@@ -67,6 +65,7 @@ function LoginPage() {
       navigate({ to: "/" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Authentication failed");
+    } finally {
       setLoading(false);
     }
   };
