@@ -19,10 +19,6 @@ import {
 } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
 
-import Header from "../components/Header";
-
-import ConvexProvider from "../integrations/convex/provider";
-
 import appCss from "../styles.css?url";
 
 // Get auth information for SSR using available cookies
@@ -92,21 +88,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ConvexProvider>
-          <Header />
-          {children}
-          <TanStackDevtools
-            config={{
-              position: "bottom-right",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-        </ConvexProvider>
+        {children}
+        <TanStackDevtools
+          config={{
+            position: "bottom-right",
+          }}
+          plugins={[
+            {
+              name: "Tanstack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
         <Scripts />
       </body>
     </html>
