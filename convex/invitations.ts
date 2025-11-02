@@ -146,16 +146,18 @@ export const getTeamInvitations = query({
       throw new Error("Not a member of this team");
     }
 
-    let query = ctx.db
+    // Get all invitations for the team
+    const invitations = await ctx.db
       .query("teamInvitations")
-      .withIndex("by_team", (q) => q.eq("teamId", settings.currentTeamId));
+      .withIndex("by_team", (q) => q.eq("teamId", settings.currentTeamId))
+      .collect();
 
+    // Filter by status if provided
     if (args.status) {
-      const invitations = await query.collect();
       return invitations.filter((inv) => inv.status === args.status);
     }
 
-    return await query.collect();
+    return invitations;
   },
 });
 

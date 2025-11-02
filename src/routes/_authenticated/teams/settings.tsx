@@ -4,6 +4,7 @@ import { useMutation } from "convex/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../../convex/_generated/api";
+import { Doc } from "../../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,10 +36,11 @@ function TeamSettings() {
   );
 
   // Get pending invitations
-  const { data: invitations } = useSuspenseQuery(
+  // Type cast needed due to @convex-dev/react-query type inference issue with optional parameters
+  const { data: invitations } = useSuspenseQuery<Doc<"teamInvitations">[]>(
     convexQuery(api.invitations.getTeamInvitations, {
       status: "pending",
-    }),
+    }) as any,
   );
 
   const cancelInvitation = useMutation(api.invitations.cancelInvitation);
