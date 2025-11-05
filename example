@@ -1,0 +1,821 @@
+{
+    "web": [
+        {
+            "url": "https://www.qodo.ai/blog/best-ai-coding-assistant-tools/",
+            "title": "20 Best AI Coding Assistant Tools [Updated Aug 2025]",
+            "description": "Best AI Coding Assistant Tools (Updated – August 2025) · Qodo · GitHub Copilot · Tabnine · Bolt · Amazon Q Developer · AskCodi · Warp · Replit ...",
+            "position": 1,
+            "metadata": {
+                "og:type": "article",
+                "viewport": "width=device-width, initial-scale=1",
+                "author": "Ayelet Slasky",
+                "ogUrl": "https://www.qodo.ai/blog/best-ai-coding-assistant-tools/",
+                "generator": "WP Rocket 3.18.1.5",
+                "twitter:creator": "@QodoAI",
+                "ogImage": "https://www.qodo.ai/wp-content/uploads/2024/09/15-Best-AI-Coding-Assistant-Tools-in-2025-1.png",
+                "og:locale": "en_US",
+                "og:image": "https://www.qodo.ai/wp-content/uploads/2024/09/15-Best-AI-Coding-Assistant-Tools-in-2025-1.png",
+                "modifiedTime": "2025-10-27T20:18:46+00:00",
+                "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+                "language": "en-US",
+                "ogDescription": "Explore our list of the 20 best AI coding assistant tools in 2025, boosting productivity and code quality for developers.",
+                "twitter:data1": "Ayelet Slasky",
+                "favicon": "https://www.qodo.ai/wp-content/uploads/2025/03/qodo-fav-32x32.png",
+                "twitter:data2": "56 minutes",
+                "og:site_name": "Qodo",
+                "ogLocale": "en_US",
+                "article:modified_time": "2025-10-27T20:18:46+00:00",
+                "og:image:width": "1800",
+                "msapplication-TileImage": "https://www.qodo.ai/wp-content/uploads/2025/03/qodo-fav-300x300.png",
+                "og:image:height": "1208",
+                "twitter:label1": "Written by",
+                "ogSiteName": "Qodo",
+                "twitter:label2": "Est. reading time",
+                "twitter:site": "@QodoAI",
+                "article:published_time": "2025-01-30T04:00:32+00:00",
+                "og:description": "Explore our list of the 20 best AI coding assistant tools in 2025, boosting productivity and code quality for developers.",
+                "og:url": "https://www.qodo.ai/blog/best-ai-coding-assistant-tools/",
+                "og:image:type": "image/png",
+                "description": "Explore our list of the 20 best AI coding assistant tools in 2025, boosting productivity and code quality for developers.",
+                "ogTitle": "20 Best AI Coding Assistant Tools [Updated Aug 2025]",
+                "og:title": "20 Best AI Coding Assistant Tools [Updated Aug 2025]",
+                "publishedTime": "2025-01-30T04:00:32+00:00",
+                "title": "20 Best AI Code Assistants Reviewed and Tested [August 2025]",
+                "twitter:card": "summary_large_image",
+                "scrapeId": "1cf488d4-f71f-42e6-aa8d-d092879635a4",
+                "sourceURL": "https://www.qodo.ai/blog/best-ai-coding-assistant-tools/",
+                "url": "https://www.qodo.ai/blog/best-ai-coding-assistant-tools/",
+                "statusCode": 200,
+                "contentType": "text/html; charset=UTF-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-03T17:56:47.611Z"
+            },
+            "json": {
+                "summary": "AI coding assistants enhance developers' capabilities and efficiency by assisting with tasks ranging from debugging and code formatting to complex tasks like code review and architectural suggestions. The future lies in multi-agent systems that automate workflows, allowing developers to focus on higher-level tasks. The article lists the best AI coding assistant tools, evaluates their features, and provides insights based on personal experiences with each tool.",
+                "keyPoints": [
+                    {
+                        "title": "AI Coding Assistants Overview",
+                        "content": "AI coding assistants do not replace developers but significantly enhance their capabilities and efficiency."
+                    },
+                    {
+                        "title": "Future of AI Coding Assistants",
+                        "content": "The future is in multi-agent systems that automate workflows, allowing developers to focus on higher-level tasks."
+                    },
+                    {
+                        "title": "Best AI Coding Assistant Tools",
+                        "content": "The article lists and evaluates various AI coding assistant tools, providing insights based on personal experiences."
+                    },
+                    {
+                        "title": "Selection Criteria for Tools",
+                        "content": "Tools were evaluated based on their ability to address common developer challenges, such as syntax complexity, debugging, code efficiency, and collaboration."
+                    },
+                    {
+                        "title": "Qodo",
+                        "content": "An AI-powered code quality platform that integrates into various IDEs and focuses on code review, test coverage, and compliance."
+                    },
+                    {
+                        "title": "GitHub Copilot",
+                        "content": "A widely used tool for code autocompletion, enhancing productivity through AI-driven suggestions."
+                    },
+                    {
+                        "title": "Tabnine",
+                        "content": "Offers intelligent code completion, error detection, and automatic documentation generation."
+                    },
+                    {
+                        "title": "Amazon Q Developer",
+                        "content": "Focuses on AWS-native architectures, providing automated code edits and security scans."
+                    },
+                    {
+                        "title": "Replit",
+                        "content": "Combines AI assistance with an interactive development environment, supporting learning and coding."
+                    },
+                    {
+                        "title": "OpenAI Codex",
+                        "content": "Transforms natural language into functional code, supporting a wide range of programming languages."
+                    }
+                ]
+            }
+        },
+        {
+            "url": "https://blog.n8n.io/best-ai-for-coding/",
+            "title": "8 best AI coding tools for developers: tested & compared! - n8n Blog",
+            "description": "We've tested and reviewed 8 leading AI coding platforms, focusing on real-world development scenarios.",
+            "position": 2,
+            "metadata": {
+                "modifiedTime": "2025-04-03T12:16:16.000Z",
+                "og:type": "article",
+                "og:image:width": "1200",
+                "referrer": "no-referrer-when-downgrade",
+                "title": "8 best AI coding tools for developers: tested & compared! – n8n Blog",
+                "ogImage": "https://blog.n8n.io/content/images/size/w1200/2025/03/11-ai-tools-coding--2---2-.png",
+                "HandheldFriendly": "True",
+                "twitter:description": "Struggling to choose the best AI tool for coding? We tested 8 leading platforms to help you decide. Discover our top picks—and see how n8n stands out by combining AI with powerful automation to streamline your development workflows!",
+                "twitter:data1": "Yulia Dmitrievna",
+                "og:site_name": "n8n Blog",
+                "twitter:label2": "Filed under",
+                "ogSiteName": "n8n Blog",
+                "og:description": "Struggling to choose the best AI tool for coding? We tested 8 leading platforms to help you decide. Discover our top picks—and see how n8n stands out by combining AI with powerful automation to streamline your development workflows!",
+                "og:url": "https://blog.n8n.io/best-ai-for-coding/",
+                "twitter:card": "summary_large_image",
+                "description": "Struggling to choose the best AI tool for coding? We tested 8 leading platforms to help you decide. Discover our top picks to streamline your development workflows!",
+                "twitter:site": "@n8n_io",
+                "publishedTime": "2025-03-18T12:41:24.000Z",
+                "article:published_time": "2025-03-18T12:41:24.000Z",
+                "ogDescription": "Struggling to choose the best AI tool for coding? We tested 8 leading platforms to help you decide. Discover our top picks—and see how n8n stands out by combining AI with powerful automation to streamline your development workflows!",
+                "og:title": "8 best AI coding tools for developers: tested & compared!",
+                "og:image": "https://blog.n8n.io/content/images/size/w1200/2025/03/11-ai-tools-coding--2---2-.png",
+                "viewport": "width=device-width, initial-scale=1",
+                "article:tag": [
+                    "AI",
+                    "Guide"
+                ],
+                "ogTitle": "8 best AI coding tools for developers: tested & compared!",
+                "twitter:data2": "AI, Guide",
+                "twitter:label1": "Written by",
+                "language": "en",
+                "twitter:image": "https://blog.n8n.io/content/images/size/w1200/2025/03/11-ai-tools-coding--2---2-.png",
+                "twitter:url": "https://blog.n8n.io/best-ai-for-coding/",
+                "og:image:height": "675",
+                "generator": "Ghost 6.5",
+                "ogUrl": "https://blog.n8n.io/best-ai-for-coding/",
+                "favicon": "https://blog.n8n.io/content/images/size/w256h256/2022/06/logo-n8n-symbol-512x512.png",
+                "article:modified_time": "2025-04-03T12:16:16.000Z",
+                "article:publisher": "https://www.facebook.com/n8nio",
+                "twitter:title": "8 best AI coding tools for developers: tested & compared!",
+                "scrapeId": "c060b44b-2bc3-4b05-b0c7-d35dc6cf97be",
+                "sourceURL": "https://blog.n8n.io/best-ai-for-coding/",
+                "url": "https://blog.n8n.io/best-ai-for-coding/",
+                "statusCode": 200,
+                "contentType": "text/html; charset=utf-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-03T08:07:34.681Z"
+            },
+            "json": {
+                "summary": "This article reviews and compares eight leading AI coding tools for developers, focusing on their features, pricing, and integration into development workflows. It highlights the importance of selecting tools based on specific needs and the advantages of low-code platforms like n8n over AI-generated code.",
+                "keyPoints": [
+                    {
+                        "title": "Selection Criteria for AI Coding Tools",
+                        "content": "The tools were tested based on installation, trial usage, project complexity, and documentation review."
+                    },
+                    {
+                        "title": "Best AI Coding Tools",
+                        "content": "The article lists eight tools: Cursor, GitHub Copilot, Bolt.new, JetBrains AI Assistant, Windsurf, Xcode AI Assistant, Cline, and aider."
+                    },
+                    {
+                        "title": "Key Takeaways from Testing",
+                        "content": "1. Choose tools based on specific needs. 2. Consider model selection and pricing strategy. 3. Context management matters. 4. Maintenance challenges exist."
+                    },
+                    {
+                        "title": "Low-Code Platforms vs AI-Generated Code",
+                        "content": "Low-code platforms like n8n provide a more reliable foundation for automation and integration compared to AI-generated code."
+                    }
+                ]
+            }
+        },
+        {
+            "url": "https://pieces.app/blog/9-best-ai-code-generation-tools",
+            "title": "10 Best AI code generators in 2025 [Free & Paid]",
+            "description": "Free AI code generators include Pieces, GitHub Copilot, Codiga, ChatGPT, and Amazon Q Developer. Paid options include Tabnine, Replit, CodeWP, ...",
+            "position": 3,
+            "metadata": {
+                "twitter:image": "https://framerusercontent.com/images/wdyzy6s3eQqaysIrCIazUlUUs8.png?width=5110&height=2874",
+                "language": "en",
+                "framer-search-index-fallback": "https://framerusercontent.com/sites/4zcMleYZ80b9votWbXV3Uq/searchIndex-rEmleSlR8hTw.json",
+                "og:title": "10 Best AI code generators in 2025 [Free & Paid]",
+                "og:image": "https://framerusercontent.com/images/wdyzy6s3eQqaysIrCIazUlUUs8.png?width=5110&height=2874",
+                "favicon": "https://framerusercontent.com/images/3H9TqKUdcZC6u2btCue2vacmvMc.png",
+                "color-scheme": "light dark",
+                "ogImage": "https://framerusercontent.com/images/wdyzy6s3eQqaysIrCIazUlUUs8.png?width=5110&height=2874",
+                "og:type": "website",
+                "generator": "Framer 958e4e9",
+                "twitter:card": "summary_large_image",
+                "og:description": "AI tools can help generate code, research, and debug. In this article, we talk about some of the best AI code generators that can speed up your development workflow.",
+                "ogTitle": "10 Best AI code generators in 2025 [Free & Paid]",
+                "robots": "max-image-preview:large",
+                "ogDescription": "AI tools can help generate code, research, and debug. In this article, we talk about some of the best AI code generators that can speed up your development workflow.",
+                "twitter:description": "AI tools can help generate code, research, and debug. In this article, we talk about some of the best AI code generators that can speed up your development workflow.",
+                "title": "10 Best AI code generators in 2025 [Free & Paid]",
+                "viewport": [
+                    "width=device-width",
+                    "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+                ],
+                "twitter:title": "10 Best AI code generators in 2025 [Free & Paid]",
+                "og:url": "https://pieces.app/blog/9-best-ai-code-generation-tools",
+                "framer-html-plugin": "disable",
+                "ogUrl": "https://pieces.app/blog/9-best-ai-code-generation-tools",
+                "framer-search-index": "https://framerusercontent.com/sites/4zcMleYZ80b9votWbXV3Uq/searchIndex-Fn08iCCKcMw6.json",
+                "description": "AI tools can help generate code, research, and debug. In this article, we talk about some of the best AI code generators that can speed up your development workflow.",
+                "scrapeId": "e122ade0-c4d3-44a5-8895-d0a5ecf43c2d",
+                "sourceURL": "https://pieces.app/blog/9-best-ai-code-generation-tools",
+                "url": "https://pieces.app/blog/9-best-ai-code-generation-tools",
+                "statusCode": 200,
+                "contentType": "text/html",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-04T02:28:42.388Z"
+            },
+            "json": {
+                "summary": "The article discusses the top 10 AI code generators available in 2025, both free and paid, highlighting their features, pros, and cons. It emphasizes how these tools can enhance productivity in software development by automating code generation, debugging, and research tasks. The review is based on personal experiences and community feedback.",
+                "keyPoints": [
+                    {
+                        "name": "Pieces for Developers",
+                        "type": "Free",
+                        "description": "An AI Copilot that runs locally, supports multiple LLMs, and excels at capturing live context."
+                    },
+                    {
+                        "name": "GitHub Copilot",
+                        "type": "Paid",
+                        "description": "An AI code assistant integrated with popular IDEs, known for generating code and documentation."
+                    },
+                    {
+                        "name": "Codiga",
+                        "type": "Free/Paid",
+                        "description": "Focuses on code reviews and vulnerability detection, with a subscription option."
+                    },
+                    {
+                        "name": "ChatGPT",
+                        "type": "Free/Paid",
+                        "description": "An AI chat assistant that can write code and debug, with a free tier and a paid upgrade."
+                    },
+                    {
+                        "name": "Tabnine",
+                        "type": "Paid",
+                        "description": "A deep learning-based AI that adapts to coding styles, with a focus on privacy."
+                    },
+                    {
+                        "name": "Replit",
+                        "type": "Free/Paid",
+                        "description": "A browser-based AI tool that auto-completes code and checks for bugs."
+                    },
+                    {
+                        "name": "CodeWP",
+                        "type": "Free/Paid",
+                        "description": "An AI tool specifically for WordPress developers."
+                    },
+                    {
+                        "name": "Amazon Q Developer",
+                        "type": "Paid",
+                        "description": "An AI assistant for AWS-related coding tasks."
+                    },
+                    {
+                        "name": "PyCharm",
+                        "type": "Paid",
+                        "description": "A popular Python IDE with integrated AI coding assistance."
+                    },
+                    {
+                        "name": "Cursor",
+                        "type": "Free/Paid",
+                        "description": "An AI-powered code editor that integrates with VSCode."
+                    }
+                ]
+            }
+        },
+        {
+            "url": "https://www.reddit.com/r/LocalLLaMA/comments/1nhx3jp/whats_the_most_costeffective_and_best_ai_model/",
+            "title": "What's the most cost-effective and best AI model for coding in your ...",
+            "description": "Hi everyone, I'm curious to hear from developers here: which AI model do you personally find the most cost-effective and reliable for coding ...",
+            "position": 4
+        },
+        {
+            "url": "https://www.shakudo.io/blog/best-ai-coding-assistants",
+            "title": "Best AI Coding Assistants as of October 2025 - Shakudo",
+            "description": "Comparison of top AI coding assistants, from Cursor to Bolt to Cline. Find the perfect AI pair programmer agent for your needs and budget.",
+            "position": 5,
+            "metadata": {
+                "og:image": [
+                    "https://cdn.prod.website-files.com/625447c67b621ab49bb7e3e5/67f57b1ec77a569d7b697889_coding%20assistant%20top%20list%20(1).avif",
+                    "https://cdn.prod.website-files.com/625447c67b621a2b13b7e3c7/689f8a19a632eed3ec826224_shakudo-ogimage-aug2025.avif",
+                    "https://cdn.prod.website-files.com/625447c67b621ab49bb7e3e5/67f57b1ec77a569d7b697889_coding%20assistant%20top%20list%20(1).avif"
+                ],
+                "og:type": "website",
+                "og:title": "Best AI Coding Assistants as of October 2025 | Shakudo",
+                "ogTitle": "Best AI Coding Assistants as of October 2025 | Shakudo",
+                "favicon": "https://cdn.prod.website-files.com/625447c67b621a2b13b7e3c7/6508b3b767dd5f4c4f5ceb5e_shakudo-icon-32.png",
+                "ogImage": "https://cdn.prod.website-files.com/625447c67b621ab49bb7e3e5/67f57b1ec77a569d7b697889_coding%20assistant%20top%20list%20(1).avif",
+                "twitter:card": "summary_large_image",
+                "google-site-verification": "8fuPCKSjs08aDiKSb2vuRNGsHQnAfG3YU1_3mEi8wLs",
+                "title": "Best AI Coding Assistants as of October 2025 | Shakudo",
+                "language": "en",
+                "description": "Comparison of top AI coding assistants, from Cursor to Bolt to Cline. Find the perfect AI pair programmer agent for your needs and budget.",
+                "viewport": "width=device-width, initial-scale=1",
+                "twitter:image": [
+                    "https://cdn.prod.website-files.com/625447c67b621ab49bb7e3e5/67f57b1ec77a569d7b697889_coding%20assistant%20top%20list%20(1).avif",
+                    "https://cdn.prod.website-files.com/625447c67b621ab49bb7e3e5/67f57b1ec77a569d7b697889_coding%20assistant%20top%20list%20(1).avif"
+                ],
+                "twitter:title": "Best AI Coding Assistants as of October 2025 | Shakudo",
+                "twitter:description": "Comparison of top AI coding assistants, from Cursor to Bolt to Cline. Find the perfect AI pair programmer agent for your needs and budget.",
+                "ogDescription": "Comparison of top AI coding assistants, from Cursor to Bolt to Cline. Find the perfect AI pair programmer agent for your needs and budget.",
+                "og:description": "Comparison of top AI coding assistants, from Cursor to Bolt to Cline. Find the perfect AI pair programmer agent for your needs and budget.",
+                "scrapeId": "14ec0141-c27d-4488-a595-fb89da863303",
+                "sourceURL": "https://www.shakudo.io/blog/best-ai-coding-assistants",
+                "url": "https://www.shakudo.io/blog/best-ai-coding-assistants",
+                "statusCode": 200,
+                "contentType": "text/html",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-03T16:08:06.162Z"
+            },
+            "json": {
+                "summary": "The article provides an overview of the best AI coding assistants available as of October 2025, categorizing them into closed-source and open-source options. It highlights the differences in philosophy, security, cost, and flexibility between these two categories. Notable closed-source assistants include GitHub Copilot, Amazon Q Developer, and Google Gemini Code Assist, while open-source options include Cline, OpenHands, and Aider. The article emphasizes the importance of understanding these tools' trade-offs for enterprise leaders.",
+                "keyPoints": [
+                    {
+                        "title": "Closed-Source AI Coding Assistants",
+                        "details": "Typically developed by major tech companies, offering polished user experiences and deep integration with specific platforms."
+                    },
+                    {
+                        "title": "GitHub Copilot (Microsoft)",
+                        "details": "Integrates into popular IDEs, powered by OpenAI's Codex and GPT-4, offering real-time code suggestions."
+                    },
+                    {
+                        "title": "Amazon Q Developer (AWS)",
+                        "details": "Integrates with JetBrains IDEs and VS Code, designed for large projects with multiple tasks."
+                    },
+                    {
+                        "title": "Google Gemini Code Assist",
+                        "details": "Uses Google's Gemini LLM, offers code completion and citations for code suggestions."
+                    },
+                    {
+                        "title": "Open-Source AI Coding Assistants",
+                        "details": "Preferred for flexibility, transparency, and lower costs, often self-hosted."
+                    },
+                    {
+                        "title": "Cline (Roo)",
+                        "details": "An autonomous coding assistant for VS Code with planning and execution capabilities."
+                    },
+                    {
+                        "title": "OpenHands",
+                        "details": "Acts as a full-capability software developer, automating various tasks."
+                    },
+                    {
+                        "title": "Aider",
+                        "details": "CLI tool for AI-assisted coding with write access to repositories."
+                    },
+                    {
+                        "title": "Goose",
+                        "details": "An extensible AI agent framework that runs locally."
+                    },
+                    {
+                        "title": "Continue.dev",
+                        "details": "Allows developers to create and share custom AI assistants."
+                    },
+                    {
+                        "title": "Codeium (Windsurf)",
+                        "details": "Free for individuals, emphasizes privacy and offers self-hosting options."
+                    }
+                ]
+            }
+        }
+    ],
+    "news": [
+        {
+            "title": "Cursor 2.0 Brings Faster AI Coding and Multi-Agent Workflows",
+            "url": "https://devops.com/cursor-2-0-brings-faster-ai-coding-and-multi-agent-workflows/",
+            "snippet": "Cursor has just released version 2.0, featuring two major updates: A new AI coding model called Composer and an interface designed for...",
+            "date": "3 days ago",
+            "imageUrl": "data:image/jpeg;base64,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",
+            "position": 1,
+            "description": "Cursor has just released version 2.0, featuring two major updates: A new AI coding model called Composer and an interface designed for...",
+            "metadata": {
+                "twitter:data2": "4 minutes",
+                "ogTitle": "Cursor 2.0 Brings Faster AI Coding and Multi-Agent Workflows - DevOps.com",
+                "tec-api-version": "v1",
+                "tec-api-origin": "https://devops.com",
+                "twitter:data1": "Tom Smith",
+                "renderer": [
+                    "webkit",
+                    "webkit"
+                ],
+                "og:image:width": "770",
+                "ogSiteName": "DevOps.com",
+                "title": "Cursor 2.0 Brings Faster AI Coding and Multi-Agent Workflows - DevOps.com",
+                "og:url": "https://devops.com/cursor-2-0-brings-faster-ai-coding-and-multi-agent-workflows/",
+                "twitter:label2": "Est. reading time",
+                "twitter:label1": "Written by",
+                "generator": "Elementor 3.32.4; features: additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-auto",
+                "twitter:card": "summary_large_image",
+                "ogUrl": "https://devops.com/cursor-2-0-brings-faster-ai-coding-and-multi-agent-workflows/",
+                "language": "en-US",
+                "article:modified_time": "2025-10-31T09:17:03+00:00",
+                "article:publisher": "https://www.facebook.com/devopscom",
+                "ogDescription": "Cursor 2.0 launches with Composer AI model and multi-agent interface for faster coding. Completes tasks in under 30 seconds.",
+                "og:title": "Cursor 2.0 Brings Faster AI Coding and Multi-Agent Workflows - DevOps.com",
+                "twitter:creator": "@devopsdotcom",
+                "og:site_name": "DevOps.com",
+                "publishedTime": "2025-10-31T09:08:09+00:00",
+                "force-rendering": [
+                    "webkit",
+                    "webkit"
+                ],
+                "favicon": "https://devops.com/wp-content/uploads/2021/10/android-chrome-256x256-1-130x130.png",
+                "og:locale": "en_US",
+                "og:image:height": "329",
+                "author": "Tom Smith",
+                "modifiedTime": "2025-10-31T09:17:03+00:00",
+                "og:image:type": "image/jpeg",
+                "msapplication-TileImage": "https://devops.com/wp-content/uploads/2021/10/android-chrome-256x256-1.png",
+                "description": "Cursor 2.0 launches with Composer AI model and multi-agent interface for faster coding. Completes tasks in under 30 seconds., Join the web’s most supportive community of creators and get high-quality tools for hosting, sharing, and streaming videos in gorgeous HD with no ads., Join the web’s most supportive community of creators and get high-quality tools for hosting, sharing, and streaming videos in gorgeous HD with no ads.",
+                "article:published_time": "2025-10-31T09:08:09+00:00",
+                "next-head-count": [
+                    "2",
+                    "2"
+                ],
+                "og:description": "Cursor 2.0 launches with Composer AI model and multi-agent interface for faster coding. Completes tasks in under 30 seconds.",
+                "ogImage": "https://devops.com/wp-content/uploads/2022/02/coding-gb646cb77a_1280-e1644931732205.jpg",
+                "og:type": "article",
+                "twitter:site": "@devopsdotcom",
+                "viewport": [
+                    "width=device-width, initial-scale=1",
+                    "width=device-width",
+                    "width=device-width",
+                    "width=device-width,initial-scale=1",
+                    "width=device-width,initial-scale=1"
+                ],
+                "og:image": "https://devops.com/wp-content/uploads/2022/02/coding-gb646cb77a_1280-e1644931732205.jpg",
+                "ogLocale": "en_US",
+                "robots": [
+                    "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+                    "noindex"
+                ],
+                "scrapeId": "33cddac0-d343-4a47-a521-97c0b0b6bae5",
+                "sourceURL": "https://devops.com/cursor-2-0-brings-faster-ai-coding-and-multi-agent-workflows/",
+                "url": "https://devops.com/cursor-2-0-brings-faster-ai-coding-and-multi-agent-workflows/",
+                "statusCode": 200,
+                "contentType": "text/html; charset=UTF-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-01T20:45:59.863Z"
+            },
+            "json": {
+                "summary": "Cursor has released version 2.0, introducing a new AI coding model called Composer, which is four times faster than similar models, and a new interface for running multiple AI agents simultaneously. Composer is designed to handle large codebases effectively, providing semantic search capabilities and improving trust in multistep tasks. The new interface focuses on outcomes, allowing multiple agents to work in parallel without conflicts, enhancing efficiency in coding tasks. Cursor 2.0 also addresses code review and testing challenges, making it a significant advancement for DevOps teams.",
+                "keyPoints": [
+                    {
+                        "title": "New AI Coding Model - Composer",
+                        "details": "Composer is four times faster than similar models, completing most tasks in under 30 seconds."
+                    },
+                    {
+                        "title": "Semantic Search Capabilities",
+                        "details": "Composer can find relevant code across large codebases, even when exact keywords don't match."
+                    },
+                    {
+                        "title": "Parallel Agent Functionality",
+                        "details": "The new interface allows multiple agents to run simultaneously without conflicts, improving workflow."
+                    },
+                    {
+                        "title": "Enhanced Code Review and Testing",
+                        "details": "Cursor 2.0 simplifies code review and includes a built-in browser tool for testing changes."
+                    },
+                    {
+                        "title": "Impact on DevOps Teams",
+                        "details": "The parallel agent capability can change how infrastructure work is approached, improving incident response times."
+                    },
+                    {
+                        "title": "Focus on Intent-Driven Development",
+                        "details": "Cursor 2.0 emphasizes directing AI agents to achieve desired outcomes rather than managing individual files."
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Cursor 2.0 pivots to multi-agent AI coding, debuts Composer model",
+            "url": "https://www.artificialintelligence-news.com/news/cursor-2-pivots-multi-agent-ai-coding-debuts-composer-model/",
+            "snippet": "Cursor has released its latest AI software development platform with a new multi-agent interface and the debut of its coding model,...",
+            "date": "5 days ago",
+            "imageUrl": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAEIAeAMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAAAAQIDBAUGB//EAD0QAAEDAgIFCQMKBwAAAAAAAAEAAgMEERIhBRMxUdEUIkFSU2FxkZIygaEGByNDYoKxwdLhFiRCcqKzwv/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAIhEBAAIBAwMFAAAAAAAAAAAAAAERAgMSEyFRkQQUMWGB/9oADAMBAAIRAxEAPwD0KyVsb3i7GOcO4XSLR0bcUzi2LWHW552sLDuKyijqZeyf6SjUy9lJ6StYufivyU3DbA4nbtnspQ6RhsykyaLA4z+lVWRqZuyf6SjUzdlJ6St6HG/FrIsAGw473+CkwDvQc7qZuyk9JRqZeyk9JW1FLI+QNdSTMHXc5tvxRibrXDFHiB6xv+CDG1MvZP8ASU3Uy9lJ6SuhbYgWIN9ydhQc7qZeyk9JRqJeyf6SuhwowoOeMMvZSekpro5GC72OaO8WWtpHSFBQQtnrZhGwuDA6xOeZtl4FZr9K6O0nSuOjZxLq5GiSzXC12uttHcrtmrZuLq0CVIhZU8rS0eWto33lEf0tg477BZpWno17WUUj33wiTrAdA3lFWmVMLcjUxuA232+d1VeY3OcW1cYxOyz/AHU7KqJnQ7PrSNP/AEncuizu3YOsz9SojE8Iab1MTXW9oFSsqYGHC6pjN9lzmk5bEDbD/kz9SXlkXQAc7GzmZfFBKyeGR2BkjXO3ApHXbc4nm5yCbFM2Z/NBBAv7Q2e4p8wdbmvwc5AxrySRaQAG2eX5KRpaM7uPiCquoeX3jniDjc5DP8VKIJrZzG/ddC02Md/kUYx3+RUWpl7Z3mlEMo+tPmhaQuadoJ+6s/TJbyVlhb6QdFugq5qpe1Ko6XY9tMwufcawZe4on4ywhNc4MF3kNG8myFndC0kzWrooA0cmIXGt2DwCyrrV0SwSUcrXbDIegHoG9IFuNzg0hjS0biw8VIxztjgb7w2wTBA0AAEWH2G8E5sQaQbjL7IWhJnvRnvSIQF87ZqvO9zBzXW51lOGgOLt/co3YhiLyzDe45puhKtJJI5ubzl4KAOJGcjrWt0cFfxDO+Hv+jKGOaXWIHoIRKlVEh7Q+Q4JRIRkX38ldws3N8kWZub5KUVKkJLf1hcx84mkqqh0LTSUk5Y/lbRzbZjA828Ml2lmbmrifnbaP4bpcNr8uZ/rkUy+Fxjq8yq9JVdbJjqp3vPQHO2IVXDmL/FC4VD0PaL3Wtog/wAtJYfWfkFwfLqkfXyW/uV2g0/U0cDotWydrn47ykkjIC3wXWJ6uDvGlwywk3O8cU4l3UPw4rjIflJPYtFJSNadowmyvwaclIuDSM8GOVnUxgp0wuRn5JrmYr89wvuWKzS8zts1L5HipuWvkFnup3A9BH7pyYrtlfiibA+xqJHucMmyPvsO0D3pz8WeBgdzjtCzea+oZUaulMzAQ1+C5F9ud+lTGoq88JgsTfNh4pyYm2S52P0UYAyIs3inMDnOdgiYHWzIA4pnK6vdB5O4pj6zSFxgbTHfcO4rPLibMlnDUdRvpTsM3U+CzzWaWBIMVGd2TuKhmr9ONF4qegedxLwpz4ffheLLu1sEvU+C47502v8A4fpsbbDlrc/uPWm/TGn2DnUNCD3OPFc38pqzTunII6OfRsUUUcwlxsJuSARv+0VnL1GnUxbeGjldy8/c3nC+aF0rPk7OWHG036cLTkheb3OHd3nTaJ2pSkQvW8STpb4KdvsIQuctnMJ3qzETbalQsSqeMneVOyR4Is9w96EKq1qR7nEYnE+JVywLcwEqFcVNcBbYgewhC1IhkAvsCiOxCFjJqCgc1IhCUr//2Q==",
+            "position": 2,
+            "description": "Cursor has released its latest AI software development platform with a new multi-agent interface and the debut of its coding model,...",
+            "metadata": {
+                "twitter:label2": "Estimated reading time",
+                "title": "Cursor 2.0 pivots to multi-agent AI coding, debuts Composer model",
+                "og:image": "https://www.artificialintelligence-news.com/wp-content/uploads/2025/10/cursor-2-ai-software-development-platform-agents-model-artificial-intelligence-developers-coding-scaled.jpg",
+                "twitter:label1": "Written by",
+                "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+                "og:locale": "en_GB",
+                "ogTitle": "Cursor 2.0 pivots to multi-agent AI coding, debuts Composer model",
+                "twitter:data1": "Ryan Daws",
+                "twitter:data2": "4 minutes",
+                "modifiedTime": "2025-10-29T17:46:14+00:00",
+                "og:url": "https://www.artificialintelligence-news.com/news/cursor-2-pivots-multi-agent-ai-coding-debuts-composer-model/",
+                "publishedTime": "2025-10-29T17:46:12+00:00",
+                "description": "Cursor has released its latest AI software development platform with a new multi-agent interface and the debut of its coding model, Composer.",
+                "og:title": "Cursor 2.0 pivots to multi-agent AI coding, debuts Composer model",
+                "og:image:type": "image/jpeg",
+                "og:image:width": "2560",
+                "twitter:card": "summary_large_image",
+                "twitter:site": "@ai_technews",
+                "ogLocale": "en_GB",
+                "article:modified_time": "2025-10-29T17:46:14+00:00",
+                "twitter:creator": "@Gadget_Ry",
+                "msapplication-TileImage": "https://www.artificialintelligence-news.com/wp-content/uploads/2020/09/cropped-ai-icon-270x270.png",
+                "article:published_time": "2025-10-29T17:46:12+00:00",
+                "ogDescription": "Cursor has released its latest AI software development platform with a new multi-agent interface and the debut of its coding model, Composer.",
+                "favicon": "https://www.artificialintelligence-news.com/wp-content/uploads/2020/09/cropped-ai-icon-32x32.png",
+                "ogUrl": "https://www.artificialintelligence-news.com/news/cursor-2-pivots-multi-agent-ai-coding-debuts-composer-model/",
+                "og:site_name": "AI News",
+                "author": "Ryan Daws",
+                "ogSiteName": "AI News",
+                "viewport": "width=device-width, initial-scale=1",
+                "og:description": "Cursor has released its latest AI software development platform with a new multi-agent interface and the debut of its coding model, Composer.",
+                "article:publisher": "https://www.facebook.com/AITechNews/",
+                "language": "en-GB",
+                "og:type": "article",
+                "og:image:height": "1920",
+                "generator": [
+                    "WordPress 6.8.3",
+                    "Elementor 3.32.5; features: e_font_icon_svg, additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-swap"
+                ],
+                "ogImage": "https://www.artificialintelligence-news.com/wp-content/uploads/2025/10/cursor-2-ai-software-development-platform-agents-model-artificial-intelligence-developers-coding-scaled.jpg",
+                "scrapeId": "b0ecf7d0-d21d-4a8c-a813-6b1a4c2558de",
+                "sourceURL": "https://www.artificialintelligence-news.com/news/cursor-2-pivots-multi-agent-ai-coding-debuts-composer-model/",
+                "url": "https://www.artificialintelligence-news.com/news/cursor-2-pivots-multi-agent-ai-coding-debuts-composer-model/",
+                "statusCode": 200,
+                "contentType": "text/html; charset=UTF-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-03T18:21:24.161Z"
+            },
+            "json": {
+                "summary": "Cursor has launched its latest AI software development platform, featuring a new multi-agent interface and the Composer coding model, which is claimed to be four times faster than similar models. The platform aims to enhance developer workflow by allowing quick iterations and handling complex coding tasks. Key updates include a focused user interface, the ability to run multiple AI agents in parallel, and new features for code review and testing, marking a step towards more autonomous development processes.",
+                "keyPoints": [
+                    {
+                        "title": "Composer Model",
+                        "description": "A new coding model that is four times faster than similar models, designed for low-latency coding."
+                    },
+                    {
+                        "title": "User Interface Update",
+                        "description": "A redesigned interface centered around AI agents, allowing developers to focus on outcomes."
+                    },
+                    {
+                        "title": "Parallel AI Agents",
+                        "description": "Ability to run multiple AI agents simultaneously, improving output quality."
+                    },
+                    {
+                        "title": "Code Review and Testing Features",
+                        "description": "Simplified interface for reviewing changes and a native browser tool for automated testing."
+                    }
+                ]
+            }
+        },
+        {
+            "title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+            "url": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+            "snippet": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that's designed to carry out more...",
+            "date": "5 days ago",
+            "imageUrl": "data:image/jpeg;base64,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",
+            "position": 3,
+            "description": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that's designed to carry out more...",
+            "metadata": {
+                "iso-8601-publish-date": "2025-10-29T16:00:05.051Z",
+                "og:type": "article",
+                "al:android:url": "bloomberg://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks?utm_medium=applink&utm_source=facebook",
+                "fb:status": "Cursor is releasing a new version of its popular AI coding assistant that’s designed to carry out more complicated tasks from start to finish.",
+                "parsely-image-url": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/izZJVRYjeN3k/v0/1200x720.jpg",
+                "sailthru.title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "twitter:tile:image:alt": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "article:content_tier": "metered",
+                "format-detection": "telephone=no",
+                "al:android:package": "com.bloomberg.android.plus",
+                "article:opinion": "false",
+                "twitter:tile:image": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/izZJVRYjeN3k/v0/1200x720.jpg",
+                "parsely-link": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+                "favicon": "https://www.bloomberg.com/favicon-black.png",
+                "parsely-section": "technology",
+                "parsely-post-id": "T4WHS5GPWCGE00",
+                "sailthru.author": "Rachel Metz",
+                "parsely-pub-date": "2025-10-29T16:00:05.051Z",
+                "lotame-bbg-category": "finance,technology",
+                "og:description": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that’s designed to carry out more complicated software development tasks from start to finish, rivaling products from OpenAI and Anthropic.",
+                "sailthru.description": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that’s designed to carry out more complicated software development tasks from start to finish, rivaling products from OpenAI and Anthropic.",
+                "robots": "max-image-preview:large",
+                "title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks - Bloomberg",
+                "viewport": [
+                    "width=device-width",
+                    "width=device-width, initial-scale=1, viewport-fit=cover"
+                ],
+                "apple-itunes-app": "app-id=281941097",
+                "twitter:title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "language": "en",
+                "parsely-type": "post",
+                "parsely-title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "parsely-author": "Rachel Metz",
+                "validatedAt": "2025-10-29T16:00:05.051Z",
+                "keywords": "Artificial Intelligence,Startups,Software,Engineering,SPOTIFY TECHNOLOGY SA,NVIDIA CORP,Markets,Finance,Entertainment Disrupted,Entertainment,technology,business",
+                "sailthru.tags": "Artificial Intelligence,Startups,Software,Engineering,SPOTIFY TECHNOLOGY SA,NVIDIA CORP,Markets,Finance,Entertainment Disrupted,Entertainment,technology,business",
+                "ogTitle": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "sailthru.date": "2025-10-29T16:00:05.051Z",
+                "ogImage": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/izZJVRYjeN3k/v0/1200x720.jpg",
+                "lotame-bbg-topic": "artificial-intelligence,startups,software",
+                "og:url": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+                "twitter:image": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/izZJVRYjeN3k/v0/1200x720.jpg",
+                "twitter:card": "summary_large_image",
+                "ogUrl": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+                "og:title": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "twitter:description": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that’s designed to carry out more complicated software development tasks from start to finish, rivaling products from OpenAI and Anthropic.",
+                "og:image": "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/izZJVRYjeN3k/v0/1200x720.jpg",
+                "og:site_name": "Bloomberg.com",
+                "description": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that’s designed to carry out more complicated software development tasks from start to finish, rivaling products from OpenAI and Anthropic.",
+                "twitter:tile:template:testing": "2",
+                "al:android:app_name": "Bloomberg",
+                "ogDescription": "Cursor, an artificial intelligence coding startup, is releasing a new version of its popular AI assistant that’s designed to carry out more complicated software development tasks from start to finish, rivaling products from OpenAI and Anthropic.",
+                "next-head-count": "21",
+                "twitter:site": "@technology",
+                "parsely-tags": "Artificial Intelligence,Startups,Software,Engineering,SPOTIFY TECHNOLOGY SA,NVIDIA CORP,Markets,Finance,Entertainment Disrupted,Entertainment,Secondary Brand: technology,Secondary Brand: business,Region: Global,Page: article",
+                "will-have-content-metadata": "true",
+                "ogSiteName": "Bloomberg.com",
+                "checksum": "b7d6b77ddb6ffaf24b27932db360a4c1",
+                "sailthru.headline": "AI Coding Leader Cursor Says New Agent Fields Tougher Tasks",
+                "scrapeId": "6ba3d82c-8956-45d7-a9b4-5df67bede839",
+                "sourceURL": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+                "url": "https://www.bloomberg.com/news/articles/2025-10-29/vibe-coding-leader-cursor-says-new-agent-fields-tougher-tasks",
+                "statusCode": 200,
+                "contentType": "text/html; charset=utf-8",
+                "proxyUsed": "stealth",
+                "indexId": "0b40d7f8-01f8-4d83-978f-43151037bd4f"
+            },
+            "json": {
+                "summary": "Cursor, an AI coding startup, is launching a new AI model called Composer, designed to handle complex software development tasks autonomously, competing with OpenAI and Anthropic's products.",
+                "keyPoints": [
+                    {
+                        "title": "AI Bubble Concerns",
+                        "link": "https://www.bloomberg.com/news/articles/2025-10-04/why-ai-bubble-concerns-loom-as-openai-microsoft-meta-ramp-up-spending?itm_source=record&itm_campaign=The_AI_Race&itm_content=Bubble_Fears-0"
+                    },
+                    {
+                        "title": "Understanding AGI",
+                        "link": "https://www.bloomberg.com/news/features/2025-10-23/what-is-agi-why-openai-anthropic-are-targeting-artificial-general-intelligence?itm_source=record&itm_campaign=The_AI_Race&itm_content=AGI_Explained-1"
+                    },
+                    {
+                        "title": "Circular Deals in AI",
+                        "link": "https://www.bloomberg.com/news/features/2025-10-07/openai-s-nvidia-amd-deals-boost-1-trillion-ai-boom-with-circular-deals?itm_source=record&itm_campaign=The_AI_Race&itm_content=Circular_Deals-2"
+                    },
+                    {
+                        "title": "Regulatory Challenges",
+                        "link": "https://www.bloomberg.com/news/articles/2025-10-10/ai-s-growth-leaves-financial-regulators-struggling-to-catch-up?itm_source=record&itm_campaign=The_AI_Race&itm_content=Regulators_Struggle-3"
+                    },
+                    {
+                        "title": "US vs China in AI Race",
+                        "link": "https://www.bloomberg.com/news/articles/2025-08-06/who-is-winning-the-artificial-intelligence-race-the-us-or-china?itm_source=record&itm_campaign=The_AI_Race&itm_content=US_Versus_China-4"
+                    },
+                    {
+                        "title": "China’s AI Desert Empire",
+                        "link": "https://www.bloomberg.com/news/articles/2025-07-31/video-the-secret-rise-of-china-s-ai-desert-empire?itm_source=record&itm_campaign=The_AI_Race&itm_content=China%E2%80%99s_AI_Desert_Empire-5"
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Coding as the epicenter of AI progress and the path to general agents",
+            "url": "https://www.interconnects.ai/p/coding-as-the-epicenter-of-ai-progress",
+            "snippet": "Coding, due to its breadth of use-cases, is arguably the last tractable, general domain of continued progress for frontier models that most...",
+            "date": "1 month ago",
+            "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABCCAMAAACrW+IrAAAAkFBMVEX////+/v77+/v4+Pj09PTy4efo6Oj26u7w3OPr6+vx8fH8+fru19/47/L05uv69Pbj3OXe3t7x7vLU1NTqztjr5uzmw9Db0t3W2dzBwcHLy8u5ubm5vsPgu8jTma7YobXPkKjcrr/LhqDBsMXTx9aznrmdgaWqkrHHuMujq7DRzdXEvsmusrd/ipHFyM1wfoet9LAEAAAEeElEQVRYhe1Z23qjOAy2ZBt8AmMSQtqd7uxu2+mmc3r/txvZkLRJmECa0tyM+AKOD/olWZZlYIwBsI4Em4H4IMH4wBkJP56SwngFXQGvBMw6YHOT3YbAwy376yabGxGTuh0w3tze3ga20IwEmBuYfeK0jDrgfj2R6v2kI3v9fGfgBe6A+YJIZAHDgoewCCHoBS4WgX76vRcceTTuTH0FujYwYPQ0+DDaAceZ/VjFt6YediE7P/Awrf4AfxTw0l8J2OV/gD8GGGV5HWCby7mBgRLO40ZfqLmBeRYCHkXywquZNo4RU+e2nC1anwQubT5bBDkJLOFqwH62hTwCzHZuDXckwzuurlFgK1XS2in39+d/Pv/73zu52xhwSUqWcaLtnVy5OydX58+6HZqvMeBEF4YRlQ8gTwKmp/xNVjZGzjNQQypPAs49rOy5SYGnwYWULlcWBpxyEjBThV9hNLiavryWOQOZF9b6wbnqgdHoDA7jcgTuCkqSrRXznsSfFL0ZOFSuN3FalNbl0QbsIFaD1noIuC+UkYN3zkXhp2wBTAGJudwKXkhWQl462u867Kmm7iit4CkeXgCmWX1JI1QaV3pZqOX2SDwdONGUILosDkeCipLgKsoumZVvALbj2ZDN45zsk0vmKlKRSTW2LQ5VqtIpcrETObc7feYCJ3M7ovFQZR7FpnXij7Tq+Y4marnCEeATjuTUsdHTxBRqPNBYNjbHp8cnubzqOHjm00nrN3Y4ordq3DcXpfMlrXCa+VJaN83pLwamLdNZYHmpKDmjaafoND1JuwSY9RtHCTJFpFicfPS4CHi3Vcrzk8It8GBCPzWdZ1IeDR6L5ltgTEcY2F/5k3M7eX6Osm9qu3zdNiE6vhdwkcvlC9r0pPpiYAkFFDsDF8VULuWlwF0s2uo8HbiYGq9OAlOik+8D1/dVTdTWLWtrfKh9fcBl3zfeDAxQUASkWLRtaB8evzze3z89PcH94/+PX+4fD9mc/0JsCDiStYV6sXRro8pN3WBbV3Q1h2zOf1dy4Fz0q5oqVdiqaf1bP735WtQ0H3VT1RiFZukjCHv1WvYIuK4Rm6pqmooCIhUS+VhV1aw5UnWIqCsZp65pRNhsnr+aZvP1uaki13gj3g0cm7rpXsJgH4YhxeO6oV2I1ZW11T618UbsoCI5rbDEE0nAHcdv2ebb9x8/N983Pbektd/TGJMbY0VFLiiAAt0EUtFw7L5DImrD4pdPnYTjwhijtREGq9aYh5ZUMbxuqZoLIYyIfD7RJrDQP9br+G0TOZhUr18DZ0g2Wj+viTKidaCbDpmmKxbTzeh1WGfBZGFN7XQISNBZ0GtNRxHqQgMM9aKm7TACpoKhOz1CiPXrzOybmuQEAySXEGjAMEM6Y9TbAEkJVM15X51aDJJqjFSIvSHpyVNvakARmSBnJhlLYORN/WI12XHfuUSWiXjp+OQGktykVZbxwDNOfww1ID0011pEA/AMY7WJ1fRXaEG9MQhNf7UJIoMQbWF04s2zVE2jrvr55xc++DPZbvKjXgAAAABJRU5ErkJggg==",
+            "position": 4,
+            "description": "Coding, due to its breadth of use-cases, is arguably the last tractable, general domain of continued progress for frontier models that most...",
+            "metadata": {
+                "norton-safeweb-site-verification": [
+                    "24usqpep0ejc5w6hod3dulxwciwp0djs6c6ufp96av3t4whuxovj72wfkdjxu82yacb7430qjm8adbd5ezlt4592dq4zrvadcn9j9n-0btgdzpiojfzno16-fnsnu7xd",
+                    "24usqpep0ejc5w6hod3dulxwciwp0djs6c6ufp96av3t4whuxovj72wfkdjxu82yacb7430qjm8adbd5ezlt4592dq4zrvadcn9j9n-0btgdzpiojfzno16-fnsnu7xd",
+                    "24usqpep0ejc5w6hod3dulxwciwp0djs6c6ufp96av3t4whuxovj72wfkdjxu82yacb7430qjm8adbd5ezlt4592dq4zrvadcn9j9n-0btgdzpiojfzno16-fnsnu7xd"
+                ],
+                "viewport": [
+                    "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover",
+                    "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover",
+                    "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover"
+                ],
+                "interactionStatistic": "[{\"@type\":\"InteractionCounter\",\"interactionType\":\"https://schema.org/LikeAction\",\"userInteractionCount\":115},{\"@type\":\"InteractionCounter\",\"interactionType\":\"https://schema.org/CommentAction\",\"userInteractionCount\":13}]",
+                "og:title": "Coding as the epicenter of AI progress and the path to general agents",
+                "ogTitle": "Coding as the epicenter of AI progress and the path to general agents",
+                "ogUrl": "https://www.interconnects.ai/p/coding-as-the-epicenter-of-ai-progress",
+                "ogDescription": "GPT-5-Codex, adoption, denial, peak performance, and everyday gains.",
+                "theme-color": "#ffffff",
+                "og:description": "GPT-5-Codex, adoption, denial, peak performance, and everyday gains.",
+                "favicon": "https://substackcdn.com/image/fetch/$s_!SuGJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6f0da424-dc5e-43bf-ae0d-56b947e43c23%2Ffavicon-16x16.png",
+                "description": "GPT-5-Codex, adoption, denial, peak performance, and everyday gains.",
+                "ogImage": "https://substackcdn.com/image/fetch/$s_!RAqm!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F57090aa2-c354-4eb5-9222-8e0c61b2a8e8_2494x1556.png",
+                "og:type": "article",
+                "og:image": "https://substackcdn.com/image/fetch/$s_!RAqm!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F57090aa2-c354-4eb5-9222-8e0c61b2a8e8_2494x1556.png",
+                "title": "Coding as the epicenter of AI progress and the path to general agents",
+                "twitter:image": "https://substackcdn.com/image/fetch/$s_!-kAd!,f_auto,q_auto:best,fl_progressive:steep/https%3A%2F%2Frobotic.substack.com%2Fapi%2Fv1%2Fpost_preview%2F173893588%2Ftwitter.jpg%3Fversion%3D4",
+                "language": "en",
+                "twitter:title": "Coding as the epicenter of AI progress and the path to general agents",
+                "og:url": [
+                    "https://www.interconnects.ai/p/coding-as-the-epicenter-of-ai-progress",
+                    "https://substack.com/channel-frame",
+                    "https://substack.com/session-attribution-frame"
+                ],
+                "twitter:card": "summary_large_image",
+                "twitter:description": "GPT-5-Codex, adoption, denial, peak performance, and everyday gains.",
+                "author": [
+                    "Nathan Lambert",
+                    "Substack",
+                    "Substack"
+                ],
+                "google-site-verification": "546f9Mes4_iLd0cUA2o_PYFfUm1f5cnXJO9YtFVCRwc",
+                "scrapeId": "cac457ba-a8ba-42b3-84ef-61230aaaf780",
+                "sourceURL": "https://www.interconnects.ai/p/coding-as-the-epicenter-of-ai-progress",
+                "url": "https://www.interconnects.ai/p/coding-as-the-epicenter-of-ai-progress",
+                "statusCode": 200,
+                "contentType": "text/html; charset=utf-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-02T15:10:19.475Z"
+            },
+            "json": {
+                "summary": "The article discusses the evolution of AI coding agents, particularly focusing on GPT-5-Codex and its impact on coding practices. It highlights the gradual improvements in AI coding capabilities, the challenges of adoption, and the potential for these agents to transform the coding landscape. The author shares personal experiences and examples of projects built using AI coding agents, emphasizing the increasing value they provide to users.",
+                "keyPoints": [
+                    {
+                        "point": "Coding is a crucial domain for AI progress, with models like GPT-5-Codex showing significant improvements."
+                    },
+                    {
+                        "point": "AI coding agents are becoming more useful for various tasks, including function completion, scripting, and building projects."
+                    },
+                    {
+                        "point": "The adoption of AI coding agents is slower due to differences in how they are marketed compared to traditional AI applications."
+                    },
+                    {
+                        "point": "The article emphasizes the importance of careful scoping and context when using AI coding agents."
+                    },
+                    {
+                        "point": "OpenAI's GPT-5-Codex adapts its thinking time based on task complexity, improving its performance on coding tasks."
+                    },
+                    {
+                        "point": "The author shares examples of projects built using AI coding agents, showcasing their practical applications."
+                    },
+                    {
+                        "point": "The article concludes with a call to action for readers to engage with AI coding agents and explore their potential."
+                    }
+                ]
+            }
+        },
+        {
+            "title": "Introducing Claude Haiku 4.5",
+            "url": "https://www.anthropic.com/news/claude-haiku-4-5",
+            "snippet": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+            "date": "3 weeks ago",
+            "imageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABCCAMAAACrW+IrAAAAnFBMVEX////e29E5j3bYd1Yybab7+/rMzMwui3HXcU0raqRki7aVva/Wbkr29vPu8vbc6OTqvLDw1cy0sqvo6OAdhmnt7e3u7ujk5OS8vLytWj3d3d3Gxsa2trbU1NTpt6mjo6OfxLgOX58YTn6UlJSMjIysrKwgb1l3d3dra2sAgWL35+Tl6vLVaEFzlIkAaE+tt7S9pp+rVDK4k4lKaoxf0NT4AAAC6klEQVRYhe2Zi1bbMAyGvYvNZTOMDdWaZONtiTe2sQvb+7/b5JJbQ6D0kgYG/+E0lp2TDyl/ldZV6kn3ThzkxV+fd/WAxuHaIhAm/8U4Qwk8ee28DNAHHww7JGY0FO32wSEWoYCoz4tYeF8kKmNhy8gJ/XlRFlGVnOJARTYWBoegKZBzMtRJgwfly8KBCwzeqQCuLGEE8pB0cN2QxrrPjhwBgLYaJFGwLlhFWmJwIj0OVQSIyC4gmiTmkiCgNx4wEETHOF6ZtXjWgrIiyEPJNP/J2Cqweu2MAymj9Oi6DqYg4In0iMHOAIVdUYlacAjk467akAmVq+dRc8gTIP0waLXozDZiInl43bC63NWqLvXxh0bV0waka6RO6SNywW1IMZjYCZlwxcfFFfjV6V6lr8f1yuJ/Kp1TU2+pTcZxMCv2sQq897zSaQbbs0bf8vL3Rkc5fNYqk7X0NWnm+XBXqnPD4JOL/UoXZxIefWx0OAB+14YVWT4x3G5UMFfmWgBLePL6RaX9N7J+dPCy0sFhPr0LFnXBV24SZxpH6g7m6mfcBUvGXfDyjGeNbiv99sG2DWf3Dgw3mWtEsM7NgVkZvcxcPbAsL5irB9aLYFnveYsYpik1ponusaGJMnaZC7ApWK0MDrnUhkfoXLMOeKBzmexqmdt9qYutmWu2Epji1sAruhrV/IvCzjPGXGrE3ZtL81SlNhOBw2QtM0wEdqW88ATmmr+P7QSdqyn54wJv/pBQ64HD8GNR326uLtiubK65YONevWbGk93jxwemCTrXXHrjT5kPrdQPGKzWBLOKJuvH51o/f0n4+/J9pcs/EuKnRn/z2W9b8fWQ2xDnF+cBsBuY261079gP+/O2N6U7X4T7m2C3ihMyJkqpOpt9SmhCvXkH0RtMHOvFiGwYffL1/lJMibAeo2cfEL03yytqAWz+zaPenNLWSQjNXpUsW6g30OTtn/eUsuqsIG9/NufKtfIFFdwp6Sf9N/oHTcpuauFDXTgAAAAASUVORK5CYII=",
+            "position": 5,
+            "description": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+            "metadata": {
+                "ogDescription": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+                "og:type": "website",
+                "ogTitle": "Introducing Claude Haiku 4.5",
+                "msapplication-TileColor": "141413",
+                "og:description": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+                "twitter:card": "summary_large_image",
+                "favicon": "https://www.anthropic.com/images/icons/favicon-32x32.png",
+                "theme-color": "#141413",
+                "viewport": [
+                    "width=device-width, initial-scale=1",
+                    "width=device-width, initial-scale=1"
+                ],
+                "msapplication-config": "/browserconfig.xml",
+                "twitter:image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20HeadBolt&backgroundColor=clay",
+                "twitter:creator": "@AnthropicAI",
+                "title": "Introducing Claude Haiku 4.5 \\ Anthropic",
+                "ogImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20HeadBolt&backgroundColor=clay",
+                "og:image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand%20HeadBolt&backgroundColor=clay",
+                "twitter:title": "Introducing Claude Haiku 4.5",
+                "twitter:description": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+                "language": "en",
+                "twitter:site": "@AnthropicAI",
+                "og:title": "Introducing Claude Haiku 4.5",
+                "og:image:alt": "Hand with lightning bolt and head outline in stylized profile design",
+                "description": "Claude Haiku 4.5, our latest small model, is available today to all users.",
+                "twitter:image:alt": "Hand with lightning bolt and head outline in stylized profile design",
+                "scrapeId": "22c4f120-5408-4271-959c-200357aa6d4e",
+                "sourceURL": "https://www.anthropic.com/news/claude-haiku-4-5",
+                "url": "https://www.anthropic.com/news/claude-haiku-4-5",
+                "statusCode": 200,
+                "contentType": "text/html; charset=utf-8",
+                "proxyUsed": "basic",
+                "cacheState": "hit",
+                "cachedAt": "2025-11-03T12:11:54.124Z"
+            },
+            "json": {
+                "summary": "Claude Haiku 4.5 is the latest small model from Anthropic, offering similar coding performance to its predecessor, Claude Sonnet 4, but at one-third the cost and more than twice the speed. It excels in real-time tasks and enhances user experience in applications like Claude for Chrome and Claude Code. The model has undergone extensive safety evaluations, showing low rates of concerning behaviors and is classified under AI Safety Level 2.",
+                "keyPoints": [
+                    {
+                        "title": "Performance Improvement",
+                        "content": "Claude Haiku 4.5 provides similar coding performance to Claude Sonnet 4 at one-third the cost and over twice the speed."
+                    },
+                    {
+                        "title": "Enhanced User Experience",
+                        "content": "Ideal for real-time tasks such as chat assistants and customer service, offering high intelligence and speed."
+                    },
+                    {
+                        "title": "Safety Evaluations",
+                        "content": "Demonstrated low rates of concerning behaviors and is classified as AI Safety Level 2."
+                    },
+                    {
+                        "title": "Availability",
+                        "content": "Available on Claude Code, API, Amazon Bedrock, and Google Cloud’s Vertex AI."
+                    },
+                    {
+                        "title": "Cost Efficiency",
+                        "content": "Pricing is set at $1/$5 per million input and output tokens."
+                    }
+                ]
+            }
+        }
+    ]
+}

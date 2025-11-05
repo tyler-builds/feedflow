@@ -18,6 +18,7 @@ import {
   getCookieName,
 } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
+import { NotFound } from "@/components/not-found";
 
 import appCss from "../styles.css?url";
 
@@ -65,6 +66,7 @@ export const Route = createRootRouteWithContext<{
     return { userId, token };
   },
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
 
 function RootComponent() {

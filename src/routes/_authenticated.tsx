@@ -1,13 +1,23 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { fetchSession } from "@convex-dev/better-auth/react-start";
 import { Suspense } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { authClient } from "@/lib/auth-client";
+
+// Server-side session check
+const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
+  const { session } = await fetchSession(getRequest());
+  return {
+    isAuthenticated: !!session?.user?.id,
+  };
+});
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {
-    const session = await authClient.getSession();
-    if (!session?.data?.session) {
+    const { isAuthenticated } = await checkAuth();
+    if (!isAuthenticated) {
       throw redirect({ to: "/login" });
     }
   },
@@ -16,10 +26,10 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-screen overflow-hidden">
       <AppSidebar />
-      <main className="flex-1 w-full">
-        <div className="p-2">
+      <main className="flex-1 w-full flex flex-col h-screen overflow-hidden">
+        <div className="p-2 shrink-0">
           <SidebarTrigger />
         </div>
         <Suspense
@@ -32,7 +42,9 @@ function AuthenticatedLayout() {
             </div>
           }
         >
-          <Outlet />
+          <div className="flex-1 overflow-hidden">
+            <Outlet />
+          </div>
         </Suspense>
       </main>
     </SidebarProvider>

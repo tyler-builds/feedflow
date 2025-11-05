@@ -1,4 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { fetchSession } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,10 +16,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+// Server-side session check
+const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
+  const { session } = await fetchSession(getRequest());
+  return {
+    isAuthenticated: !!session?.user?.id,
+  };
+});
+
 export const Route = createFileRoute("/login")({
   beforeLoad: async () => {
-    const session = await authClient.getSession();
-    if (session?.data?.session) {
+    const { isAuthenticated } = await checkAuth();
+    if (isAuthenticated) {
       throw redirect({ to: "/" });
     }
   },

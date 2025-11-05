@@ -47,4 +47,24 @@ export default defineSchema({
     currentTeamId: v.id("teams"),
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
+
+  topics: defineTable({
+    teamId: v.id("teams"),
+    title: v.string(),
+    description: v.string(),
+    createdBy: v.string(), // Better Auth user ID
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    deletedAt: v.optional(v.number()), // For soft deletes
+    scrapedData: v.optional(v.string()), // JSON string of Firecrawl search results
+    scrapeStatus: v.union(
+      v.literal("pending"),
+      v.literal("completed"),
+      v.literal("failed"),
+    ),
+    lastScrapedAt: v.optional(v.number()),
+    scrapeError: v.optional(v.string()),
+  })
+    .index("by_team", ["teamId"])
+    .index("by_team_and_deleted", ["teamId", "deletedAt"]),
 });

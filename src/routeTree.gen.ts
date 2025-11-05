@@ -13,7 +13,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenticated/invitations'
+import { Route as AuthenticatedTopicsIndexRouteImport } from './routes/_authenticated/topics/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthenticatedTopicsTopicIdRouteImport } from './routes/_authenticated/topics/$topicId'
 import { Route as AuthenticatedTeamsSettingsRouteImport } from './routes/_authenticated/teams/settings'
 
 const LoginRoute = LoginRouteImport.update({
@@ -36,11 +38,23 @@ const AuthenticatedInvitationsRoute =
     path: '/invitations',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedTopicsIndexRoute =
+  AuthenticatedTopicsIndexRouteImport.update({
+    id: '/topics/',
+    path: '/topics/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTopicsTopicIdRoute =
+  AuthenticatedTopicsTopicIdRouteImport.update({
+    id: '/topics/$topicId',
+    path: '/topics/$topicId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedTeamsSettingsRoute =
   AuthenticatedTeamsSettingsRouteImport.update({
     id: '/teams/settings',
@@ -53,14 +67,18 @@ export interface FileRoutesByFullPath {
   '/invitations': typeof AuthenticatedInvitationsRoute
   '/': typeof AuthenticatedIndexRoute
   '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/invitations': typeof AuthenticatedInvitationsRoute
   '/': typeof AuthenticatedIndexRoute
   '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,13 +87,29 @@ export interface FileRoutesById {
   '/_authenticated/invitations': typeof AuthenticatedInvitationsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/_authenticated/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_authenticated/topics/': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/invitations' | '/' | '/teams/settings' | '/api/auth/$'
+  fullPaths:
+    | '/login'
+    | '/invitations'
+    | '/'
+    | '/teams/settings'
+    | '/topics/$topicId'
+    | '/api/auth/$'
+    | '/topics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/invitations' | '/' | '/teams/settings' | '/api/auth/$'
+  to:
+    | '/login'
+    | '/invitations'
+    | '/'
+    | '/teams/settings'
+    | '/topics/$topicId'
+    | '/api/auth/$'
+    | '/topics'
   id:
     | '__root__'
     | '/_authenticated'
@@ -83,7 +117,9 @@ export interface FileRouteTypes {
     | '/_authenticated/invitations'
     | '/_authenticated/'
     | '/_authenticated/teams/settings'
+    | '/_authenticated/topics/$topicId'
     | '/api/auth/$'
+    | '/_authenticated/topics/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -122,12 +158,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvitationsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/topics/': {
+      id: '/_authenticated/topics/'
+      path: '/topics'
+      fullPath: '/topics'
+      preLoaderRoute: typeof AuthenticatedTopicsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/topics/$topicId': {
+      id: '/_authenticated/topics/$topicId'
+      path: '/topics/$topicId'
+      fullPath: '/topics/$topicId'
+      preLoaderRoute: typeof AuthenticatedTopicsTopicIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/teams/settings': {
       id: '/_authenticated/teams/settings'
@@ -143,12 +193,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedInvitationsRoute: typeof AuthenticatedInvitationsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedTeamsSettingsRoute: typeof AuthenticatedTeamsSettingsRoute
+  AuthenticatedTopicsTopicIdRoute: typeof AuthenticatedTopicsTopicIdRoute
+  AuthenticatedTopicsIndexRoute: typeof AuthenticatedTopicsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedInvitationsRoute: AuthenticatedInvitationsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedTeamsSettingsRoute: AuthenticatedTeamsSettingsRoute,
+  AuthenticatedTopicsTopicIdRoute: AuthenticatedTopicsTopicIdRoute,
+  AuthenticatedTopicsIndexRoute: AuthenticatedTopicsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

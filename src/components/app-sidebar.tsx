@@ -1,4 +1,4 @@
-import { Home, Settings } from "lucide-react";
+import { Home, Settings, MessageSquare } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
   Sidebar,
@@ -20,6 +20,11 @@ const menuItems = [
     title: "Home",
     url: "/",
     icon: Home,
+  },
+  {
+    title: "Topics",
+    url: "/topics",
+    icon: MessageSquare,
   },
   {
     title: "Team Settings",

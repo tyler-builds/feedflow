@@ -11,7 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Settings, Users } from "lucide-react";
+import { Mail, Settings, Users, MessageSquare } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: App,
@@ -87,13 +88,21 @@ function App() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Coming Soon</CardTitle>
-              <CardDescription>New features on the way</CardDescription>
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                <CardTitle>Topics</CardTitle>
+              </div>
+              <CardDescription>
+                Create and discuss topics with your team
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Topic creation and collaboration features will be added soon!
-              </p>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/topics">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Browse Topics
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -111,6 +120,12 @@ function App() {
               Here's what you can do right now:
             </p>
             <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+              <li>
+                <Link to="/topics" className="text-primary hover:underline">
+                  Create and manage topics
+                </Link>{" "}
+                for your team to discuss
+              </li>
               <li>Invite team members to join your workspace</li>
               <li>
                 Switch between teams using the team switcher in the sidebar
