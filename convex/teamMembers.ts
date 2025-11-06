@@ -134,21 +134,27 @@ export const removeTeamMember = mutation({
 
     await ctx.db.delete(targetMembership._id);
 
+    // If the removed user had this team as their current team, switch them to a fallback
     const targetSettings = await ctx.db
       .query("userSettings")
       .withIndex("by_user", (q) => q.eq("userId", targetMembership.userId))
       .first();
 
     if (targetSettings?.currentTeamId === teamId) {
+      // Find another team membership (will always find at least their Personal team)
       const fallbackMembership = await ctx.db
         .query("teamMembers")
         .withIndex("by_user", (q) => q.eq("userId", targetMembership.userId))
         .first();
 
+      if (!fallbackMembership) {
+        throw new Error(
+          "Cannot remove user: no fallback team found. Every user should have at least a Personal team.",
+        );
+      }
+
       await ctx.db.patch(targetSettings._id, {
-        currentTeamId: fallbackMembership
-          ? fallbackMembership.teamId
-          : undefined,
+        currentTeamId: fallbackMembership.teamId,
         updatedAt: Date.now(),
       });
     }
