@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { CreateTopicModal } from "@/components/create-topic-modal";
 import { Plus, Trash2, Calendar } from "lucide-react";
 
@@ -113,12 +114,25 @@ function TopicsPage() {
                     </p>
 
                     <div className="mt-auto pt-4 border-t space-y-2">
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        <span>
-                          Created{" "}
-                          {new Date(topic.createdAt).toLocaleDateString()}
-                        </span>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Calendar className="h-3 w-3" />
+                          <span>
+                            Created{" "}
+                            {new Date(topic.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <Badge
+                          variant={
+                            topic.scrapeStatus === "completed"
+                              ? "default"
+                              : topic.scrapeStatus === "failed"
+                                ? "destructive"
+                                : "secondary"
+                          }
+                        >
+                          {topic.scrapeStatus}
+                        </Badge>
                       </div>
                       {topic.creatorName && (
                         <p className="text-xs text-muted-foreground">
