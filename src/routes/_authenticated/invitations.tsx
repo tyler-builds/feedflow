@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../convex/_generated/api";
+import { useInvitationActions } from "@/hooks/use-invitation-actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,40 +19,12 @@ export const Route = createFileRoute("/_authenticated/invitations")({
 });
 
 function InvitationsPage() {
-  const navigate = useNavigate();
-
   // Get pending invitations for current user
   const { data: invitations } = useQuery(
     convexQuery(api.invitations.getUserInvitations, {}),
   );
 
-  const setCurrentTeam = useMutation(api.userSettings.setCurrentTeam);
-  const acceptInvitation = useMutation(api.invitations.acceptInvitation);
-  const declineInvitation = useMutation(api.invitations.declineInvitation);
-
-  const handleAccept = async (token: string) => {
-    try {
-      const teamId = await acceptInvitation({ token });
-
-      // Switch to the newly joined team
-      await setCurrentTeam({ teamId });
-      navigate({ to: "/" });
-    } catch (error: any) {
-      console.error("Failed to accept invitation:", error);
-      alert(error.message || "Failed to accept invitation");
-    }
-  };
-
-  const handleDecline = async (token: string) => {
-    if (!confirm("Are you sure you want to decline this invitation?")) return;
-
-    try {
-      await declineInvitation({ token });
-    } catch (error: any) {
-      console.error("Failed to decline invitation:", error);
-      alert(error.message || "Failed to decline invitation");
-    }
-  };
+  const { handleAccept, handleDecline } = useInvitationActions();
 
   return (
     <div className="flex-1 p-8">
