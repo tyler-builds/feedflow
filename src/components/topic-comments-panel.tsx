@@ -1,95 +1,176 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { TopicComment, type Comment } from "./topic-comment";
-import { MessageSquare } from "lucide-react";
+import { TopicComment } from "./topic-comment";
+import { TopicCommentRepliesPanel } from "./topic-comment-replies-panel";
+import { MessageSquare, X, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { useMutation } from "convex/react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { convexQuery } from "@convex-dev/react-query";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
-// Dummy data for comments
-const dummyComments: Comment[] = [
-  {
-    id: "1",
-    author: {
-      name: "Sarah Johnson",
-      initials: "SJ",
-    },
-    content:
-      "This is a great topic! I've been thinking about this for a while and would love to discuss further.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
-  },
-  {
-    id: "2",
-    author: {
-      name: "Mike Chen",
-      initials: "MC",
-    },
-    content:
-      "I agree with the approach outlined here. We should definitely consider implementing this in our next sprint.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-  },
-  {
-    id: "3",
-    author: {
-      name: "Emily Rodriguez",
-      initials: "ER",
-    },
-    content:
-      "Has anyone looked into the technical implications of this? I think we might need to do some research first.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
-  },
-  {
-    id: "4",
-    author: {
-      name: "David Park",
-      initials: "DP",
-    },
-    content:
-      "I've done some preliminary research and this looks promising. Let me share what I found...",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-  },
-  {
-    id: "5",
-    author: {
-      name: "Lisa Anderson",
-      initials: "LA",
-    },
-    content:
-      "Can we schedule a meeting to discuss this in more detail? I have some questions about the implementation.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
-  },
-  {
-    id: "6",
-    author: {
-      name: "James Wilson",
-      initials: "JW",
-    },
-    content:
-      "I've created a proof of concept that demonstrates this could work. Will share the link shortly.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-  },
-];
+interface TopicCommentsPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  topicId: Id<"topics">;
+  searchResultId: Id<"searchResults">;
+}
 
-export function TopicCommentsPanel() {
+export function TopicCommentsPanel({
+  isOpen,
+  onClose,
+  topicId,
+  searchResultId,
+}: TopicCommentsPanelProps) {
+  const [newComment, setNewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<{
+    id: Id<"comments">;
+    authorName: string;
+  } | null>(null);
+
+  // Fetch comments for this search result
+  const { data: comments } = useSuspenseQuery(
+    convexQuery(api.comments.getCommentsBySearchResult, {
+      topicId,
+      searchResultId,
+    }),
+  );
+
+  const addCommentMutation = useMutation(api.comments.addComment);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await addCommentMutation({
+        topicId,
+        searchResultId,
+        content: newComment.trim(),
+      });
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      alert(error instanceof Error ? error.message : "Failed to add comment");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCommentClick = (
+    commentId: Id<"comments">,
+    authorName: string,
+  ) => {
+    setSelectedComment({ id: commentId, authorName });
+  };
+
+  const handleBackToComments = () => {
+    setSelectedComment(null);
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <Card className="h-full flex flex-col mt-10">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-muted-foreground" />
-          <CardTitle className="text-lg">Comments</CardTitle>
-          <span className="text-sm text-muted-foreground">
-            ({dummyComments.length})
-          </span>
+    <div className="flex flex-col h-full border-l bg-background relative overflow-hidden">
+      {/* Main Comments Panel */}
+      <div
+        className={`absolute inset-0 flex flex-col transition-transform duration-300 ${
+          selectedComment ? "-translate-x-full" : "translate-x-0"
+        }`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b shrink-0">
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-5 w-5" />
+            <h2 className="text-lg font-semibold">Comments</h2>
+            <span className="text-sm text-muted-foreground">
+              ({comments.length})
+            </span>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </Button>
         </div>
-      </CardHeader>
-      <Separator />
-      <CardContent className="p-0 flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
-          <div className="divide-y">
-            {dummyComments.map((comment) => (
-              <TopicComment key={comment.id} comment={comment} />
-            ))}
+
+        {/* Comments List - Scrollable */}
+        <ScrollArea className="flex-1 px-4">
+          <div className="space-y-3 py-4">
+            {comments.length === 0 ? (
+              <div className="text-center py-8 text-sm text-muted-foreground">
+                No comments yet. Be the first to comment!
+              </div>
+            ) : (
+              comments.map((comment) => (
+                <TopicComment
+                  key={comment._id}
+                  comment={{
+                    id: comment._id,
+                    author: comment.author,
+                    content: comment.content,
+                    timestamp: new Date(comment.createdAt),
+                    replyCount: comment.replyCount,
+                  }}
+                  onClick={() =>
+                    handleCommentClick(comment._id, comment.author.name)
+                  }
+                />
+              ))
+            )}
           </div>
         </ScrollArea>
-      </CardContent>
-    </Card>
+
+        {/* Comment Input - Fixed at bottom */}
+        <div className="border-t p-4 shrink-0">
+          <form onSubmit={handleSubmit}>
+            <div className="relative">
+              <Textarea
+                placeholder="Add a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                disabled={isSubmitting}
+                className="min-h-20 resize-none"
+              />
+              <Button
+                type="submit"
+                size="icon"
+                disabled={!newComment.trim() || isSubmitting}
+                className="absolute bottom-3 right-1.5 h-8 w-8"
+              >
+                <Send className="h-4 w-4" />
+                <span className="sr-only">Send</span>
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Responses Panel */}
+      <div
+        className={`absolute inset-0 flex flex-col transition-transform duration-300 ${
+          selectedComment ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {selectedComment && (
+          <TopicCommentRepliesPanel
+            commentId={selectedComment.id}
+            authorName={selectedComment.authorName}
+            topicId={topicId}
+            searchResultId={searchResultId}
+            onBack={handleBackToComments}
+            onClose={onClose}
+          />
+        )}
+      </div>
+    </div>
   );
 }

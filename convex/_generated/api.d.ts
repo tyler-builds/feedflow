@@ -9,8 +9,10 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as comments from "../comments.js";
 import type * as http from "../http.js";
 import type * as invitations from "../invitations.js";
+import type * as searchResults from "../searchResults.js";
 import type * as teamMembers from "../teamMembers.js";
 import type * as teams from "../teams.js";
 import type * as topicsActions from "../topicsActions.js";
@@ -34,8 +36,10 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  comments: typeof comments;
   http: typeof http;
   invitations: typeof invitations;
+  searchResults: typeof searchResults;
   teamMembers: typeof teamMembers;
   teams: typeof teams;
   topicsActions: typeof topicsActions;

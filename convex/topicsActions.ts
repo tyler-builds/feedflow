@@ -6,6 +6,7 @@ import { authComponent } from "./auth";
 import { internal, api } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import Firecrawl from "@mendable/firecrawl-js";
+import * as searchResults from "./searchResults";
 
 // Internal action to scrape topic data with Firecrawl
 export const _scrapeTopicWithFirecrawl = internalAction({
@@ -42,30 +43,80 @@ export const _scrapeTopicWithFirecrawl = internalAction({
                   keyPoints: {
                     type: "array",
                     items: {
-                      type: "object",
-                      required: [],
-                      properties: {},
+                      type: "string",
                     },
                   },
                 },
               },
-              prompt: "Extract a summary and key points",
+              prompt: "Extract a summary and key points as an array of strings",
             },
           ],
         },
       });
 
-      // Store the results as JSON string
-      await ctx.runMutation(internal.topicsDb._updateTopicScrapeData, {
+      // Parse and flatten the search results
+      const flattenedResults: Array<{
+        type: "web" | "news";
+        title: string;
+        url: string;
+        position: number;
+        description?: string;
+        summary?: string;
+        keyPoints?: string[];
+        imageUrl?: string;
+        date?: string;
+        favicon?: string;
+      }> = [];
+
+      // Process web results
+      if (searchResults.web && Array.isArray(searchResults.web)) {
+        searchResults.web.forEach((webResult: any) => {
+          flattenedResults.push({
+            type: "web",
+            title: webResult.title,
+            url: webResult.url,
+            position: webResult.position,
+            description: webResult.description,
+            summary: webResult.json?.summary,
+            keyPoints: webResult.json?.keyPoints,
+            favicon: webResult.metadata?.favicon,
+          });
+        });
+      }
+
+      // Process news results
+      if (searchResults.news && Array.isArray(searchResults.news)) {
+        searchResults.news.forEach((newsResult: any) => {
+          flattenedResults.push({
+            type: "news",
+            title: newsResult.title,
+            url: newsResult.url,
+            position: newsResult.position,
+            description: newsResult.snippet,
+            summary: newsResult.json?.summary,
+            keyPoints: newsResult.json?.keyPoints,
+            imageUrl: newsResult.imageUrl,
+            date: newsResult.date,
+          });
+        });
+      }
+
+      // Store the flattened results in the searchResults table
+      await ctx.runMutation(internal.searchResults._insertSearchResults, {
         topicId: args.topicId,
-        scrapedData: JSON.stringify(searchResults),
+        results: flattenedResults,
+      });
+
+      // Update topic status
+      await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
+        topicId: args.topicId,
         scrapeStatus: "completed",
       });
     } catch (error) {
       console.error("Firecrawl search failed:", error);
 
       // Update topic with error status
-      await ctx.runMutation(internal.topicsDb._updateTopicScrapeData, {
+      await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
         topicId: args.topicId,
         scrapeStatus: "failed",
         scrapeError: error instanceof Error ? error.message : "Unknown error",
