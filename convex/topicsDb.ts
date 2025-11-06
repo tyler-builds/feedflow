@@ -38,12 +38,17 @@ export const _updateTopicScrapeData = internalMutation({
   handler: async (ctx, args) => {
     const now = Date.now();
 
-    await ctx.db.patch(args.topicId, {
+    const updates: any = {
       scrapedData: args.scrapedData,
       scrapeStatus: args.scrapeStatus,
-      lastScrapedAt: args.scrapeStatus === "completed" ? now : undefined,
       scrapeError: args.scrapeError,
-    });
+    };
+
+    if (args.scrapeStatus === "completed") {
+      updates.lastScrapedAt = now;
+    }
+
+    await ctx.db.patch(args.topicId, updates);
   },
 });
 
