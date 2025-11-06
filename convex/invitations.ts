@@ -31,11 +31,13 @@ export const createInvitation = mutation({
       throw new Error("Not a member of this team");
     }
 
+    const normalizedEmail = args.email.toLowerCase();
+
     // Check if there's already a pending invitation for this email
     const existingInvitation = await ctx.db
       .query("teamInvitations")
       .withIndex("by_team", (q) => q.eq("teamId", args.teamId))
-      .filter((q) => q.eq(q.field("email"), args.email))
+      .filter((q) => q.eq(q.field("email"), normalizedEmail))
       .filter((q) => q.eq(q.field("status"), "pending"))
       .first();
 
@@ -51,7 +53,7 @@ export const createInvitation = mutation({
 
     const invitationId = await ctx.db.insert("teamInvitations", {
       teamId: args.teamId,
-      email: args.email.toLowerCase(),
+      email: normalizedEmail,
       invitedBy: user.userId || user._id.toString(),
       status: "pending",
       role: args.role || "member",
@@ -198,13 +200,13 @@ export const acceptInvitation = mutation({
       throw new Error("This invitation was sent to a different email address");
     }
 
+    const userId = user.userId || user._id.toString();
+
     // Check if user is already a member
     const existingMembership = await ctx.db
       .query("teamMembers")
       .withIndex("by_team_and_user", (q) =>
-        q
-          .eq("teamId", invitation.teamId)
-          .eq("userId", user.userId || user._id.toString()),
+        q.eq("teamId", invitation.teamId).eq("userId", userId),
       )
       .first();
 
@@ -215,7 +217,7 @@ export const acceptInvitation = mutation({
     // Add user to team
     await ctx.db.insert("teamMembers", {
       teamId: invitation.teamId,
-      userId: user.userId || user._id.toString(),
+      userId: userId,
       role: invitation.role,
       joinedAt: now,
     });
@@ -225,6 +227,27 @@ export const acceptInvitation = mutation({
       status: "accepted",
       acceptedAt: now,
     });
+
+    // Get or create user settings
+    let settings = await ctx.db
+      .query("userSettings")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .first();
+
+    if (!settings) {
+      // Create settings with the new team as current team
+      await ctx.db.insert("userSettings", {
+        userId: userId,
+        currentTeamId: invitation.teamId,
+        updatedAt: now,
+      });
+    } else {
+      // Update current team to the newly joined team
+      await ctx.db.patch(settings._id, {
+        currentTeamId: invitation.teamId,
+        updatedAt: now,
+      });
+    }
 
     return invitation.teamId;
   },
@@ -249,6 +272,10 @@ export const declineInvitation = mutation({
 
     if (!invitation) {
       throw new Error("Invitation not found");
+    }
+
+    if (invitation.status !== "pending") {
+      throw new Error("This invitation is no longer actionable");
     }
 
     // Check if invitation belongs to user's email
@@ -301,10 +328,13 @@ export const cancelInvitation = mutation({
     //   throw new Error("Insufficient permissions");
     // }
 
+    if (invitation.status !== "pending") {
+      throw new Error("Only pending invitations can be cancelled");
+    }
+
     await ctx.db.patch(args.invitationId, {
       status: "cancelled",
     });
-
     return { success: true };
   },
 });

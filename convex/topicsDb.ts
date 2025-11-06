@@ -116,7 +116,6 @@ export const getTopic = query({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
-    console.log(JSON.stringify(ctx, null, 2));
     const user = await authComponent.getAuthUser(ctx);
     if (!user) {
       throw new Error("Not authenticated");

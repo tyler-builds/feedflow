@@ -107,6 +107,7 @@ function LoginPage() {
                   type="text"
                   placeholder="John Doe"
                   disabled={loading}
+                  required
                 />
               </div>
             )}

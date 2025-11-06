@@ -8,16 +8,13 @@ interface UseInvitationActionsOptions {
 
 export function useInvitationActions(options?: UseInvitationActionsOptions) {
   const navigate = useNavigate();
-  const setCurrentTeam = useMutation(api.userSettings.setCurrentTeam);
   const acceptInvitation = useMutation(api.invitations.acceptInvitation);
   const declineInvitation = useMutation(api.invitations.declineInvitation);
 
   const handleAccept = async (token: string) => {
     try {
-      const teamId = await acceptInvitation({ token });
-
-      // Switch to the newly joined team
-      await setCurrentTeam({ teamId });
+      // Accept invitation (now also sets the current team in the mutation)
+      await acceptInvitation({ token });
 
       // Call optional success callback (e.g., to close modal)
       options?.onSuccess?.();
@@ -35,9 +32,11 @@ export function useInvitationActions(options?: UseInvitationActionsOptions) {
 
     try {
       await declineInvitation({ token });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to decline invitation:", error);
-      alert(error.message || "Failed to decline invitation");
+      alert(
+        error instanceof Error ? error.message : "Failed to accept invitation",
+      );
     }
   };
 

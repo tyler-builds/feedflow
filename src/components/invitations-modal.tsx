@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../convex/_generated/api";
+import { Doc } from "../../convex/_generated/dataModel";
 import { useInvitationActions } from "@/hooks/use-invitation-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,25 +19,42 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Mail } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Check, X, Mail, AlertCircle } from "lucide-react";
 
 interface InvitationsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+type InvitationWithTeam = Doc<"teamInvitations"> & {
+  team: { name: string; logoUrl?: string } | null;
+};
+
 export function InvitationsModal({
   open,
   onOpenChange,
 }: InvitationsModalProps) {
   // Get pending invitations for current user
-  const { data: invitations } = useQuery(
-    convexQuery(api.invitations.getUserInvitations, {}),
-  );
+  const {
+    data: invitations,
+    isLoading,
+    error,
+  } = useQuery(convexQuery(api.invitations.getUserInvitations, {}));
 
   const { handleAccept, handleDecline } = useInvitationActions({
     onSuccess: () => onOpenChange(false),
   });
+
+  const formatDate = (timestamp: number) => {
+    try {
+      const date = new Date(timestamp);
+      if (isNaN(date.getTime())) return "Invalid date";
+      return date.toLocaleDateString();
+    } catch {
+      return "Invalid date";
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,7 +67,50 @@ export function InvitationsModal({
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
-          {!invitations || invitations.length === 0 ? (
+          {isLoading ? (
+            // Loading state
+            <div className="space-y-4">
+              {[1, 2].map((i) => (
+                <Card key={i}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-2 flex-1">
+                        <Skeleton className="h-6 w-48" />
+                        <Skeleton className="h-4 w-64" />
+                      </div>
+                      <Skeleton className="h-5 w-16" />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-40" />
+                        <Skeleton className="h-4 w-40" />
+                      </div>
+                      <div className="flex gap-2">
+                        <Skeleton className="h-10 w-24" />
+                        <Skeleton className="h-10 w-24" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : error ? (
+            // Error state
+            <div className="text-center py-8">
+              <AlertCircle className="mx-auto h-12 w-12 text-destructive/50 mb-4" />
+              <p className="text-muted-foreground font-medium">
+                Failed to load invitations
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {error instanceof Error
+                  ? error.message
+                  : "Please try again later"}
+              </p>
+            </div>
+          ) : !invitations || invitations.length === 0 ? (
+            // Empty state
             <div className="text-center py-8">
               <Mail className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
               <p className="text-muted-foreground">No pending invitations</p>
@@ -58,7 +119,8 @@ export function InvitationsModal({
               </p>
             </div>
           ) : (
-            invitations.map((invitation: any) => (
+            // Data state
+            invitations.map((invitation: InvitationWithTeam) => (
               <Card key={invitation._id}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -76,14 +138,8 @@ export function InvitationsModal({
                 <CardContent>
                   <div className="space-y-4">
                     <div className="text-sm text-muted-foreground">
-                      <p>
-                        Invited{" "}
-                        {new Date(invitation.createdAt).toLocaleDateString()}
-                      </p>
-                      <p>
-                        Expires{" "}
-                        {new Date(invitation.expiresAt).toLocaleDateString()}
-                      </p>
+                      <p>Invited {formatDate(invitation.createdAt)}</p>
+                      <p>Expires {formatDate(invitation.expiresAt)}</p>
                     </div>
                     <div className="flex gap-2">
                       <Button onClick={() => handleAccept(invitation.token)}>

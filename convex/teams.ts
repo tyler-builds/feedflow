@@ -182,7 +182,15 @@ export const updateTeam = mutation({
 
     if (args.name !== undefined) {
       updates.name = args.name;
-      updates.slug = generateSlug(args.name);
+      const newSlug = generateSlug(args.name);
+      const slugCollision = await ctx.db
+        .query("teams")
+        .withIndex("by_slug", (q) => q.eq("slug", newSlug))
+        .first();
+      updates.slug =
+        slugCollision && slugCollision._id !== args.teamId
+          ? `${newSlug}-${Date.now()}`
+          : newSlug;
     }
 
     if (args.logoUrl !== undefined) {

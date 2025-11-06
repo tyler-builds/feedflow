@@ -121,11 +121,13 @@ export const removeTeamMember = mutation({
       throw new Error("Cannot remove the team owner");
     }
 
-    // Future: Check if current user has permission to remove members
-    // For now, any member can remove other members (except owner)
-    // if (currentUserMembership.role !== "owner" && currentUserMembership.role !== "admin") {
-    //   throw new Error("Insufficient permissions");
-    // }
+    // Check if current user has permission to remove members
+    if (
+      currentUserMembership.role !== "owner" &&
+      currentUserMembership.role !== "admin"
+    ) {
+      throw new Error("Insufficient permissions");
+    }
 
     await ctx.db.delete(targetMembership._id);
 
