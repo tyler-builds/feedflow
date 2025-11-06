@@ -171,10 +171,9 @@ export const updateTeam = mutation({
       throw new Error("Not a member of this team");
     }
 
-    // Future: Check if user has permission to update
-    // if (membership.role !== "owner" && membership.role !== "admin") {
-    //   throw new Error("Insufficient permissions");
-    // }
+    if (membership.role !== "owner" && membership.role !== "admin") {
+      throw new Error("Insufficient permissions");
+    }
 
     const updates: any = {
       updatedAt: Date.now(),

@@ -117,7 +117,10 @@ export const removeTeamMember = mutation({
     }
 
     // Cannot remove the owner
-    if (targetMembership.role === "owner") {
+    if (
+      targetMembership.role === "owner" ||
+      team.ownerId === targetMembership.userId
+    ) {
       throw new Error("Cannot remove the team owner");
     }
 

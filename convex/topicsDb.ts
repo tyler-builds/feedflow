@@ -84,16 +84,12 @@ export const getTopics = query({
     const topics = await ctx.db
       .query("topics")
       .withIndex("by_team", (q) => q.eq("teamId", settings.currentTeamId))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
-
-    // Filter out soft-deleted topics
-    const activeTopics = topics.filter(
-      (topic) => topic.deletedAt === undefined,
-    );
 
     // Get creator information for each topic
     const topicsWithCreator = await Promise.all(
-      activeTopics.map(async (topic) => {
+      topics.map(async (topic) => {
         const creator = await authComponent.getAnyUserById(
           ctx,
           topic.createdBy,
@@ -193,9 +189,11 @@ export const updateTopic = mutation({
       throw new Error("Not a member of this team");
     }
 
-    const updates: any = {
-      updatedAt: Date.now(),
-    };
+    const updates: {
+      updatedAt: number;
+      title?: string;
+      description?: string;
+    } = { updatedAt: Date.now() };
 
     if (args.title !== undefined) {
       updates.title = args.title;
