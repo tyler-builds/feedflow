@@ -6,7 +6,7 @@ import { authComponent } from "./auth";
 export const getCommentsBySearchResult = query({
   args: {
     topicId: v.id("topics"),
-    searchResultId: v.string(),
+    searchResultId: v.id("searchResults"),
   },
   handler: async (ctx, args) => {
     const user = await authComponent.getAuthUser(ctx);
@@ -83,7 +83,7 @@ export const getCommentsBySearchResult = query({
 export const addComment = mutation({
   args: {
     topicId: v.id("topics"),
-    searchResultId: v.string(),
+    searchResultId: v.id("searchResults"),
     content: v.string(),
   },
   handler: async (ctx, args) => {

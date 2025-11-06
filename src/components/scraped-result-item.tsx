@@ -12,33 +12,31 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
-import type { WebResult, NewsResult } from "@/types/scraped-data";
+import type { Id } from "../../convex/_generated/dataModel";
 
 interface ScrapedResultItemProps {
-  item: WebResult | NewsResult;
-  type: "web" | "news";
-  onClick?: (searchResultId: string) => void;
+  result: {
+    _id: Id<"searchResults">;
+    type: "web" | "news";
+    title: string;
+    url: string;
+    position: number;
+    description?: string;
+    summary?: string;
+    keyPoints?: string[];
+    imageUrl?: string;
+    date?: string;
+    favicon?: string;
+  };
+  onClick?: (searchResultId: Id<"searchResults">) => void;
 }
 
-export function ScrapedResultItem({
-  item,
-  type,
-  onClick,
-}: ScrapedResultItemProps) {
+export function ScrapedResultItem({ result, onClick }: ScrapedResultItemProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const isNews = type === "news";
-  const newsItem = isNews ? (item as NewsResult) : null;
-  const webItem = !isNews ? (item as WebResult) : null;
+  const isNews = result.type === "news";
 
-  // Generate a consistent unique identifier for this search result
-  const searchResultId = `${type}-${item.position}`;
-
-  const hasSummary = !!(isNews
-    ? newsItem?.json?.summary
-    : webItem?.json?.summary);
-  const hasKeyPoints = !!(isNews
-    ? newsItem?.json?.keyPoints?.length
-    : webItem?.json?.keyPoints?.length);
+  const hasSummary = !!result.summary;
+  const hasKeyPoints = !!(result.keyPoints && result.keyPoints.length > 0);
   const hasExpandableContent = hasSummary || hasKeyPoints;
 
   return (
@@ -46,7 +44,7 @@ export function ScrapedResultItem({
       open={isOpen}
       onOpenChange={setIsOpen}
       className="rounded-lg border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-      onClick={() => onClick?.(searchResultId)}
+      onClick={() => onClick?.(result._id)}
     >
       {/* Header - Clickable trigger */}
       <CollapsibleTrigger
@@ -57,10 +55,10 @@ export function ScrapedResultItem({
           <div className="flex-1 min-w-0">
             <div className="flex items-start gap-2">
               <h3 className="text-base font-semibold leading-tight flex-1 text-left">
-                {item.title}
+                {result.title}
               </h3>
               <a
-                href={item.url}
+                href={result.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group"
@@ -98,19 +96,21 @@ export function ScrapedResultItem({
       {/* Content */}
       <div className="space-y-3 mt-3 mx-4 mb-4">
         {/* Always visible: Description/Snippet */}
-        <p className="text-sm text-muted-foreground line-clamp-2">
-          {isNews ? newsItem?.snippet : webItem?.description}
-        </p>
+        {result.description && (
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {result.description}
+          </p>
+        )}
 
         {/* Collapsible content: Summary, Key Points, Image */}
         {hasExpandableContent && (
           <CollapsibleContent className="space-y-3">
             {/* News thumbnail in expanded view */}
-            {isNews && newsItem?.imageUrl && (
+            {isNews && result.imageUrl && (
               <div>
                 <img
-                  src={newsItem.imageUrl}
-                  alt={item.title}
+                  src={result.imageUrl}
+                  alt={result.title}
                   className="w-full max-w-xs rounded-md object-cover"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
@@ -120,48 +120,39 @@ export function ScrapedResultItem({
             )}
 
             {/* Full summary - no line clamp when expanded */}
-            {(isNews ? newsItem?.json?.summary : webItem?.json?.summary) && (
+            {result.summary && (
               <div className="pt-2 border-t">
                 <h4 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
                   Summary
                 </h4>
-                <p className="text-sm">
-                  {isNews ? newsItem?.json?.summary : webItem?.json?.summary}
-                </p>
+                <p className="text-sm">{result.summary}</p>
               </div>
             )}
 
             {/* All key points when expanded */}
-            {(isNews ? newsItem?.json?.keyPoints : webItem?.json?.keyPoints) &&
-              (isNews
-                ? newsItem?.json?.keyPoints.length
-                : webItem?.json?.keyPoints.length)! > 0 && (
-                <div className="pt-2 border-t">
-                  <h4 className="text-xs font-semibold mb-2 text-muted-foreground uppercase">
-                    Key Points
-                  </h4>
-                  <ul className="space-y-1.5 text-sm">
-                    {(isNews
-                      ? newsItem?.json?.keyPoints
-                      : webItem?.json?.keyPoints)!.map((point, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-primary shrink-0">•</span>
-                        <span>
-                          {point.title || point.name || point.content}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            {result.keyPoints && result.keyPoints.length > 0 && (
+              <div className="pt-2 border-t">
+                <h4 className="text-xs font-semibold mb-2 text-muted-foreground uppercase">
+                  Key Points
+                </h4>
+                <ul className="space-y-1.5 text-sm">
+                  {result.keyPoints.map((point, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="text-primary shrink-0">•</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </CollapsibleContent>
         )}
 
         {/* Metadata footer - always visible */}
         <div className="pt-2 flex items-center gap-2 text-xs text-muted-foreground border-t">
-          {!isNews && webItem?.metadata?.favicon && (
+          {!isNews && result.favicon && (
             <img
-              src={webItem.metadata.favicon}
+              src={result.favicon}
               alt=""
               className="h-3 w-3"
               onError={(e) => {
@@ -169,14 +160,14 @@ export function ScrapedResultItem({
               }}
             />
           )}
-          {isNews && newsItem?.date && (
+          {isNews && result.date && (
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              <span>{newsItem.date}</span>
+              <span>{result.date}</span>
             </div>
           )}
-          <span className="truncate">{new URL(item.url).hostname}</span>
-          <span className="text-muted-foreground/50">#{item.position}</span>
+          <span className="truncate">{new URL(result.url).hostname}</span>
+          <span className="text-muted-foreground/50">#{result.position}</span>
         </div>
       </div>
     </Collapsible>

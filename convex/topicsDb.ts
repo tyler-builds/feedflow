@@ -27,11 +27,10 @@ export const _createTopicInDb = internalMutation({
   },
 });
 
-// Internal mutation to update topic with scraped data
-export const _updateTopicScrapeData = internalMutation({
+// Internal mutation to update topic scrape status
+export const _updateTopicScrapeStatus = internalMutation({
   args: {
     topicId: v.id("topics"),
-    scrapedData: v.optional(v.string()),
     scrapeStatus: v.union(v.literal("completed"), v.literal("failed")),
     scrapeError: v.optional(v.string()),
   },
@@ -39,7 +38,6 @@ export const _updateTopicScrapeData = internalMutation({
     const now = Date.now();
 
     const updates: any = {
-      scrapedData: args.scrapedData,
       scrapeStatus: args.scrapeStatus,
       scrapeError: args.scrapeError,
     };

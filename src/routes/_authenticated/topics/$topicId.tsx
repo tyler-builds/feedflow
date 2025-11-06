@@ -9,7 +9,6 @@ import { ScrapedResultItem } from "@/components/scraped-result-item";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowLeft, Search } from "lucide-react";
-import type { ScrapedData, WebResult, NewsResult } from "@/types/scraped-data";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/topics/$topicId")({
@@ -18,9 +17,8 @@ export const Route = createFileRoute("/_authenticated/topics/$topicId")({
 
 function TopicPage() {
   const { topicId } = Route.useParams();
-  const [selectedSearchResultId, setSelectedSearchResultId] = useState<
-    string | null
-  >(null);
+  const [selectedSearchResultId, setSelectedSearchResultId] =
+    useState<Id<"searchResults"> | null>(null);
 
   const { data: topic } = useSuspenseQuery(
     convexQuery(api.topicsDb.getTopic, {
@@ -28,29 +26,13 @@ function TopicPage() {
     }),
   );
 
-  // Parse scraped data if available
-  let scrapedData: ScrapedData | null = null;
-  if (topic.scrapedData) {
-    try {
-      scrapedData = JSON.parse(topic.scrapedData) as ScrapedData;
-    } catch (error) {
-      console.error("Failed to parse scraped data:", error);
-    }
-  }
+  const { data: searchResults } = useSuspenseQuery(
+    convexQuery(api.searchResults.getSearchResultsByTopic, {
+      topicId: topicId as Id<"topics">,
+    }),
+  );
 
-  // Merge web and news results into a single array with type info
-  const allResults: Array<{
-    item: WebResult | NewsResult;
-    type: "web" | "news";
-  }> = [];
-  if (scrapedData) {
-    scrapedData.web.forEach((item) => allResults.push({ item, type: "web" }));
-    scrapedData.news.forEach((item) => allResults.push({ item, type: "news" }));
-    // Sort by position to maintain search relevance
-    allResults.sort((a, b) => a.item.position - b.item.position);
-  }
-
-  const handleResultClick = (searchResultId: string) => {
+  const handleResultClick = (searchResultId: Id<"searchResults">) => {
     setSelectedSearchResultId(searchResultId);
   };
 
@@ -119,20 +101,19 @@ function TopicPage() {
           {/* Scrollable Results Section */}
           <div className="flex-1 overflow-y-auto">
             {/* Unified Search Results */}
-            {allResults.length > 0 && (
+            {searchResults.length > 0 && (
               <>
                 <div className="flex items-center gap-2 sticky top-0 bg-background py-2 z-10">
                   <Search className="h-5 w-5" />
                   <h2 className="text-xl font-semibold">
-                    Search Results ({allResults.length})
+                    Search Results ({searchResults.length})
                   </h2>
                 </div>
                 <div className="space-y-3 pb-6">
-                  {allResults.map((result, index) => (
+                  {searchResults.map((result) => (
                     <ScrapedResultItem
-                      key={`${result.type}-${index}`}
-                      item={result.item}
-                      type={result.type}
+                      key={result._id}
+                      result={result}
                       onClick={handleResultClick}
                     />
                   ))}
@@ -141,13 +122,14 @@ function TopicPage() {
             )}
 
             {/* Empty State */}
-            {!scrapedData && topic.scrapeStatus === "completed" && (
-              <Card>
-                <CardContent className="py-8 text-center text-muted-foreground">
-                  No scraped data available for this topic.
-                </CardContent>
-              </Card>
-            )}
+            {searchResults.length === 0 &&
+              topic.scrapeStatus === "completed" && (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    No search results available for this topic.
+                  </CardContent>
+                </Card>
+              )}
 
             {topic.scrapeStatus === "pending" && (
               <Card>

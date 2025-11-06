@@ -15,7 +15,7 @@ interface TopicCommentsPanelProps {
   isOpen: boolean;
   onClose: () => void;
   topicId: Id<"topics">;
-  searchResultId: string;
+  searchResultId: Id<"searchResults">;
 }
 
 export function TopicCommentsPanel({
