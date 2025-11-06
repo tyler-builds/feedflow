@@ -1,102 +1,73 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { TopicComment, type Comment } from "./topic-comment";
-import { MessageSquare, X } from "lucide-react";
+import { MessageSquare, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-// Dummy data for comments
-const dummyComments: Comment[] = [
-  {
-    id: "1",
-    author: {
-      name: "Sarah Johnson",
-      initials: "SJ",
-    },
-    content:
-      "This is a great topic! I've been thinking about this for a while and would love to discuss further.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
-  },
-  {
-    id: "2",
-    author: {
-      name: "Mike Chen",
-      initials: "MC",
-    },
-    content:
-      "I agree with the approach outlined here. We should definitely consider implementing this in our next sprint.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-  },
-  {
-    id: "3",
-    author: {
-      name: "Emily Rodriguez",
-      initials: "ER",
-    },
-    content:
-      "Has anyone looked into the technical implications of this? I think we might need to do some research first.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
-  },
-  {
-    id: "4",
-    author: {
-      name: "David Park",
-      initials: "DP",
-    },
-    content:
-      "I've done some preliminary research and this looks promising. Let me share what I found...",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-  },
-  {
-    id: "5",
-    author: {
-      name: "Lisa Anderson",
-      initials: "LA",
-    },
-    content:
-      "Can we schedule a meeting to discuss this in more detail? I have some questions about the implementation.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
-  },
-  {
-    id: "6",
-    author: {
-      name: "James Wilson",
-      initials: "JW",
-    },
-    content:
-      "I've created a proof of concept that demonstrates this could work. Will share the link shortly.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-  },
-  {
-    id: "7",
-    author: {
-      name: "Hannah Jackson",
-      initials: "HJ",
-    },
-    content: "Testing the new comment sections!",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-  },
-];
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { useMutation } from "convex/react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { convexQuery } from "@convex-dev/react-query";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
 interface TopicCommentsPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  topicId: Id<"topics">;
+  searchResultId: string;
 }
 
 export function TopicCommentsPanel({
   isOpen,
   onClose,
+  topicId,
+  searchResultId,
 }: TopicCommentsPanelProps) {
+  const [newComment, setNewComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch comments for this search result
+  const { data: comments } = useSuspenseQuery(
+    convexQuery(api.comments.getCommentsBySearchResult, {
+      topicId,
+      searchResultId,
+    }),
+  );
+
+  const addCommentMutation = useMutation(api.comments.addComment);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await addCommentMutation({
+        topicId,
+        searchResultId,
+        content: newComment.trim(),
+      });
+      setNewComment("");
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      alert(error instanceof Error ? error.message : "Failed to add comment");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col h-full border-l bg-background mt-10">
+    <div className="flex flex-col h-full border-l bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between p-4 border-b shrink-0">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5" />
           <h2 className="text-lg font-semibold">Comments</h2>
           <span className="text-sm text-muted-foreground">
-            ({dummyComments.length})
+            ({comments.length})
           </span>
         </div>
         <Button
@@ -110,15 +81,51 @@ export function TopicCommentsPanel({
         </Button>
       </div>
 
-      {/* Comments List */}
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full px-4 pb-8">
-          <div className="space-y-3 py-4">
-            {dummyComments.map((comment) => (
-              <TopicComment key={comment.id} comment={comment} />
-            ))}
+      {/* Comments List - Scrollable */}
+      <ScrollArea className="flex-1 px-4">
+        <div className="space-y-3 py-4">
+          {comments.length === 0 ? (
+            <div className="text-center py-8 text-sm text-muted-foreground">
+              No comments yet. Be the first to comment!
+            </div>
+          ) : (
+            comments.map((comment) => (
+              <TopicComment
+                key={comment._id}
+                comment={{
+                  id: comment._id,
+                  author: comment.author,
+                  content: comment.content,
+                  timestamp: new Date(comment.createdAt),
+                }}
+              />
+            ))
+          )}
+        </div>
+      </ScrollArea>
+
+      {/* Comment Input - Fixed at bottom */}
+      <div className="border-t p-4 shrink-0">
+        <form onSubmit={handleSubmit}>
+          <div className="relative">
+            <Textarea
+              placeholder="Add a comment..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              disabled={isSubmitting}
+              className="min-h-20 resize-none"
+            />
+            <Button
+              type="submit"
+              size="icon"
+              disabled={!newComment.trim() || isSubmitting}
+              className="absolute bottom-3 right-1.5 h-8 w-8"
+            >
+              <Send className="h-4 w-4" />
+              <span className="sr-only">Send</span>
+            </Button>
           </div>
-        </ScrollArea>
+        </form>
       </div>
     </div>
   );

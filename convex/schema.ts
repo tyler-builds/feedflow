@@ -67,4 +67,16 @@ export default defineSchema({
   })
     .index("by_team", ["teamId"])
     .index("by_team_and_deleted", ["teamId", "deletedAt"]),
+
+  comments: defineTable({
+    topicId: v.id("topics"),
+    searchResultId: v.string(), // Unique identifier for the search result (e.g., "web-1", "news-2")
+    userId: v.string(), // Better Auth user ID
+    content: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_search_result", ["searchResultId"])
+    .index("by_topic", ["topicId"])
+    .index("by_user", ["userId"]),
 });

@@ -17,7 +17,7 @@ import type { WebResult, NewsResult } from "@/types/scraped-data";
 interface ScrapedResultItemProps {
   item: WebResult | NewsResult;
   type: "web" | "news";
-  onClick?: () => void;
+  onClick?: (searchResultId: string) => void;
 }
 
 export function ScrapedResultItem({
@@ -29,6 +29,9 @@ export function ScrapedResultItem({
   const isNews = type === "news";
   const newsItem = isNews ? (item as NewsResult) : null;
   const webItem = !isNews ? (item as WebResult) : null;
+
+  // Generate a consistent unique identifier for this search result
+  const searchResultId = `${type}-${item.position}`;
 
   const hasSummary = !!(isNews
     ? newsItem?.json?.summary
@@ -43,7 +46,7 @@ export function ScrapedResultItem({
       open={isOpen}
       onOpenChange={setIsOpen}
       className="rounded-lg border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-      onClick={onClick}
+      onClick={() => onClick?.(searchResultId)}
     >
       {/* Header - Clickable trigger */}
       <CollapsibleTrigger
