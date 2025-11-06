@@ -90,10 +90,12 @@ export default defineSchema({
     searchResultId: v.id("searchResults"),
     userId: v.string(), // Better Auth user ID
     content: v.string(),
+    parentCommentId: v.optional(v.id("comments")), // For threaded replies
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index("by_search_result", ["searchResultId"])
     .index("by_topic", ["topicId"])
-    .index("by_user", ["userId"]),
+    .index("by_user", ["userId"])
+    .index("by_parent_comment", ["parentCommentId"]),
 });

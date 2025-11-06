@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MessageSquare } from "lucide-react";
 
 export interface Comment {
   id: string;
@@ -9,13 +10,15 @@ export interface Comment {
   };
   content: string;
   timestamp: Date;
+  replyCount?: number;
 }
 
 interface TopicCommentProps {
   comment: Comment;
+  onClick?: () => void;
 }
 
-export function TopicComment({ comment }: TopicCommentProps) {
+export function TopicComment({ comment, onClick }: TopicCommentProps) {
   const formatTimestamp = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -35,7 +38,14 @@ export function TopicComment({ comment }: TopicCommentProps) {
   };
 
   return (
-    <div className="rounded-lg border bg-card p-3 shadow-sm hover:shadow-md transition-shadow">
+    <div
+      className={`rounded-lg border bg-card p-3 shadow-sm transition-all ${
+        onClick
+          ? "cursor-pointer hover:shadow-md hover:border-primary/50"
+          : "hover:shadow-md"
+      }`}
+      onClick={onClick}
+    >
       <div className="flex gap-3">
         <Avatar className="h-8 w-8">
           <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
@@ -51,6 +61,15 @@ export function TopicComment({ comment }: TopicCommentProps) {
             </p>
           </div>
           <p className="text-sm text-muted-foreground">{comment.content}</p>
+          {comment.replyCount !== undefined && comment.replyCount > 0 && (
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
+              <MessageSquare className="h-3 w-3" />
+              <span>
+                {comment.replyCount}{" "}
+                {comment.replyCount === 1 ? "reply" : "replies"}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
