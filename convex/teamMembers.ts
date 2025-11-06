@@ -134,6 +134,25 @@ export const removeTeamMember = mutation({
 
     await ctx.db.delete(targetMembership._id);
 
+    const targetSettings = await ctx.db
+      .query("userSettings")
+      .withIndex("by_user", (q) => q.eq("userId", targetMembership.userId))
+      .first();
+
+    if (targetSettings?.currentTeamId === teamId) {
+      const fallbackMembership = await ctx.db
+        .query("teamMembers")
+        .withIndex("by_user", (q) => q.eq("userId", targetMembership.userId))
+        .first();
+
+      await ctx.db.patch(targetSettings._id, {
+        currentTeamId: fallbackMembership
+          ? fallbackMembership.teamId
+          : undefined,
+        updatedAt: Date.now(),
+      });
+    }
+
     return { success: true };
   },
 });
