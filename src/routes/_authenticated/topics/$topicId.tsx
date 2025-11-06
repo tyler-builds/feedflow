@@ -8,12 +8,68 @@ import { TopicCommentsPanel } from "@/components/topic-comments-panel";
 import { ScrapedResultItem } from "@/components/scraped-result-item";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowLeft, Search } from "lucide-react";
-import { useState } from "react";
+import {
+  Calendar,
+  User,
+  ArrowLeft,
+  Search,
+  MessageSquare,
+  X,
+} from "lucide-react";
+import { useState, Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Route = createFileRoute("/_authenticated/topics/$topicId")({
   component: TopicPage,
 });
+
+function CommentsPanelSkeleton({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="flex flex-col h-full border-l bg-background">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b shrink-0">
+        <div className="flex items-center gap-2">
+          <MessageSquare className="h-5 w-5" />
+          <h2 className="text-lg font-semibold">Comments</h2>
+          <Skeleton className="h-5 w-8" />
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
+      </div>
+
+      {/* Comments List Skeleton */}
+      <ScrollArea className="flex-1 px-4">
+        <div className="space-y-3 py-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <div className="space-y-1 flex-1">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              </div>
+              <Skeleton className="h-16 w-full" />
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+
+      {/* Comment Input Skeleton */}
+      <div className="border-t p-4 shrink-0">
+        <Skeleton className="h-20 w-full" />
+      </div>
+    </div>
+  );
+}
 
 function TopicPage() {
   const { topicId } = Route.useParams();
@@ -155,12 +211,20 @@ function TopicPage() {
       {/* Side Panel - Comments - 1/3 width */}
       {selectedSearchResultId && (
         <div className="flex-1 flex flex-col overflow-hidden pt-10">
-          <TopicCommentsPanel
-            isOpen={true}
-            onClose={() => setSelectedSearchResultId(null)}
-            topicId={topicId as Id<"topics">}
-            searchResultId={selectedSearchResultId}
-          />
+          <Suspense
+            fallback={
+              <CommentsPanelSkeleton
+                onClose={() => setSelectedSearchResultId(null)}
+              />
+            }
+          >
+            <TopicCommentsPanel
+              isOpen={true}
+              onClose={() => setSelectedSearchResultId(null)}
+              topicId={topicId as Id<"topics">}
+              searchResultId={selectedSearchResultId}
+            />
+          </Suspense>
         </div>
       )}
     </div>
