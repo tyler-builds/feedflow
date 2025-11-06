@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { TopicComment, type Comment } from "./topic-comment";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // Dummy data for comments
 const dummyComments: Comment[] = [
@@ -66,30 +66,60 @@ const dummyComments: Comment[] = [
       "I've created a proof of concept that demonstrates this could work. Will share the link shortly.",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
   },
+  {
+    id: "7",
+    author: {
+      name: "Hannah Jackson",
+      initials: "HJ",
+    },
+    content: "Testing the new comment sections!",
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
+  },
 ];
 
-export function TopicCommentsPanel() {
+interface TopicCommentsPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function TopicCommentsPanel({
+  isOpen,
+  onClose,
+}: TopicCommentsPanelProps) {
+  if (!isOpen) return null;
+
   return (
-    <Card className="h-full flex flex-col mt-10">
-      <CardHeader>
+    <div className="flex flex-col h-full border-l bg-background mt-10">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-muted-foreground" />
-          <CardTitle className="text-lg">Comments</CardTitle>
+          <MessageSquare className="h-5 w-5" />
+          <h2 className="text-lg font-semibold">Comments</h2>
           <span className="text-sm text-muted-foreground">
             ({dummyComments.length})
           </span>
         </div>
-      </CardHeader>
-      <Separator />
-      <CardContent className="p-0 flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
-          <div className="divide-y">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
+      </div>
+
+      {/* Comments List */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full px-4 pb-8">
+          <div className="space-y-3 py-4">
             {dummyComments.map((comment) => (
               <TopicComment key={comment.id} comment={comment} />
             ))}
           </div>
         </ScrollArea>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

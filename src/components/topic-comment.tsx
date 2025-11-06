@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
 
 export interface Comment {
   id: string;
@@ -36,26 +35,24 @@ export function TopicComment({ comment }: TopicCommentProps) {
   };
 
   return (
-    <Card className="border-0 shadow-none">
-      <CardContent className="p-3">
-        <div className="flex gap-3">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
-            <AvatarFallback className="text-xs">
-              {comment.author.initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 space-y-1">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium">{comment.author.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {formatTimestamp(comment.timestamp)}
-              </p>
-            </div>
-            <p className="text-sm text-muted-foreground">{comment.content}</p>
+    <div className="rounded-lg border bg-card p-3 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex gap-3">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
+          <AvatarFallback className="text-xs">
+            {comment.author.initials}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 space-y-1">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">{comment.author.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {formatTimestamp(comment.timestamp)}
+            </p>
           </div>
+          <p className="text-sm text-muted-foreground">{comment.content}</p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

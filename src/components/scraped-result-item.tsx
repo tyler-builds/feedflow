@@ -17,9 +17,14 @@ import type { WebResult, NewsResult } from "@/types/scraped-data";
 interface ScrapedResultItemProps {
   item: WebResult | NewsResult;
   type: "web" | "news";
+  onClick?: () => void;
 }
 
-export function ScrapedResultItem({ item, type }: ScrapedResultItemProps) {
+export function ScrapedResultItem({
+  item,
+  type,
+  onClick,
+}: ScrapedResultItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isNews = type === "news";
   const newsItem = isNews ? (item as NewsResult) : null;
@@ -37,10 +42,14 @@ export function ScrapedResultItem({ item, type }: ScrapedResultItemProps) {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="rounded-lg border bg-card shadow-sm hover:shadow-md transition-shadow p-4"
+      className="rounded-lg border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      onClick={onClick}
     >
       {/* Header - Clickable trigger */}
-      <CollapsibleTrigger className="w-full cursor-pointer hover:bg-accent/50 transition-colors rounded-md p-2 -m-2">
+      <CollapsibleTrigger
+        className="w-full cursor-pointer hover:bg-accent/50 transition-colors rounded-md p-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-start gap-2">
@@ -84,7 +93,7 @@ export function ScrapedResultItem({ item, type }: ScrapedResultItemProps) {
       </CollapsibleTrigger>
 
       {/* Content */}
-      <div className="space-y-3 mt-3">
+      <div className="space-y-3 mt-3 mx-4 mb-4">
         {/* Always visible: Description/Snippet */}
         <p className="text-sm text-muted-foreground line-clamp-2">
           {isNews ? newsItem?.snippet : webItem?.description}

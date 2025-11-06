@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, ArrowLeft, Search } from "lucide-react";
 import type { ScrapedData, WebResult, NewsResult } from "@/types/scraped-data";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/topics/$topicId")({
   component: TopicPage,
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/topics/$topicId")({
 
 function TopicPage() {
   const { topicId } = Route.useParams();
+  const [isCommentsPanelOpen, setIsCommentsPanelOpen] = useState(false);
 
   const { data: topic } = useSuspenseQuery(
     convexQuery(api.topicsDb.getTopic, {
@@ -49,7 +51,7 @@ function TopicPage() {
     <div className="h-full flex gap-4 p-4 overflow-hidden">
       {/* Main Content - 2/3 width */}
       <div className="flex-2 flex flex-col overflow-hidden">
-        <div className="max-w-4xl shrink-0 mb-2">
+        <div className="shrink-0 mb-2">
           <Button variant="ghost" size="sm" asChild className="mb-2">
             <Link to="/topics">
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -102,7 +104,7 @@ function TopicPage() {
         </div>
 
         {/* Scrollable Results Section */}
-        <div className="max-w-4xl flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           {/* Unified Search Results */}
           {allResults.length > 0 && (
             <>
@@ -118,6 +120,7 @@ function TopicPage() {
                     key={`${result.type}-${index}`}
                     item={result.item}
                     type={result.type}
+                    onClick={() => setIsCommentsPanelOpen(true)}
                   />
                 ))}
               </div>
@@ -153,9 +156,14 @@ function TopicPage() {
       </div>
 
       {/* Side Panel - Comments - 1/3 width */}
-      <div className="flex-1 overflow-hidden">
-        <TopicCommentsPanel />
-      </div>
+      {isCommentsPanelOpen && (
+        <div className="flex-1 overflow-hidden">
+          <TopicCommentsPanel
+            isOpen={isCommentsPanelOpen}
+            onClose={() => setIsCommentsPanelOpen(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }
