@@ -195,6 +195,22 @@ export const addComment = mutation({
       throw new Error("Topic not found");
     }
 
+    const searchResult = await ctx.db.get(args.searchResultId);
+    if (!searchResult || searchResult.topicId !== args.topicId) {
+      throw new Error("Search result not found");
+    }
+
+    if (args.parentCommentId) {
+      const parentComment = await ctx.db.get(args.parentCommentId);
+      if (
+        !parentComment ||
+        parentComment.topicId !== args.topicId ||
+        parentComment.searchResultId !== args.searchResultId
+      ) {
+        throw new Error("Invalid parent comment reference");
+      }
+    }
+
     // Check if topic is deleted
     if (topic.deletedAt !== undefined) {
       throw new Error("Topic not found");
