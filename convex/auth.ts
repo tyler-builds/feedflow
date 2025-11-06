@@ -1,6 +1,10 @@
-import { createClient, type GenericCtx } from "@convex-dev/better-auth";
+import {
+  createClient,
+  type GenericCtx,
+  type AuthFunctions,
+} from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
-import { components } from "./_generated/api";
+import { components, internal } from "./_generated/api";
 import { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import { betterAuth } from "better-auth";
@@ -12,9 +16,55 @@ if (!siteUrl) {
   );
 }
 
+const authFunctions: AuthFunctions = internal.auth;
+
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
-export const authComponent = createClient<DataModel>(components.betterAuth);
+export const authComponent = createClient<DataModel>(components.betterAuth, {
+  authFunctions,
+  triggers: {
+    user: {
+      onCreate: async (ctx, authUser) => {
+        console.log("🎉 User onCreate trigger fired!", authUser._id);
+
+        // Create a "Personal" team for every new user
+        const now = Date.now();
+        const teamName = "Personal";
+        const slug = `personal-${now}`;
+
+        // Get the userId as a string (Better Auth users have _id as the primary identifier)
+        const userId = authUser._id.toString();
+        console.log("Creating team for userId:", userId);
+
+        // Create the personal team
+        const teamId = await ctx.db.insert("teams", {
+          name: teamName,
+          slug,
+          ownerId: userId,
+          createdAt: now,
+          updatedAt: now,
+        });
+
+        // Add user as owner
+        await ctx.db.insert("teamMembers", {
+          teamId,
+          userId: userId,
+          role: "owner",
+          joinedAt: now,
+        });
+
+        // Initialize user settings with this team as the current team
+        await ctx.db.insert("userSettings", {
+          userId: userId,
+          currentTeamId: teamId,
+          updatedAt: now,
+        });
+      },
+    },
+  },
+});
+
+export const { onCreate, onUpdate, onDelete } = authComponent.triggersApi();
 
 export const createAuth = (
   ctx: GenericCtx<DataModel>,

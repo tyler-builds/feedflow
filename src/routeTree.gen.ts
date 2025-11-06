@@ -10,167 +10,122 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoConvexRouteImport } from './routes/demo/convex'
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
-import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenticated/invitations'
+import { Route as AuthenticatedTopicsIndexRouteImport } from './routes/_authenticated/topics/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
-import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
-import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
-import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
+import { Route as AuthenticatedTopicsTopicIdRouteImport } from './routes/_authenticated/topics/$topicId'
+import { Route as AuthenticatedTeamsSettingsRouteImport } from './routes/_authenticated/teams/settings'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const DemoConvexRoute = DemoConvexRouteImport.update({
-  id: '/demo/convex',
-  path: '/demo/convex',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
-  path: '/demo/start/api-request',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
-  id: '/demo/api/names',
-  path: '/demo/api/names',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedInvitationsRoute =
+  AuthenticatedInvitationsRouteImport.update({
+    id: '/invitations',
+    path: '/invitations',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTopicsIndexRoute =
+  AuthenticatedTopicsIndexRouteImport.update({
+    id: '/topics/',
+    path: '/topics/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
-  id: '/demo/start/ssr/',
-  path: '/demo/start/ssr/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
-  id: '/demo/start/ssr/spa-mode',
-  path: '/demo/start/ssr/spa-mode',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
-  id: '/demo/start/ssr/full-ssr',
-  path: '/demo/start/ssr/full-ssr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
-  id: '/demo/start/ssr/data-only',
-  path: '/demo/start/ssr/data-only',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedTopicsTopicIdRoute =
+  AuthenticatedTopicsTopicIdRouteImport.update({
+    id: '/topics/$topicId',
+    path: '/topics/$topicId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTeamsSettingsRoute =
+  AuthenticatedTeamsSettingsRouteImport.update({
+    id: '/teams/settings',
+    path: '/teams/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/demo/convex': typeof DemoConvexRoute
+  '/invitations': typeof AuthenticatedInvitationsRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/demo/convex': typeof DemoConvexRoute
+  '/invitations': typeof AuthenticatedInvitationsRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
-  '/demo/convex': typeof DemoConvexRoute
+  '/_authenticated/invitations': typeof AuthenticatedInvitationsRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/teams/settings': typeof AuthenticatedTeamsSettingsRoute
+  '/_authenticated/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
+  '/_authenticated/topics/': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/login'
-    | '/demo/convex'
+    | '/invitations'
+    | '/'
+    | '/teams/settings'
+    | '/topics/$topicId'
     | '/api/auth/$'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
+    | '/topics'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/login'
-    | '/demo/convex'
+    | '/invitations'
+    | '/'
+    | '/teams/settings'
+    | '/topics/$topicId'
     | '/api/auth/$'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
+    | '/topics'
   id:
     | '__root__'
-    | '/'
+    | '/_authenticated'
     | '/login'
-    | '/demo/convex'
+    | '/_authenticated/invitations'
+    | '/_authenticated/'
+    | '/_authenticated/teams/settings'
+    | '/_authenticated/topics/$topicId'
     | '/api/auth/$'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr/'
+    | '/_authenticated/topics/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
-  DemoConvexRoute: typeof DemoConvexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  DemoApiNamesRoute: typeof DemoApiNamesRoute
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
-  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
-  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
-  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,40 +137,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/demo/convex': {
-      id: '/demo/convex'
-      path: '/demo/convex'
-      fullPath: '/demo/convex'
-      preLoaderRoute: typeof DemoConvexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/invitations': {
+      id: '/_authenticated/invitations'
+      path: '/invitations'
+      fullPath: '/invitations'
+      preLoaderRoute: typeof AuthenticatedInvitationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
-      path: '/demo/start/server-funcs'
-      fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
-      path: '/demo/start/api-request'
-      fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/api/names': {
-      id: '/demo/api/names'
-      path: '/demo/api/names'
-      fullPath: '/demo/api/names'
-      preLoaderRoute: typeof DemoApiNamesRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/topics/': {
+      id: '/_authenticated/topics/'
+      path: '/topics'
+      fullPath: '/topics'
+      preLoaderRoute: typeof AuthenticatedTopicsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -224,49 +172,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/': {
-      id: '/demo/start/ssr/'
-      path: '/demo/start/ssr'
-      fullPath: '/demo/start/ssr'
-      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/topics/$topicId': {
+      id: '/_authenticated/topics/$topicId'
+      path: '/topics/$topicId'
+      fullPath: '/topics/$topicId'
+      preLoaderRoute: typeof AuthenticatedTopicsTopicIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/demo/start/ssr/spa-mode': {
-      id: '/demo/start/ssr/spa-mode'
-      path: '/demo/start/ssr/spa-mode'
-      fullPath: '/demo/start/ssr/spa-mode'
-      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/ssr/full-ssr': {
-      id: '/demo/start/ssr/full-ssr'
-      path: '/demo/start/ssr/full-ssr'
-      fullPath: '/demo/start/ssr/full-ssr'
-      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/ssr/data-only': {
-      id: '/demo/start/ssr/data-only'
-      path: '/demo/start/ssr/data-only'
-      fullPath: '/demo/start/ssr/data-only'
-      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/teams/settings': {
+      id: '/_authenticated/teams/settings'
+      path: '/teams/settings'
+      fullPath: '/teams/settings'
+      preLoaderRoute: typeof AuthenticatedTeamsSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedInvitationsRoute: typeof AuthenticatedInvitationsRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedTeamsSettingsRoute: typeof AuthenticatedTeamsSettingsRoute
+  AuthenticatedTopicsTopicIdRoute: typeof AuthenticatedTopicsTopicIdRoute
+  AuthenticatedTopicsIndexRoute: typeof AuthenticatedTopicsIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedInvitationsRoute: AuthenticatedInvitationsRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedTeamsSettingsRoute: AuthenticatedTeamsSettingsRoute,
+  AuthenticatedTopicsTopicIdRoute: AuthenticatedTopicsTopicIdRoute,
+  AuthenticatedTopicsIndexRoute: AuthenticatedTopicsIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
-  DemoConvexRoute: DemoConvexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  DemoApiNamesRoute: DemoApiNamesRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
-  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
-  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
-  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

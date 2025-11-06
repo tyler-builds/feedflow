@@ -1,4 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { fetchSession } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,10 +16,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+// Server-side session check
+const checkAuth = createServerFn({ method: "GET" }).handler(async () => {
+  const { session } = await fetchSession(getRequest());
+  return {
+    isAuthenticated: !!session?.user?.id,
+  };
+});
+
 export const Route = createFileRoute("/login")({
   beforeLoad: async () => {
-    const session = await authClient.getSession();
-    if (session?.data?.session) {
+    const { isAuthenticated } = await checkAuth();
+    if (isAuthenticated) {
       throw redirect({ to: "/" });
     }
   },
@@ -26,16 +37,18 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
 
     try {
       if (isSignUp) {
@@ -71,7 +84,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
@@ -83,19 +96,18 @@ function LoginPage() {
               : "Enter your credentials to access your account"}
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+        <CardContent>
+          <form onSubmit={handleAuth} className="space-y-4">
             {isSignUp && (
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
+                  name="name"
                   type="text"
                   placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required={isSignUp}
                   disabled={loading}
+                  required
                 />
               </div>
             )}
@@ -103,26 +115,24 @@ function LoginPage() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
                 disabled={loading}
                 autoComplete="email"
+                required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
                 disabled={loading}
                 autoComplete={isSignUp ? "new-password" : "current-password"}
+                required
               />
             </div>
 
@@ -133,27 +143,28 @@ function LoginPage() {
                 </p>
               </div>
             )}
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Loading..." : isSignUp ? "Sign up" : "Sign in"}
             </Button>
-            <div className="text-sm text-center text-muted-foreground">
-              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSignUp(!isSignUp);
-                  setError("");
-                }}
-                className="text-primary hover:underline font-medium"
-                disabled={loading}
-              >
-                {isSignUp ? "Sign in" : "Sign up"}
-              </button>
-            </div>
-          </CardFooter>
-        </form>
+          </form>
+        </CardContent>
+        <CardFooter className="flex flex-col space-y-4">
+          <div className="text-sm text-center text-muted-foreground">
+            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError("");
+              }}
+              className="text-primary hover:underline font-medium"
+              disabled={loading}
+            >
+              {isSignUp ? "Sign in" : "Sign up"}
+            </button>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );

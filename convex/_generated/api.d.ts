@@ -10,7 +10,13 @@
 
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
-import type * as todos from "../todos.js";
+import type * as invitations from "../invitations.js";
+import type * as teamMembers from "../teamMembers.js";
+import type * as teams from "../teams.js";
+import type * as topicsActions from "../topicsActions.js";
+import type * as topicsDb from "../topicsDb.js";
+import type * as userSettings from "../userSettings.js";
+import type * as userSetup from "../userSetup.js";
 
 import type {
   ApiFromModules,
@@ -29,7 +35,13 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
-  todos: typeof todos;
+  invitations: typeof invitations;
+  teamMembers: typeof teamMembers;
+  teams: typeof teams;
+  topicsActions: typeof topicsActions;
+  topicsDb: typeof topicsDb;
+  userSettings: typeof userSettings;
+  userSetup: typeof userSetup;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

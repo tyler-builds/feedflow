@@ -18,10 +18,7 @@ import {
   getCookieName,
 } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
-
-import Header from "../components/Header";
-
-import ConvexProvider from "../integrations/convex/provider";
+import { NotFound } from "@/components/not-found";
 
 import appCss from "../styles.css?url";
 
@@ -69,6 +66,7 @@ export const Route = createRootRouteWithContext<{
     return { userId, token };
   },
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
 
 function RootComponent() {
@@ -92,21 +90,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ConvexProvider>
-          <Header />
-          {children}
-          <TanStackDevtools
-            config={{
-              position: "bottom-right",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-        </ConvexProvider>
+        {children}
+        <TanStackDevtools
+          config={{
+            position: "bottom-right",
+          }}
+          plugins={[
+            {
+              name: "Tanstack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
         <Scripts />
       </body>
     </html>
