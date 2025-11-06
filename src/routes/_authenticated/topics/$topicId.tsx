@@ -114,6 +114,7 @@ function TopicPage() {
                     <ScrapedResultItem
                       key={result._id}
                       result={result}
+                      commentCount={result.commentCount}
                       onClick={handleResultClick}
                     />
                   ))}

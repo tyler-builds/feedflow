@@ -80,15 +80,34 @@ export const getSearchResultsByTopic = query({
       throw new Error("Not a member of this team");
     }
 
-    // Get all search results for this topic, sorted by position
+    // Get all search results for this topic
     const results = await ctx.db
       .query("searchResults")
       .withIndex("by_topic", (q) => q.eq("topicId", args.topicId))
       .collect();
 
-    // Sort by position (since we can't do compound index ordering in Convex)
-    results.sort((a, b) => a.position - b.position);
+    // Get all comments for this topic in a single query
+    const allComments = await ctx.db
+      .query("comments")
+      .withIndex("by_topic", (q) => q.eq("topicId", args.topicId))
+      .collect();
 
-    return results;
+    // Count comments per search result
+    const commentCountMap = new Map<string, number>();
+    for (const comment of allComments) {
+      const count = commentCountMap.get(comment.searchResultId) || 0;
+      commentCountMap.set(comment.searchResultId, count + 1);
+    }
+
+    // Add comment counts to results and sort by position
+    const resultsWithCommentCounts = results.map((result) => ({
+      ...result,
+      commentCount: commentCountMap.get(result._id) || 0,
+    }));
+
+    // Sort by position (since we can't do compound index ordering in Convex)
+    resultsWithCommentCounts.sort((a, b) => a.position - b.position);
+
+    return resultsWithCommentCounts;
   },
 });

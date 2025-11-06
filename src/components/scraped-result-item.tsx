@@ -10,6 +10,7 @@ import {
   Newspaper,
   Calendar,
   ChevronDown,
+  MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -28,10 +29,15 @@ interface ScrapedResultItemProps {
     date?: string;
     favicon?: string;
   };
+  commentCount: number;
   onClick?: (searchResultId: Id<"searchResults">) => void;
 }
 
-export function ScrapedResultItem({ result, onClick }: ScrapedResultItemProps) {
+export function ScrapedResultItem({
+  result,
+  commentCount,
+  onClick,
+}: ScrapedResultItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isNews = result.type === "news";
 
@@ -81,6 +87,10 @@ export function ScrapedResultItem({ result, onClick }: ScrapedResultItemProps) {
                   Web
                 </>
               )}
+            </Badge>
+            <Badge variant="outline" className="gap-1">
+              <MessageSquare className="h-3 w-3" />
+              {commentCount}
             </Badge>
             {hasExpandableContent && (
               <ChevronDown
