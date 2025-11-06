@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { fetchSession } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,17 +40,15 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
-
-  const handleAuth = async () => {
+  const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setError("");
     setLoading(true);
 
-    const email = emailRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-    const name = nameRef.current?.value || "";
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
 
     try {
       if (isSignUp) {
@@ -99,15 +97,15 @@ function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <form onSubmit={handleAuth} className="space-y-4">
             {isSignUp && (
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
+                  name="name"
                   type="text"
                   placeholder="John Doe"
-                  ref={nameRef}
                   disabled={loading}
                 />
               </div>
@@ -116,22 +114,24 @@ function LoginPage() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="name@example.com"
-                ref={emailRef}
                 disabled={loading}
                 autoComplete="email"
+                required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
-                ref={passwordRef}
                 disabled={loading}
                 autoComplete={isSignUp ? "new-password" : "current-password"}
+                required
               />
             </div>
 
@@ -142,12 +142,13 @@ function LoginPage() {
                 </p>
               </div>
             )}
-          </div>
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Loading..." : isSignUp ? "Sign up" : "Sign in"}
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button onClick={handleAuth} className="w-full" disabled={loading}>
-            {loading ? "Loading..." : isSignUp ? "Sign up" : "Sign in"}
-          </Button>
           <div className="text-sm text-center text-muted-foreground">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button
