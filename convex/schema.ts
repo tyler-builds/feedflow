@@ -63,6 +63,7 @@ export default defineSchema({
     ),
     lastScrapedAt: v.optional(v.number()),
     scrapeError: v.optional(v.string()),
+    frequency: v.optional(v.string()), // Scrape frequency: "1h", "6h", "12h", "24h"
   })
     .index("by_team", ["teamId"])
     .index("by_team_and_deleted", ["teamId", "deletedAt"]),

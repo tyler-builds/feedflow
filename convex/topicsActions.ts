@@ -8,6 +8,22 @@ import { Id } from "./_generated/dataModel";
 import Firecrawl from "@mendable/firecrawl-js";
 import * as searchResults from "./searchResults";
 
+// Helper function to convert frequency string to milliseconds
+function frequencyToMs(frequency: string): number {
+  switch (frequency) {
+    case "1h":
+      return 3600000; // 1 hour
+    case "6h":
+      return 21600000; // 6 hours
+    case "12h":
+      return 43200000; // 12 hours
+    case "24h":
+      return 86400000; // 24 hours
+    default:
+      return 86400000; // Default to 24 hours
+  }
+}
+
 // Internal action to scrape topic data with Firecrawl
 export const _scrapeTopicWithFirecrawl = internalAction({
   args: {
@@ -15,6 +31,53 @@ export const _scrapeTopicWithFirecrawl = internalAction({
     title: v.string(),
   },
   handler: async (ctx, args) => {
+    // Validation: Check if topic exists and if it's time to scrape
+    const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+      topicId: args.topicId,
+    });
+
+    if (!topic) {
+      console.log(`Topic ${args.topicId} not found, skipping scrape`);
+      return;
+    }
+
+    // Check if topic is deleted
+    if (topic.deletedAt !== undefined) {
+      console.log(`Topic ${args.topicId} is deleted, skipping scrape`);
+      return;
+    }
+
+    // Check if enough time has passed since last scrape
+    if (topic.lastScrapedAt) {
+      const now = Date.now();
+      const frequency = topic.frequency || "24h";
+      const frequencyMs = frequencyToMs(frequency);
+      const nextScrapeTime = topic.lastScrapedAt + frequencyMs;
+
+      if (now < nextScrapeTime) {
+        // It's too early to scrape - reschedule for the correct time
+        const delay = nextScrapeTime - now;
+        console.log(
+          `Topic ${args.topicId} scrape scheduled too early. Rescheduling in ${delay}ms`,
+        );
+        await ctx.scheduler.runAfter(
+          delay,
+          internal.topicsActions._scrapeTopicWithFirecrawl,
+          {
+            topicId: args.topicId,
+            title: args.title,
+          },
+        );
+        return;
+      }
+    }
+
+    // Set topic status to pending at the start of the scrape
+    await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
+      topicId: args.topicId,
+      scrapeStatus: "pending",
+    });
+
     try {
       const apiKey = process.env.FIRECRAWL_API_KEY;
       if (!apiKey) {
@@ -25,7 +88,7 @@ export const _scrapeTopicWithFirecrawl = internalAction({
 
       // Search for content related to the topic title
       const searchResults = await firecrawl.search(args.title, {
-        limit: 5,
+        limit: 3,
         sources: ["web", "news"],
         scrapeOptions: {
           onlyMainContent: true,
@@ -112,6 +175,29 @@ export const _scrapeTopicWithFirecrawl = internalAction({
         topicId: args.topicId,
         scrapeStatus: "completed",
       });
+
+      // Schedule the next scrape based on the topic's frequency
+      const updatedTopic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+        topicId: args.topicId,
+      });
+
+      if (updatedTopic && updatedTopic.deletedAt === undefined) {
+        const frequency = updatedTopic.frequency || "24h";
+        const delay = frequencyToMs(frequency);
+
+        console.log(
+          `Scheduling next scrape for topic ${args.topicId} in ${delay}ms (${frequency})`,
+        );
+
+        await ctx.scheduler.runAfter(
+          delay,
+          internal.topicsActions._scrapeTopicWithFirecrawl,
+          {
+            topicId: args.topicId,
+            title: args.title,
+          },
+        );
+      }
     } catch (error) {
       console.error("Firecrawl search failed:", error);
 
@@ -121,6 +207,29 @@ export const _scrapeTopicWithFirecrawl = internalAction({
         scrapeStatus: "failed",
         scrapeError: error instanceof Error ? error.message : "Unknown error",
       });
+
+      // Schedule retry even on failure (after the same frequency interval)
+      const failedTopic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+        topicId: args.topicId,
+      });
+
+      if (failedTopic && failedTopic.deletedAt === undefined) {
+        const frequency = failedTopic.frequency || "24h";
+        const delay = frequencyToMs(frequency);
+
+        console.log(
+          `Scheduling retry scrape for topic ${args.topicId} in ${delay}ms (${frequency}) after failure`,
+        );
+
+        await ctx.scheduler.runAfter(
+          delay,
+          internal.topicsActions._scrapeTopicWithFirecrawl,
+          {
+            topicId: args.topicId,
+            title: args.title,
+          },
+        );
+      }
     }
   },
 });
@@ -130,6 +239,7 @@ export const createTopic = action({
   args: {
     title: v.string(),
     description: v.string(),
+    frequency: v.optional(v.string()),
   },
   handler: async (ctx, args): Promise<Id<"topics">> => {
     const user = await authComponent.getAuthUser(ctx);
@@ -152,6 +262,7 @@ export const createTopic = action({
       title: args.title,
       description: args.description,
       createdBy: userId,
+      frequency: args.frequency,
     });
 
     // Schedule Firecrawl scraping to run immediately in the background

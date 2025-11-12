@@ -1,5 +1,10 @@
 import { v } from "convex/values";
-import { mutation, query, internalMutation } from "./_generated/server";
+import {
+  mutation,
+  query,
+  internalMutation,
+  internalQuery,
+} from "./_generated/server";
 import { authComponent } from "./auth";
 
 // Internal mutation to create topic in database
@@ -9,6 +14,7 @@ export const _createTopicInDb = internalMutation({
     title: v.string(),
     description: v.string(),
     createdBy: v.string(),
+    frequency: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const now = Date.now();
@@ -21,9 +27,20 @@ export const _createTopicInDb = internalMutation({
       createdAt: now,
       updatedAt: now,
       scrapeStatus: "pending",
+      frequency: args.frequency || "24h",
     });
 
     return topicId;
+  },
+});
+
+// Internal query to get a topic by ID (for internal use)
+export const _getTopicById = internalQuery({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.topicId);
   },
 });
 
@@ -31,7 +48,11 @@ export const _createTopicInDb = internalMutation({
 export const _updateTopicScrapeStatus = internalMutation({
   args: {
     topicId: v.id("topics"),
-    scrapeStatus: v.union(v.literal("completed"), v.literal("failed")),
+    scrapeStatus: v.union(
+      v.literal("completed"),
+      v.literal("failed"),
+      v.literal("pending"),
+    ),
     scrapeError: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -161,6 +182,7 @@ export const updateTopic = mutation({
     topicId: v.id("topics"),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
+    frequency: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await authComponent.getAuthUser(ctx);
@@ -196,6 +218,7 @@ export const updateTopic = mutation({
       updatedAt: number;
       title?: string;
       description?: string;
+      frequency?: string;
     } = { updatedAt: Date.now() };
 
     if (args.title !== undefined) {
@@ -204,6 +227,10 @@ export const updateTopic = mutation({
 
     if (args.description !== undefined) {
       updates.description = args.description;
+    }
+
+    if (args.frequency !== undefined) {
+      updates.frequency = args.frequency;
     }
 
     await ctx.db.patch(args.topicId, updates);
