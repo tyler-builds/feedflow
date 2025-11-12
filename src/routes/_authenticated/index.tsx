@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Settings, Users, MessageSquare } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: App,
