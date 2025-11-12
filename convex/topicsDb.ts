@@ -261,8 +261,11 @@ export const updateTopic = mutation({
       updatedAt: number;
       title?: string;
       description?: string;
-      frequency?: "1h" | "6h" | "12h" | "24h";
-    } = { updatedAt: Date.now() };
+      frequency: "1h" | "6h" | "12h" | "24h";
+    } = {
+      updatedAt: Date.now(),
+      frequency: args.frequency,
+    };
 
     if (args.title !== undefined) {
       updates.title = args.title;
@@ -270,10 +273,6 @@ export const updateTopic = mutation({
 
     if (args.description !== undefined) {
       updates.description = args.description;
-    }
-
-    if (args.frequency !== undefined) {
-      updates.frequency = args.frequency;
     }
 
     await ctx.db.patch(args.topicId, updates);
