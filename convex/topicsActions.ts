@@ -28,7 +28,6 @@ function frequencyToMs(frequency: string): number {
 export const _scrapeTopicWithFirecrawl = internalAction({
   args: {
     topicId: v.id("topics"),
-    title: v.string(),
   },
   handler: async (ctx, args) => {
     // Validation: Check if topic exists and if it's time to scrape
@@ -65,7 +64,6 @@ export const _scrapeTopicWithFirecrawl = internalAction({
           internal.topicsActions._scrapeTopicWithFirecrawl,
           {
             topicId: args.topicId,
-            title: args.title,
           },
         );
         return;
@@ -86,8 +84,8 @@ export const _scrapeTopicWithFirecrawl = internalAction({
 
       const firecrawl = new Firecrawl({ apiKey });
 
-      // Search for content related to the topic title
-      const searchResults = await firecrawl.search(args.title, {
+      // Search for content related to the topic title (using the latest title from DB)
+      const searchResults = await firecrawl.search(topic.title, {
         limit: 3,
         sources: ["web", "news"],
         scrapeOptions: {
@@ -194,7 +192,6 @@ export const _scrapeTopicWithFirecrawl = internalAction({
           internal.topicsActions._scrapeTopicWithFirecrawl,
           {
             topicId: args.topicId,
-            title: args.title,
           },
         );
       }
@@ -226,7 +223,6 @@ export const _scrapeTopicWithFirecrawl = internalAction({
           internal.topicsActions._scrapeTopicWithFirecrawl,
           {
             topicId: args.topicId,
-            title: args.title,
           },
         );
       }
@@ -239,7 +235,12 @@ export const createTopic = action({
   args: {
     title: v.string(),
     description: v.string(),
-    frequency: v.optional(v.string()),
+    frequency: v.union(
+      v.literal("1h"),
+      v.literal("6h"),
+      v.literal("12h"),
+      v.literal("24h"),
+    ),
   },
   handler: async (ctx, args): Promise<Id<"topics">> => {
     const user = await authComponent.getAuthUser(ctx);
@@ -272,7 +273,6 @@ export const createTopic = action({
       internal.topicsActions._scrapeTopicWithFirecrawl,
       {
         topicId,
-        title: args.title,
       },
     );
 

@@ -14,7 +14,12 @@ export const _createTopicInDb = internalMutation({
     title: v.string(),
     description: v.string(),
     createdBy: v.string(),
-    frequency: v.optional(v.string()),
+    frequency: v.union(
+      v.literal("1h"),
+      v.literal("6h"),
+      v.literal("12h"),
+      v.literal("24h"),
+    ),
   },
   handler: async (ctx, args) => {
     const now = Date.now();
@@ -27,7 +32,7 @@ export const _createTopicInDb = internalMutation({
       createdAt: now,
       updatedAt: now,
       scrapeStatus: "pending",
-      frequency: args.frequency || "24h",
+      frequency: args.frequency,
     });
 
     return topicId;
@@ -182,7 +187,12 @@ export const updateTopic = mutation({
     topicId: v.id("topics"),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
-    frequency: v.optional(v.string()),
+    frequency: v.union(
+      v.literal("1h"),
+      v.literal("6h"),
+      v.literal("12h"),
+      v.literal("24h"),
+    ),
   },
   handler: async (ctx, args) => {
     const user = await authComponent.getAuthUser(ctx);
@@ -218,7 +228,7 @@ export const updateTopic = mutation({
       updatedAt: number;
       title?: string;
       description?: string;
-      frequency?: string;
+      frequency?: "1h" | "6h" | "12h" | "24h";
     } = { updatedAt: Date.now() };
 
     if (args.title !== undefined) {
