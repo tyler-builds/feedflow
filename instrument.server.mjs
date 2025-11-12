@@ -5,11 +5,11 @@ Sentry.init({
 
   // Setting this option to true will send default PII data to Sentry.
   // For example, automatic IP address collection on events
-  sendDefaultPii: import.meta.env.PROD ? false : true,
+  sendDefaultPii: process.env.NODE_ENV === "production" ? false : true,
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for tracing.
   // We recommend adjusting this value in production.
   // Learn more at https://docs.sentry.io/platforms/javascript/configuration/options/#traces-sample-rate
-  tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
+  tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1.0,
 });
