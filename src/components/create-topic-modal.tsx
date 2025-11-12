@@ -13,6 +13,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const FREQUENCY_OPTIONS = [
+  { label: "Every hour", value: "1h" },
+  { label: "Every 6 hours", value: "6h" },
+  { label: "Every 12 hours", value: "12h" },
+  { label: "Once daily", value: "24h" },
+];
 
 interface CreateTopicModalProps {
   open: boolean;
@@ -25,6 +39,7 @@ export function CreateTopicModal({
 }: CreateTopicModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [frequency, setFrequency] = useState("24h");
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -51,11 +66,12 @@ export function CreateTopicModal({
     }
 
     try {
-      await createTopic({ title, description });
+      await createTopic({ title, description, frequency });
 
       // Reset form
       if (titleRef.current) titleRef.current.value = "";
       if (descriptionRef.current) descriptionRef.current.value = "";
+      setFrequency("24h");
 
       // Close modal
       onOpenChange(false);
@@ -71,6 +87,7 @@ export function CreateTopicModal({
     setError("");
     if (titleRef.current) titleRef.current.value = "";
     if (descriptionRef.current) descriptionRef.current.value = "";
+    setFrequency("24h");
     onOpenChange(false);
   };
 
@@ -104,6 +121,26 @@ export function CreateTopicModal({
               disabled={loading}
               rows={5}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="frequency">Update Frequency</Label>
+            <Select
+              value={frequency}
+              onValueChange={setFrequency}
+              disabled={loading}
+            >
+              <SelectTrigger id="frequency" className="w-full">
+                <SelectValue placeholder="Select frequency" />
+              </SelectTrigger>
+              <SelectContent>
+                {FREQUENCY_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {error && (

@@ -1,5 +1,10 @@
 import { v } from "convex/values";
-import { mutation, query, internalMutation } from "./_generated/server";
+import {
+  mutation,
+  query,
+  internalMutation,
+  internalQuery,
+} from "./_generated/server";
 import { authComponent } from "./auth";
 
 // Internal mutation to create topic in database
@@ -9,6 +14,12 @@ export const _createTopicInDb = internalMutation({
     title: v.string(),
     description: v.string(),
     createdBy: v.string(),
+    frequency: v.union(
+      v.literal("1h"),
+      v.literal("6h"),
+      v.literal("12h"),
+      v.literal("24h"),
+    ),
   },
   handler: async (ctx, args) => {
     const now = Date.now();
@@ -21,9 +32,22 @@ export const _createTopicInDb = internalMutation({
       createdAt: now,
       updatedAt: now,
       scrapeStatus: "pending",
+      frequency: args.frequency,
+      retryCount: 0,
+      permanentFailure: false,
     });
 
     return topicId;
+  },
+});
+
+// Internal query to get a topic by ID (for internal use)
+export const _getTopicById = internalQuery({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.topicId);
   },
 });
 
@@ -31,7 +55,11 @@ export const _createTopicInDb = internalMutation({
 export const _updateTopicScrapeStatus = internalMutation({
   args: {
     topicId: v.id("topics"),
-    scrapeStatus: v.union(v.literal("completed"), v.literal("failed")),
+    scrapeStatus: v.union(
+      v.literal("completed"),
+      v.literal("failed"),
+      v.literal("pending"),
+    ),
     scrapeError: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -44,9 +72,40 @@ export const _updateTopicScrapeStatus = internalMutation({
 
     if (args.scrapeStatus === "completed") {
       updates.lastScrapedAt = now;
+      updates.retryCount = 0; // Reset retry count on success
     }
 
     await ctx.db.patch(args.topicId, updates);
+  },
+});
+
+// Internal mutation to increment retry count
+export const _incrementRetryCount = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    const topic = await ctx.db.get(args.topicId);
+    if (!topic) return;
+
+    await ctx.db.patch(args.topicId, {
+      retryCount: topic.retryCount + 1,
+    });
+  },
+});
+
+// Internal mutation to mark topic as permanently failed
+export const _markPermanentFailure = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+    scrapeError: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.topicId, {
+      permanentFailure: true,
+      scrapeStatus: "failed",
+      scrapeError: args.scrapeError,
+    });
   },
 });
 
@@ -161,6 +220,12 @@ export const updateTopic = mutation({
     topicId: v.id("topics"),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
+    frequency: v.union(
+      v.literal("1h"),
+      v.literal("6h"),
+      v.literal("12h"),
+      v.literal("24h"),
+    ),
   },
   handler: async (ctx, args) => {
     const user = await authComponent.getAuthUser(ctx);
@@ -196,7 +261,11 @@ export const updateTopic = mutation({
       updatedAt: number;
       title?: string;
       description?: string;
-    } = { updatedAt: Date.now() };
+      frequency: "1h" | "6h" | "12h" | "24h";
+    } = {
+      updatedAt: Date.now(),
+      frequency: args.frequency,
+    };
 
     if (args.title !== undefined) {
       updates.title = args.title;

@@ -75,7 +75,7 @@ export function TopicCommentsPanel({
   if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col h-full border-l bg-background relative overflow-hidden">
+    <div className="flex flex-col h-full border rounded-xl bg-background relative overflow-hidden">
       {/* Main Comments Panel */}
       <div
         className={`absolute inset-0 flex flex-col transition-transform duration-300 ${
