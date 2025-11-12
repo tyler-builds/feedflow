@@ -69,6 +69,8 @@ export default defineSchema({
       v.literal("12h"),
       v.literal("24h"),
     ), // Scrape frequency: "1h", "6h", "12h", "24h"
+    retryCount: v.number(), // Number of consecutive failed scrapes
+    permanentFailure: v.boolean(), // True if max retries exceeded
   })
     .index("by_team", ["teamId"])
     .index("by_team_and_deleted", ["teamId", "deletedAt"]),

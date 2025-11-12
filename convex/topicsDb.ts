@@ -33,6 +33,8 @@ export const _createTopicInDb = internalMutation({
       updatedAt: now,
       scrapeStatus: "pending",
       frequency: args.frequency,
+      retryCount: 0,
+      permanentFailure: false,
     });
 
     return topicId;
@@ -70,9 +72,40 @@ export const _updateTopicScrapeStatus = internalMutation({
 
     if (args.scrapeStatus === "completed") {
       updates.lastScrapedAt = now;
+      updates.retryCount = 0; // Reset retry count on success
     }
 
     await ctx.db.patch(args.topicId, updates);
+  },
+});
+
+// Internal mutation to increment retry count
+export const _incrementRetryCount = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    const topic = await ctx.db.get(args.topicId);
+    if (!topic) return;
+
+    await ctx.db.patch(args.topicId, {
+      retryCount: topic.retryCount + 1,
+    });
+  },
+});
+
+// Internal mutation to mark topic as permanently failed
+export const _markPermanentFailure = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+    scrapeError: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.topicId, {
+      permanentFailure: true,
+      scrapeStatus: "failed",
+      scrapeError: args.scrapeError,
+    });
   },
 });
 

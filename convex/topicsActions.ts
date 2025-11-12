@@ -8,6 +8,11 @@ import { Id } from "./_generated/dataModel";
 import Firecrawl from "@mendable/firecrawl-js";
 import * as searchResults from "./searchResults";
 
+// Constants for retry logic
+const MAX_RETRIES = 5;
+const BASE_RETRY_DELAY_MS = 300000; // 5 minutes base delay
+const MAX_RETRY_DELAY_MS = 3600000; // 1 hour max delay
+
 // Helper function to convert frequency string to milliseconds
 function frequencyToMs(frequency: string): number {
   switch (frequency) {
@@ -22,6 +27,12 @@ function frequencyToMs(frequency: string): number {
     default:
       return 86400000; // Default to 24 hours
   }
+}
+
+// Helper function to calculate exponential backoff delay
+function calculateRetryDelay(retryCount: number): number {
+  const delay = BASE_RETRY_DELAY_MS * Math.pow(2, retryCount - 1);
+  return Math.min(delay, MAX_RETRY_DELAY_MS);
 }
 
 // Internal action to scrape topic data with Firecrawl
@@ -43,6 +54,14 @@ export const _scrapeTopicWithFirecrawl = internalAction({
     // Check if topic is deleted
     if (topic.deletedAt !== undefined) {
       console.log(`Topic ${args.topicId} is deleted, skipping scrape`);
+      return;
+    }
+
+    // Check if topic is permanently failed
+    if (topic.permanentFailure) {
+      console.log(
+        `Topic ${args.topicId} is permanently failed, skipping scrape`,
+      );
       return;
     }
 
@@ -198,34 +217,59 @@ export const _scrapeTopicWithFirecrawl = internalAction({
     } catch (error) {
       console.error("Firecrawl search failed:", error);
 
-      // Update topic with error status
-      await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
+      // Increment retry count
+      await ctx.runMutation(internal.topicsDb._incrementRetryCount, {
         topicId: args.topicId,
-        scrapeStatus: "failed",
-        scrapeError: error instanceof Error ? error.message : "Unknown error",
       });
 
-      // Schedule retry even on failure (after the same frequency interval)
+      // Get updated topic with incremented retry count
       const failedTopic = await ctx.runQuery(internal.topicsDb._getTopicById, {
         topicId: args.topicId,
       });
 
-      if (failedTopic && failedTopic.deletedAt === undefined) {
-        const frequency = failedTopic.frequency || "24h";
-        const delay = frequencyToMs(frequency);
-
-        console.log(
-          `Scheduling retry scrape for topic ${args.topicId} in ${delay}ms (${frequency}) after failure`,
-        );
-
-        await ctx.scheduler.runAfter(
-          delay,
-          internal.topicsActions._scrapeTopicWithFirecrawl,
-          {
-            topicId: args.topicId,
-          },
-        );
+      if (!failedTopic || failedTopic.deletedAt !== undefined) {
+        return;
       }
+
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
+      // Check if we've exceeded max retries
+      if (failedTopic.retryCount >= MAX_RETRIES) {
+        console.log(
+          `Topic ${args.topicId} exceeded max retries (${MAX_RETRIES}), marking as permanently failed`,
+        );
+
+        await ctx.runMutation(internal.topicsDb._markPermanentFailure, {
+          topicId: args.topicId,
+          scrapeError: `Max retries exceeded: ${errorMessage}`,
+        });
+
+        return; // Stop scheduling further retries
+      }
+
+      // Update topic with error status
+      await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
+        topicId: args.topicId,
+        scrapeStatus: "failed",
+        scrapeError: errorMessage,
+      });
+
+      // Calculate exponential backoff delay
+      const retryDelay = calculateRetryDelay(failedTopic.retryCount);
+
+      console.log(
+        `Scheduling retry ${failedTopic.retryCount}/${MAX_RETRIES} for topic ${args.topicId} in ${retryDelay}ms`,
+      );
+
+      // Schedule retry with exponential backoff
+      await ctx.scheduler.runAfter(
+        retryDelay,
+        internal.topicsActions._scrapeTopicWithFirecrawl,
+        {
+          topicId: args.topicId,
+        },
+      );
     }
   },
 });
