@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as autumn from "../autumn.js";
 import type * as comments from "../comments.js";
 import type * as http from "../http.js";
 import type * as invitations from "../invitations.js";
@@ -36,6 +37,7 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  autumn: typeof autumn;
   comments: typeof comments;
   http: typeof http;
   invitations: typeof invitations;
@@ -2158,4 +2160,5 @@ export declare const components: {
       updateMany: FunctionReference<"mutation", "internal", any, any>;
     };
   };
+  autumn: {};
 };

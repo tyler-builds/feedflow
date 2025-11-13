@@ -6,6 +6,7 @@ import {
   internalQuery,
 } from "./_generated/server";
 import { authComponent } from "./auth";
+import { Autumn as autumn } from "autumn-js";
 
 // Internal mutation to create topic in database
 export const _createTopicInDb = internalMutation({
@@ -281,52 +282,14 @@ export const updateTopic = mutation({
   },
 });
 
-// Soft delete a topic
-export const deleteTopic = mutation({
+// Internal mutation to soft delete a topic in the database
+export const _deleteTopicInDb = internalMutation({
   args: {
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
-    const user = await authComponent.getAuthUser(ctx);
-    if (!user) {
-      throw new Error("Not authenticated");
-    }
-
-    const topic = await ctx.db.get(args.topicId);
-    if (!topic) {
-      throw new Error("Topic not found");
-    }
-
-    // Check if topic is already deleted
-    if (topic.deletedAt !== undefined) {
-      throw new Error("Topic not found");
-    }
-
-    const userId = user.userId || user._id.toString();
-
-    // Check if user is a member of the team
-    const membership = await ctx.db
-      .query("teamMembers")
-      .withIndex("by_team_and_user", (q) =>
-        q.eq("teamId", topic.teamId).eq("userId", userId),
-      )
-      .first();
-
-    if (!membership) {
-      throw new Error("Not a member of this team");
-    }
-
-    // Future: Check if user has permission to delete
-    // For now, any team member can delete topics
-    // if (membership.role !== "owner" && membership.role !== "admin") {
-    //   throw new Error("Insufficient permissions");
-    // }
-
-    // Soft delete by setting deletedAt timestamp
     await ctx.db.patch(args.topicId, {
       deletedAt: Date.now(),
     });
-
-    return { success: true };
   },
 });

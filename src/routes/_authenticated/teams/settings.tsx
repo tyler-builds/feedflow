@@ -17,6 +17,7 @@ import { InviteMembersModal } from "@/components/invite-members-modal";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserPlus, X, Users } from "lucide-react";
+import { PricingTable } from "autumn-js/react";
 
 export const Route = createFileRoute("/_authenticated/teams/settings")({
   component: TeamSettings,
@@ -84,8 +85,8 @@ function TeamSettings() {
   };
 
   return (
-    <div className="flex-1 p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="h-full overflow-y-auto">
+      <div className="max-w-4xl mx-auto p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">{currentTeam.name}</h1>
@@ -249,6 +250,8 @@ function TeamSettings() {
             )}
           </CardContent>
         </Card>
+
+        <PricingTable />
       </div>
 
       {currentTeam && (

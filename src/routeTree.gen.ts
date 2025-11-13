@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedInvitationsRouteImport } from './routes/_authenticated/invitations'
 import { Route as AuthenticatedTopicsIndexRouteImport } from './routes/_authenticated/topics/index'
+import { Route as ApiAutumnSplatRouteImport } from './routes/api/autumn/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedTopicsTopicIdRouteImport } from './routes/_authenticated/topics/$topicId'
 import { Route as AuthenticatedTeamsSettingsRouteImport } from './routes/_authenticated/teams/settings'
@@ -44,6 +45,11 @@ const AuthenticatedTopicsIndexRoute =
     path: '/topics/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiAutumnSplatRoute = ApiAutumnSplatRouteImport.update({
+  id: '/api/autumn/$',
+  path: '/api/autumn/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
   '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
   '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/teams/settings': typeof AuthenticatedTeamsSettingsRoute
   '/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
   '/topics': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRoutesById {
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/_authenticated/teams/settings': typeof AuthenticatedTeamsSettingsRoute
   '/_authenticated/topics/$topicId': typeof AuthenticatedTopicsTopicIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
   '/_authenticated/topics/': typeof AuthenticatedTopicsIndexRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/teams/settings'
     | '/topics/$topicId'
     | '/api/auth/$'
+    | '/api/autumn/$'
     | '/topics'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/teams/settings'
     | '/topics/$topicId'
     | '/api/auth/$'
+    | '/api/autumn/$'
     | '/topics'
   id:
     | '__root__'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/_authenticated/teams/settings'
     | '/_authenticated/topics/$topicId'
     | '/api/auth/$'
+    | '/api/autumn/$'
     | '/_authenticated/topics/'
   fileRoutesById: FileRoutesById
 }
@@ -126,6 +138,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiAutumnSplatRoute: typeof ApiAutumnSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -164,6 +177,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/topics'
       preLoaderRoute: typeof AuthenticatedTopicsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/autumn/$': {
+      id: '/api/autumn/$'
+      path: '/api/autumn/$'
+      fullPath: '/api/autumn/$'
+      preLoaderRoute: typeof ApiAutumnSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -213,6 +233,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiAutumnSplatRoute: ApiAutumnSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

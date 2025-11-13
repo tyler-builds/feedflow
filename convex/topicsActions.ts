@@ -6,7 +6,7 @@ import { authComponent } from "./auth";
 import { internal, api } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import Firecrawl from "@mendable/firecrawl-js";
-import * as searchResults from "./searchResults";
+import { Autumn as autumn } from "autumn-js";
 
 // Constants for retry logic
 const MAX_RETRIES = 5;
@@ -301,6 +301,22 @@ export const createTopic = action({
       throw new Error("User settings not found");
     }
 
+    // Check if user has access to create more topics (Autumn limit check)
+    const { data: checkData, error: checkError } = await autumn.check({
+      customer_id: currentTeam._id,
+      feature_id: "topics",
+    });
+
+    if (checkError) {
+      throw new Error(`Failed to check topic limit: ${checkError.message}`);
+    }
+
+    if (!checkData.allowed) {
+      throw new Error(
+        "You've reached your plan's topic limit. Please upgrade to create more topics.",
+      );
+    }
+
     // Create the topic in the database with pending scrape status
     const topicId = await ctx.runMutation(internal.topicsDb._createTopicInDb, {
       teamId: currentTeam._id,
@@ -308,6 +324,13 @@ export const createTopic = action({
       description: args.description,
       createdBy: userId,
       frequency: args.frequency,
+    });
+
+    // Track the topic creation in Autumn
+    await autumn.track({
+      customer_id: currentTeam._id,
+      feature_id: "topics",
+      value: 1,
     });
 
     // Schedule Firecrawl scraping to run immediately in the background
@@ -321,5 +344,60 @@ export const createTopic = action({
     );
 
     return topicId;
+  },
+});
+
+// Delete a topic and decrement usage in Autumn
+export const deleteTopic = action({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    const user = await authComponent.getAuthUser(ctx);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Get the topic to check permissions and get team info
+    const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+      topicId: args.topicId,
+    });
+
+    if (!topic) {
+      throw new Error("Topic not found");
+    }
+
+    // Check if topic is already deleted
+    if (topic.deletedAt !== undefined) {
+      throw new Error("Topic not found");
+    }
+
+    const userId = user.userId || user._id.toString();
+
+    // Get user's current team from settings
+    const currentTeam = await ctx.runQuery(api.userSettings.getCurrentTeam, {});
+
+    if (!currentTeam) {
+      throw new Error("User settings not found");
+    }
+
+    // Verify the topic belongs to the user's current team
+    if (topic.teamId !== currentTeam._id) {
+      throw new Error("Not a member of this team");
+    }
+
+    // Soft delete the topic in the database
+    await ctx.runMutation(internal.topicsDb._deleteTopicInDb, {
+      topicId: args.topicId,
+    });
+
+    // Decrement the topic usage in Autumn
+    await autumn.track({
+      customer_id: currentTeam._id,
+      feature_id: "topics",
+      value: -1,
+    });
+
+    return { success: true };
   },
 });

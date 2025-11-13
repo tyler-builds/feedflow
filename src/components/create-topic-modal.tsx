@@ -20,13 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCustomer, CheckoutDialog } from "autumn-js/react";
 
 const FREQUENCY_OPTIONS = [
   { label: "Every hour", value: "1h" },
   { label: "Every 6 hours", value: "6h" },
   { label: "Every 12 hours", value: "12h" },
   { label: "Once daily", value: "24h" },
-];
+] as const;
+
+type FrequencyValue = "1h" | "6h" | "12h" | "24h";
 
 interface CreateTopicModalProps {
   open: boolean;
@@ -39,15 +42,18 @@ export function CreateTopicModal({
 }: CreateTopicModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [frequency, setFrequency] = useState("24h");
+  const [frequency, setFrequency] = useState<FrequencyValue>("24h");
+  const [isLimitError, setIsLimitError] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const createTopic = useAction(api.topicsActions.createTopic);
+  const { checkout } = useCustomer();
 
   const handleCreate = async () => {
     setError("");
+    setIsLimitError(false);
     setLoading(true);
 
     const title = titleRef.current?.value?.trim() || "";
@@ -77,14 +83,33 @@ export function CreateTopicModal({
       onOpenChange(false);
     } catch (err) {
       console.error("Failed to create topic:", err);
-      setError(err instanceof Error ? err.message : "Failed to create topic");
+      const errorMessage =
+        err instanceof Error
+          ? err.message.includes("You've reached your plan's topic limit")
+            ? "You've reached your plan's topic limit"
+            : err.message
+          : "Failed to create topic";
+      setError(errorMessage);
+
+      // Check if this is a limit error
+      if (errorMessage.includes("limit") || errorMessage.includes("upgrade")) {
+        setIsLimitError(true);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const handleUpgrade = () => {
+    checkout({
+      productId: "basic",
+      dialog: CheckoutDialog,
+    });
+  };
+
   const handleCancel = () => {
     setError("");
+    setIsLimitError(false);
     if (titleRef.current) titleRef.current.value = "";
     if (descriptionRef.current) descriptionRef.current.value = "";
     setFrequency("24h");
@@ -127,7 +152,7 @@ export function CreateTopicModal({
             <Label htmlFor="frequency">Update Frequency</Label>
             <Select
               value={frequency}
-              onValueChange={setFrequency}
+              onValueChange={(value) => setFrequency(value as FrequencyValue)}
               disabled={loading}
             >
               <SelectTrigger id="frequency" className="w-full">
@@ -146,6 +171,15 @@ export function CreateTopicModal({
           {error && (
             <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 border border-red-200 dark:border-red-800">
               <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+              {isLimitError && (
+                <Button
+                  onClick={handleUpgrade}
+                  className="mt-3 w-full"
+                  variant="default"
+                >
+                  Upgrade Plan
+                </Button>
+              )}
             </div>
           )}
         </div>
