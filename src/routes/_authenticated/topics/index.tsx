@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useAction } from "convex/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { api } from "../../../../convex/_generated/api";
@@ -34,7 +34,7 @@ function TopicsPage() {
     >
   >(convexQuery(api.topicsDb.getTopics, {}) as any);
 
-  const deleteTopic = useMutation(api.topicsDb.deleteTopic);
+  const deleteTopic = useAction(api.topicsActions.deleteTopic);
 
   const handleDelete = async (topicId: any) => {
     if (!confirm("Are you sure you want to delete this topic?")) return;

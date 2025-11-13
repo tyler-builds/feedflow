@@ -19,6 +19,8 @@ import {
 } from "@convex-dev/better-auth/react-start";
 import { authClient } from "@/lib/auth-client";
 import { NotFound } from "@/components/not-found";
+import { AutumnProvider } from "autumn-js/react";
+import { api } from "../../convex/_generated/api";
 
 import appCss from "../styles.css?url";
 
@@ -76,9 +78,15 @@ function RootComponent() {
       client={context.convexClient}
       authClient={authClient}
     >
-      <RootDocument>
-        <Outlet />
-      </RootDocument>
+      <AutumnProvider
+        includeCredentials
+        convex={context.convexClient}
+        convexApi={api.autumn}
+      >
+        <RootDocument>
+          <Outlet />
+        </RootDocument>
+      </AutumnProvider>
     </ConvexBetterAuthProvider>
   );
 }
