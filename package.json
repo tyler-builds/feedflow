@@ -18,6 +18,7 @@
     "@convex-dev/better-auth": "^0.9.6",
     "@convex-dev/react-query": "0.0.0-alpha.11",
     "@mendable/firecrawl-js": "^4.4.1",
+    "@netlify/vite-plugin-tanstack-start": "^1.1.12",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.15",

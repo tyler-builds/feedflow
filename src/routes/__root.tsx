@@ -5,7 +5,6 @@ import {
   createRootRouteWithContext,
   useRouteContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
 import { QueryClient } from "@tanstack/react-query";
 import { ConvexQueryClient } from "@convex-dev/react-query";
