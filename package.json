@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
-    "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs",
+    "preview": "vite preview",
+    "deploy": "bun run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
     "build": "vite build && cp instrument.server.mjs .output/server",
     "serve": "vite preview",
     "test": "vitest run",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
+    "@cloudflare/vite-plugin": "^1.14.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.10.2",
@@ -61,6 +64,7 @@
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
-    "web-vitals": "^5.1.0"
+    "web-vitals": "^5.1.0",
+    "wrangler": "^4.47.0"
   }
 }
