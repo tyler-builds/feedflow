@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useAction } from "convex/react";
+import { ConvexError } from "convex/values";
 import { api } from "../../convex/_generated/api";
 import {
   Dialog,
@@ -83,12 +84,20 @@ export function CreateTopicModal({
       onOpenChange(false);
     } catch (err) {
       console.error("Failed to create topic:", err);
-      const errorMessage =
-        err instanceof Error
-          ? err.message.includes("You've reached your plan's topic limit")
-            ? "You've reached your plan's topic limit"
-            : err.message
-          : "Failed to create topic";
+
+      let errorMessage = "Failed to create topic";
+
+      // Handle ConvexError (application errors from the backend)
+      if (err instanceof ConvexError) {
+        // error.data can be a string or an object
+        errorMessage =
+          typeof err.data === "string"
+            ? err.data
+            : err.data?.message || errorMessage;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
       setError(errorMessage);
 
       // Check if this is a limit error

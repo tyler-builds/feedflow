@@ -1,6 +1,6 @@
 "use node";
 
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 import { action, internalAction } from "./_generated/server";
 import { authComponent } from "./auth";
 import { internal, api } from "./_generated/api";
@@ -312,7 +312,7 @@ export const createTopic = action({
     }
 
     if (!checkData.allowed) {
-      throw new Error(
+      throw new ConvexError(
         "You've reached your plan's topic limit. Please upgrade to create more topics.",
       );
     }
