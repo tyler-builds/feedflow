@@ -38,9 +38,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --keep-vars
 
-      - name: Build for Netlify
-        run: bunx vite build --config vite.config.netlify.ts
-
       - name: Deploy to Netlify
         run: bunx netlify deploy --prod --dir=dist/client --build false
         env:
