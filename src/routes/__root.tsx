@@ -48,6 +48,13 @@ export const Route = createRootRouteWithContext<{
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
+      {
+        name: "feedflow",
+        content: "Real-time collaborative news and insights platform",
+      },
+      {
+        title: "Feedflow",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
