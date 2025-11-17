@@ -37,6 +37,7 @@ export const authComponent = createClient<DataModel>(components.betterAuth, {
         console.log("Creating team for userId:", userId);
 
         // Create the personal team
+        console.time("onCreate:createTeam");
         const teamId = await ctx.db.insert("teams", {
           name: teamName,
           slug,
@@ -44,21 +45,26 @@ export const authComponent = createClient<DataModel>(components.betterAuth, {
           createdAt: now,
           updatedAt: now,
         });
+        console.timeEnd("onCreate:createTeam");
 
         // Add user as owner
+        console.time("onCreate:addTeamMember");
         await ctx.db.insert("teamMembers", {
           teamId,
           userId: userId,
           role: "owner",
           joinedAt: now,
         });
+        console.timeEnd("onCreate:addTeamMember");
 
         // Initialize user settings with this team as the current team
+        console.time("onCreate:initUserSettings");
         await ctx.db.insert("userSettings", {
           userId: userId,
           currentTeamId: teamId,
           updatedAt: now,
         });
+        console.timeEnd("onCreate:initUserSettings");
       },
     },
   },
@@ -95,6 +101,9 @@ export const createAuth = (
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
-    return authComponent.getAuthUser(ctx);
+    console.time("getCurrentUser:getAuthUser");
+    const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("getCurrentUser:getAuthUser");
+    return user;
   },
 });

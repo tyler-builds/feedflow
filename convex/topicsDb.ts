@@ -25,6 +25,7 @@ export const _createTopicInDb = internalMutation({
   handler: async (ctx, args) => {
     const now = Date.now();
 
+    console.time("_createTopicInDb:insertTopic");
     const topicId = await ctx.db.insert("topics", {
       teamId: args.teamId,
       title: args.title,
@@ -37,6 +38,7 @@ export const _createTopicInDb = internalMutation({
       retryCount: 0,
       permanentFailure: false,
     });
+    console.timeEnd("_createTopicInDb:insertTopic");
 
     return topicId;
   },
@@ -48,7 +50,10 @@ export const _getTopicById = internalQuery({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.topicId);
+    console.time("_getTopicById:getTopic");
+    const topic = await ctx.db.get(args.topicId);
+    console.timeEnd("_getTopicById:getTopic");
+    return topic;
   },
 });
 
@@ -76,7 +81,9 @@ export const _updateTopicScrapeStatus = internalMutation({
       updates.retryCount = 0; // Reset retry count on success
     }
 
+    console.time("_updateTopicScrapeStatus:patchTopic");
     await ctx.db.patch(args.topicId, updates);
+    console.timeEnd("_updateTopicScrapeStatus:patchTopic");
   },
 });
 
@@ -86,12 +93,16 @@ export const _incrementRetryCount = internalMutation({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
+    console.time("_incrementRetryCount:getTopic");
     const topic = await ctx.db.get(args.topicId);
+    console.timeEnd("_incrementRetryCount:getTopic");
     if (!topic) return;
 
+    console.time("_incrementRetryCount:patchTopic");
     await ctx.db.patch(args.topicId, {
       retryCount: topic.retryCount + 1,
     });
+    console.timeEnd("_incrementRetryCount:patchTopic");
   },
 });
 
@@ -102,11 +113,13 @@ export const _markPermanentFailure = internalMutation({
     scrapeError: v.string(),
   },
   handler: async (ctx, args) => {
+    console.time("_markPermanentFailure:patchTopic");
     await ctx.db.patch(args.topicId, {
       permanentFailure: true,
       scrapeStatus: "failed",
       scrapeError: args.scrapeError,
     });
+    console.timeEnd("_markPermanentFailure:patchTopic");
   },
 });
 
@@ -114,7 +127,9 @@ export const _markPermanentFailure = internalMutation({
 export const getTopics = query({
   args: {},
   handler: async (ctx) => {
+    console.time("getTopics:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("getTopics:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
@@ -122,35 +137,42 @@ export const getTopics = query({
     const userId = user.userId || user._id.toString();
 
     // Get user's current team from settings
+    console.time("getTopics:getSettings");
     const settings = await ctx.db
       .query("userSettings")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
+    console.timeEnd("getTopics:getSettings");
 
     if (!settings) {
       throw new Error("User settings not found");
     }
 
     // Check if user is a member of this team
+    console.time("getTopics:checkMembership");
     const membership = await ctx.db
       .query("teamMembers")
       .withIndex("by_team_and_user", (q) =>
         q.eq("teamId", settings.currentTeamId).eq("userId", userId),
       )
       .first();
+    console.timeEnd("getTopics:checkMembership");
 
     if (!membership) {
       throw new Error("Not a member of this team");
     }
 
     // Get all topics for the team that are not deleted
+    console.time("getTopics:fetchTopics");
     const topics = await ctx.db
       .query("topics")
       .withIndex("by_team", (q) => q.eq("teamId", settings.currentTeamId))
       .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
+    console.timeEnd("getTopics:fetchTopics");
 
     // Get creator information for each topic
+    console.time("getTopics:enrichWithCreatorData");
     const topicsWithCreator = await Promise.all(
       topics.map(async (topic) => {
         const creator = await authComponent.getAnyUserById(
@@ -164,6 +186,7 @@ export const getTopics = query({
         };
       }),
     );
+    console.timeEnd("getTopics:enrichWithCreatorData");
 
     return topicsWithCreator;
   },
@@ -175,12 +198,16 @@ export const getTopic = query({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
+    console.time("getTopic:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("getTopic:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
 
+    console.time("getTopic:getTopic");
     const topic = await ctx.db.get(args.topicId);
+    console.timeEnd("getTopic:getTopic");
     if (!topic) {
       throw new Error("Topic not found");
     }
@@ -193,19 +220,23 @@ export const getTopic = query({
     const userId = user.userId || user._id.toString();
 
     // Check if user is a member of the team
+    console.time("getTopic:checkMembership");
     const membership = await ctx.db
       .query("teamMembers")
       .withIndex("by_team_and_user", (q) =>
         q.eq("teamId", topic.teamId).eq("userId", userId),
       )
       .first();
+    console.timeEnd("getTopic:checkMembership");
 
     if (!membership) {
       throw new Error("Not a member of this team");
     }
 
     // Get creator information
+    console.time("getTopic:getCreatorInfo");
     const creator = await authComponent.getAnyUserById(ctx, topic.createdBy);
+    console.timeEnd("getTopic:getCreatorInfo");
 
     return {
       ...topic,
@@ -229,12 +260,16 @@ export const updateTopic = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    console.time("updateTopic:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("updateTopic:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
 
+    console.time("updateTopic:getTopic");
     const topic = await ctx.db.get(args.topicId);
+    console.timeEnd("updateTopic:getTopic");
     if (!topic) {
       throw new Error("Topic not found");
     }
@@ -247,12 +282,14 @@ export const updateTopic = mutation({
     const userId = user.userId || user._id.toString();
 
     // Check if user is a member of the team
+    console.time("updateTopic:checkMembership");
     const membership = await ctx.db
       .query("teamMembers")
       .withIndex("by_team_and_user", (q) =>
         q.eq("teamId", topic.teamId).eq("userId", userId),
       )
       .first();
+    console.timeEnd("updateTopic:checkMembership");
 
     if (!membership) {
       throw new Error("Not a member of this team");
@@ -276,7 +313,9 @@ export const updateTopic = mutation({
       updates.description = args.description;
     }
 
+    console.time("updateTopic:patchTopic");
     await ctx.db.patch(args.topicId, updates);
+    console.timeEnd("updateTopic:patchTopic");
 
     return { success: true };
   },
@@ -288,8 +327,10 @@ export const _deleteTopicInDb = internalMutation({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
+    console.time("_deleteTopicInDb:patchTopic");
     await ctx.db.patch(args.topicId, {
       deletedAt: Date.now(),
     });
+    console.timeEnd("_deleteTopicInDb:patchTopic");
   },
 });
