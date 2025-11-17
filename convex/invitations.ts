@@ -103,17 +103,20 @@ export const getUserInvitations = query({
       .collect();
     console.timeEnd("getUserInvitations:fetchInvitations");
 
-    // Get team details for each invitation
+    // Batch fetch team details for all unique team IDs
     console.time("getUserInvitations:enrichWithTeamData");
-    const invitationsWithTeams = await Promise.all(
-      invitations.map(async (invitation) => {
-        const team = await ctx.db.get(invitation.teamId);
-        return {
-          ...invitation,
-          team: team ? { name: team.name, logoUrl: team.logoUrl } : null,
-        };
-      }),
-    );
+    const uniqueTeamIds = [...new Set(invitations.map((inv) => inv.teamId))];
+    const teams = await Promise.all(uniqueTeamIds.map((id) => ctx.db.get(id)));
+    const teamsMap = new Map(uniqueTeamIds.map((id, i) => [id, teams[i]]));
+
+    // Enrich invitations with team data from the map (no additional queries)
+    const invitationsWithTeams = invitations.map((invitation) => {
+      const team = teamsMap.get(invitation.teamId);
+      return {
+        ...invitation,
+        team: team ? { name: team.name, logoUrl: team.logoUrl } : null,
+      };
+    });
     console.timeEnd("getUserInvitations:enrichWithTeamData");
 
     return invitationsWithTeams.filter((inv) => inv.team !== null);

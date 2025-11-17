@@ -49,22 +49,27 @@ export const getTeamMembers = query({
       .collect();
     console.timeEnd("getTeamMembers:fetchMembers");
 
-    // Get user details for each member from Better Auth
+    // Batch fetch user details for all unique user IDs
     console.time("getTeamMembers:enrichWithUserData");
-    const membersWithUserData = await Promise.all(
-      members.map(async (member) => {
-        const user = await authComponent.getAnyUserById(ctx, member.userId);
-        return {
-          userId: member.userId,
-          role: member.role,
-          joinedAt: member.joinedAt,
-          _id: member._id,
-          name: user?.name || null,
-          email: user?.email || null,
-          image: user?.image || null,
-        };
-      }),
+    const uniqueUserIds = [...new Set(members.map((m) => m.userId))];
+    const users = await Promise.all(
+      uniqueUserIds.map((id) => authComponent.getAnyUserById(ctx, id)),
     );
+    const userMap = new Map(uniqueUserIds.map((id, i) => [id, users[i]]));
+
+    // Enrich members with user data from the map (no additional queries)
+    const membersWithUserData = members.map((member) => {
+      const user = userMap.get(member.userId);
+      return {
+        userId: member.userId,
+        role: member.role,
+        joinedAt: member.joinedAt,
+        _id: member._id,
+        name: user?.name || null,
+        email: user?.email || null,
+        image: user?.image || null,
+      };
+    });
     console.timeEnd("getTeamMembers:enrichWithUserData");
 
     return membersWithUserData;

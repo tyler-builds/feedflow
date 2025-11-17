@@ -171,21 +171,25 @@ export const getTopics = query({
       .collect();
     console.timeEnd("getTopics:fetchTopics");
 
-    // Get creator information for each topic
+    // Batch fetch creator information for all unique creator IDs
     console.time("getTopics:enrichWithCreatorData");
-    const topicsWithCreator = await Promise.all(
-      topics.map(async (topic) => {
-        const creator = await authComponent.getAnyUserById(
-          ctx,
-          topic.createdBy,
-        );
-        return {
-          ...topic,
-          creatorName: creator?.name || null,
-          creatorEmail: creator?.email || null,
-        };
-      }),
+    const uniqueCreatorIds = [...new Set(topics.map((t) => t.createdBy))];
+    const creators = await Promise.all(
+      uniqueCreatorIds.map((id) => authComponent.getAnyUserById(ctx, id)),
     );
+    const creatorMap = new Map(
+      uniqueCreatorIds.map((id, i) => [id, creators[i]]),
+    );
+
+    // Enrich topics with creator data from the map (no additional queries)
+    const topicsWithCreator = topics.map((topic) => {
+      const creator = creatorMap.get(topic.createdBy);
+      return {
+        ...topic,
+        creatorName: creator?.name || null,
+        creatorEmail: creator?.email || null,
+      };
+    });
     console.timeEnd("getTopics:enrichWithCreatorData");
 
     return topicsWithCreator;

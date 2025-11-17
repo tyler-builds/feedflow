@@ -86,20 +86,23 @@ export const getUserTeams = query({
       .collect();
     console.timeEnd("getUserTeams:fetchMemberships");
 
-    // Get team details for each membership
+    // Batch fetch team details for all memberships
     console.time("getUserTeams:enrichWithTeamData");
-    const teams = await Promise.all(
-      memberships.map(async (membership) => {
-        const team = await ctx.db.get(membership.teamId);
-        if (!team) return null;
+    const teamIds = memberships.map((m) => m.teamId);
+    const teamsList = await Promise.all(teamIds.map((id) => ctx.db.get(id)));
+    const teamsMap = new Map(teamIds.map((id, i) => [id, teamsList[i]]));
 
-        return {
-          ...team,
-          role: membership.role,
-          joinedAt: membership.joinedAt,
-        };
-      }),
-    );
+    // Enrich memberships with team data from the map (no additional queries)
+    const teams = memberships.map((membership) => {
+      const team = teamsMap.get(membership.teamId);
+      if (!team) return null;
+
+      return {
+        ...team,
+        role: membership.role,
+        joinedAt: membership.joinedAt,
+      };
+    });
     console.timeEnd("getUserTeams:enrichWithTeamData");
 
     // Filter out any null values and sort by most recently joined
