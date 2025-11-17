@@ -11,7 +11,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Settings, Users, MessageSquare } from "lucide-react";
+import { StatCard } from "@/components/StatCard";
+import {
+  Mail,
+  FolderOpen,
+  FileSearch,
+  MessageSquare,
+  Users,
+  Clock,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: App,
@@ -26,6 +34,11 @@ function App() {
   // Get pending invitations
   const { data: invitations } = useQuery(
     convexQuery(api.invitations.getUserInvitations, {}),
+  );
+
+  // Get team analytics
+  const { data: analytics } = useQuery(
+    convexQuery(api.analytics.getTeamAnalytics, {}),
   );
 
   return (
@@ -65,81 +78,53 @@ function App() {
           </Card>
         )}
 
-        {/* Quick Actions */}
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-muted-foreground" />
-                <CardTitle>Team Settings</CardTitle>
-              </div>
-              <CardDescription>Manage your team and members</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" asChild>
-                <Link to="/teams/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Open Team Settings
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                <CardTitle>Topics</CardTitle>
-              </div>
-              <CardDescription>
-                Create and discuss topics with your team
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full" asChild>
-                <Link to="/topics">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Browse Topics
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Getting Started */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Getting Started</CardTitle>
-            <CardDescription>
-              Your team collaboration workspace is ready
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Here's what you can do right now:
-            </p>
-            <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-              <li>
-                <Link to="/topics" className="text-primary hover:underline">
-                  Create and manage topics
-                </Link>{" "}
-                for your team to discuss
-              </li>
-              <li>Invite team members to join your workspace</li>
-              <li>
-                Switch between teams using the team switcher in the sidebar
-              </li>
-              <li>
-                <Link
-                  to="/teams/settings"
-                  className="text-primary hover:underline"
-                >
-                  Manage team settings and members
-                </Link>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
+        {/* Analytics Stats Grid */}
+        {analytics && (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <StatCard
+              title="Total Topics"
+              value={analytics.totalTopics}
+              description="All topics in your team"
+              icon={FolderOpen}
+              href="/topics"
+            />
+            <StatCard
+              title="Active Topics"
+              value={analytics.activeTopics}
+              description="Currently being tracked"
+              icon={Clock}
+              href="/topics"
+            />
+            <StatCard
+              title="Search Results"
+              value={analytics.totalSearchResults}
+              description="Total results collected"
+              icon={FileSearch}
+            />
+            <StatCard
+              title="Comments"
+              value={analytics.totalComments}
+              description="Team discussions"
+              icon={MessageSquare}
+            />
+            <StatCard
+              title="Team Members"
+              value={analytics.memberCount}
+              description="Active collaborators"
+              icon={Users}
+              href="/teams/settings"
+            />
+            {analytics.failedTopics > 0 && (
+              <StatCard
+                title="Failed Topics"
+                value={analytics.failedTopics}
+                description="Needs attention"
+                icon={FolderOpen}
+                href="/topics"
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
