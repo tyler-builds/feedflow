@@ -160,6 +160,9 @@ function TopicPage() {
                         Created {new Date(topic.createdAt).toLocaleDateString()}
                       </span>
                     </div>
+                    {topic.pausedAt !== undefined && (
+                      <Badge variant="outline">Paused</Badge>
+                    )}
                     <Badge
                       variant={
                         topic.scrapeStatus === "completed"

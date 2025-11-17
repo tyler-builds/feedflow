@@ -43,7 +43,7 @@ export const getTeamAnalytics = query({
 
     const totalTopics = allTopics.length;
     const activeTopics = allTopics.filter(
-      (t) => t.scrapeStatus === "pending" || t.scrapeStatus === "completed",
+      (t) => t.pausedAt === undefined,
     ).length;
     const failedTopics = allTopics.filter(
       (t) => t.scrapeStatus === "failed",

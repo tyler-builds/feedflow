@@ -59,6 +59,12 @@ export const _scrapeTopicWithFirecrawl = internalAction({
       return;
     }
 
+    // Check if topic is paused
+    if (topic.pausedAt !== undefined) {
+      console.log(`Topic ${args.topicId} is paused, skipping scrape`);
+      return;
+    }
+
     // Check if topic is permanently failed
     if (topic.permanentFailure) {
       console.log(
@@ -435,6 +441,117 @@ export const deleteTopic = action({
       value: -1,
     });
     console.timeEnd("deleteTopic:autumnTrack");
+
+    return { success: true };
+  },
+});
+
+// Pause a topic to stop scheduled scrapes
+export const pauseTopic = action({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    const user = await authComponent.getAuthUser(ctx);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Get the topic to check permissions
+    const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+      topicId: args.topicId,
+    });
+
+    if (!topic) {
+      throw new Error("Topic not found");
+    }
+
+    // Check if topic is already deleted
+    if (topic.deletedAt !== undefined) {
+      throw new Error("Topic not found");
+    }
+
+    // Check if topic is already paused
+    if (topic.pausedAt !== undefined) {
+      throw new Error("Topic is already paused");
+    }
+
+    // Get user's current team from settings
+    const currentTeam = await ctx.runQuery(api.userSettings.getCurrentTeam, {});
+
+    if (!currentTeam) {
+      throw new Error("User settings not found");
+    }
+
+    // Verify the topic belongs to the user's current team
+    if (topic.teamId !== currentTeam._id) {
+      throw new Error("Not a member of this team");
+    }
+
+    // Pause the topic in the database
+    await ctx.runMutation(internal.topicsDb._pauseTopicInDb, {
+      topicId: args.topicId,
+    });
+
+    return { success: true };
+  },
+});
+
+// Unpause a topic to resume scheduled scrapes
+export const unpauseTopic = action({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    const user = await authComponent.getAuthUser(ctx);
+    if (!user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Get the topic to check permissions
+    const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
+      topicId: args.topicId,
+    });
+
+    if (!topic) {
+      throw new Error("Topic not found");
+    }
+
+    // Check if topic is already deleted
+    if (topic.deletedAt !== undefined) {
+      throw new Error("Topic not found");
+    }
+
+    // Check if topic is not paused
+    if (topic.pausedAt === undefined) {
+      throw new Error("Topic is not paused");
+    }
+
+    // Get user's current team from settings
+    const currentTeam = await ctx.runQuery(api.userSettings.getCurrentTeam, {});
+
+    if (!currentTeam) {
+      throw new Error("User settings not found");
+    }
+
+    // Verify the topic belongs to the user's current team
+    if (topic.teamId !== currentTeam._id) {
+      throw new Error("Not a member of this team");
+    }
+
+    // Unpause the topic in the database
+    await ctx.runMutation(internal.topicsDb._unpauseTopicInDb, {
+      topicId: args.topicId,
+    });
+
+    // Schedule immediate scrape to resume
+    await ctx.scheduler.runAfter(
+      0,
+      internal.topicsActions._scrapeTopicWithFirecrawl,
+      {
+        topicId: args.topicId,
+      },
+    );
 
     return { success: true };
   },
