@@ -16,6 +16,7 @@ interface TopicCommentsPanelProps {
   onClose: () => void;
   topicId: Id<"topics">;
   searchResultId: Id<"searchResults">;
+  onActiveAnnotationChange?: (highlightedText: string | null) => void;
 }
 
 export function TopicCommentsPanel({
@@ -23,6 +24,7 @@ export function TopicCommentsPanel({
   onClose,
   topicId,
   searchResultId,
+  onActiveAnnotationChange,
 }: TopicCommentsPanelProps) {
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,10 +121,15 @@ export function TopicCommentsPanel({
                     content: comment.content,
                     timestamp: new Date(comment.createdAt),
                     replyCount: comment.replyCount,
+                    highlightedText: comment.highlightedText,
                   }}
                   onClick={() =>
                     handleCommentClick(comment._id, comment.author.name)
                   }
+                  onMouseEnter={() =>
+                    onActiveAnnotationChange?.(comment.highlightedText || null)
+                  }
+                  onMouseLeave={() => onActiveAnnotationChange?.(null)}
                 />
               ))
             )}

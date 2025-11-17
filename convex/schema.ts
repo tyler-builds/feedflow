@@ -99,6 +99,7 @@ export default defineSchema({
     userId: v.string(), // Better Auth user ID
     content: v.string(),
     parentCommentId: v.optional(v.id("comments")), // For threaded replies
+    highlightedText: v.optional(v.string()), // For annotations - the text that was highlighted
     createdAt: v.number(),
     updatedAt: v.number(),
   })

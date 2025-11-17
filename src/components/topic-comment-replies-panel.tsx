@@ -109,6 +109,7 @@ export function TopicCommentRepliesPanel({
               author: parentComment.author,
               content: parentComment.content,
               timestamp: new Date(parentComment.createdAt),
+              highlightedText: parentComment.highlightedText,
             }}
           />
         </div>
@@ -130,6 +131,7 @@ export function TopicCommentRepliesPanel({
                   author: reply.author,
                   content: reply.content,
                   timestamp: new Date(reply.createdAt),
+                  highlightedText: reply.highlightedText,
                 }}
               />
             ))
