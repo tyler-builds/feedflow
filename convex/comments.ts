@@ -71,34 +71,36 @@ export const getCommentsBySearchResult = query({
       }
     }
 
-    // Get user information for each top-level comment
+    // Batch fetch user information for all unique user IDs
     console.time("getCommentsBySearchResult:enrichWithUserData");
-    const commentsWithUser = await Promise.all(
-      topLevelComments.map(async (comment) => {
-        const commentUser = await authComponent.getAnyUserById(
-          ctx,
-          comment.userId,
-        );
-
-        return {
-          ...comment,
-          replyCount: replyCountMap.get(comment._id) || 0,
-          author: {
-            name: commentUser?.name || "Unknown User",
-            email: commentUser?.email || null,
-            avatar: commentUser?.image || undefined,
-            initials: commentUser?.name
-              ? commentUser.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()
-                  .slice(0, 2)
-              : "??",
-          },
-        };
-      }),
+    const uniqueUserIds = [...new Set(topLevelComments.map((c) => c.userId))];
+    const users = await Promise.all(
+      uniqueUserIds.map((id) => authComponent.getAnyUserById(ctx, id)),
     );
+    const userMap = new Map(uniqueUserIds.map((id, i) => [id, users[i]]));
+
+    // Enrich comments with user data from the map (no additional queries)
+    const commentsWithUser = topLevelComments.map((comment) => {
+      const commentUser = userMap.get(comment.userId);
+
+      return {
+        ...comment,
+        replyCount: replyCountMap.get(comment._id) || 0,
+        author: {
+          name: commentUser?.name || "Unknown User",
+          email: commentUser?.email || null,
+          avatar: commentUser?.image || undefined,
+          initials: commentUser?.name
+            ? commentUser.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()
+                .slice(0, 2)
+            : "??",
+        },
+      };
+    });
     console.timeEnd("getCommentsBySearchResult:enrichWithUserData");
 
     return commentsWithUser;
@@ -161,29 +163,34 @@ export const getCommentReplies = query({
       .collect();
     console.timeEnd("getCommentReplies:fetchReplies");
 
-    // Get user information for each reply
+    // Batch fetch user information for all unique user IDs
     console.time("getCommentReplies:enrichWithUserData");
-    const repliesWithUser = await Promise.all(
-      replies.map(async (reply) => {
-        const replyUser = await authComponent.getAnyUserById(ctx, reply.userId);
-        return {
-          ...reply,
-          author: {
-            name: replyUser?.name || "Unknown User",
-            email: replyUser?.email || null,
-            avatar: replyUser?.image || undefined,
-            initials: replyUser?.name
-              ? replyUser.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()
-                  .slice(0, 2)
-              : "??",
-          },
-        };
-      }),
+    const uniqueUserIds = [...new Set(replies.map((r) => r.userId))];
+    const users = await Promise.all(
+      uniqueUserIds.map((id) => authComponent.getAnyUserById(ctx, id)),
     );
+    const userMap = new Map(uniqueUserIds.map((id, i) => [id, users[i]]));
+
+    // Enrich replies with user data from the map (no additional queries)
+    const repliesWithUser = replies.map((reply) => {
+      const replyUser = userMap.get(reply.userId);
+      return {
+        ...reply,
+        author: {
+          name: replyUser?.name || "Unknown User",
+          email: replyUser?.email || null,
+          avatar: replyUser?.image || undefined,
+          initials: replyUser?.name
+            ? replyUser.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()
+                .slice(0, 2)
+            : "??",
+        },
+      };
+    });
     console.timeEnd("getCommentReplies:enrichWithUserData");
 
     return repliesWithUser;

@@ -102,7 +102,7 @@ function TopicsPage() {
                           e.preventDefault();
                           handleDelete(topic._id);
                         }}
-                        className="shrink-0"
+                        className="shrink-0 hover:bg-destructive/20"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
