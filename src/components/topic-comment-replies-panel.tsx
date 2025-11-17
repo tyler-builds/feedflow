@@ -21,7 +21,6 @@ interface TopicCommentRepliesPanelProps {
 
 export function TopicCommentRepliesPanel({
   commentId,
-  authorName,
   topicId,
   searchResultId,
   onBack,

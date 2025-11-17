@@ -42,9 +42,11 @@ export const _scrapeTopicWithFirecrawl = internalAction({
   },
   handler: async (ctx, args) => {
     // Validation: Check if topic exists and if it's time to scrape
+    console.time("_scrapeTopicWithFirecrawl:getTopic");
     const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
       topicId: args.topicId,
     });
+    console.timeEnd("_scrapeTopicWithFirecrawl:getTopic");
 
     if (!topic) {
       console.log(`Topic ${args.topicId} not found, skipping scrape`);
@@ -90,10 +92,12 @@ export const _scrapeTopicWithFirecrawl = internalAction({
     }
 
     // Set topic status to pending at the start of the scrape
+    console.time("_scrapeTopicWithFirecrawl:updateStatus:pending");
     await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
       topicId: args.topicId,
       scrapeStatus: "pending",
     });
+    console.timeEnd("_scrapeTopicWithFirecrawl:updateStatus:pending");
 
     try {
       const apiKey = process.env.FIRECRAWL_API_KEY;
@@ -104,6 +108,7 @@ export const _scrapeTopicWithFirecrawl = internalAction({
       const firecrawl = new Firecrawl({ apiKey });
 
       // Search for content related to the topic title (using the latest title from DB)
+      console.time("_scrapeTopicWithFirecrawl:firecrawlAPI");
       const searchResults = await firecrawl.search(topic.title, {
         limit: 3,
         sources: ["web", "news"],
@@ -133,8 +138,10 @@ export const _scrapeTopicWithFirecrawl = internalAction({
           ],
         },
       });
+      console.timeEnd("_scrapeTopicWithFirecrawl:firecrawlAPI");
 
       // Parse and flatten the search results
+      console.time("_scrapeTopicWithFirecrawl:parseResults");
       const flattenedResults: Array<{
         type: "web" | "news";
         title: string;
@@ -180,18 +187,23 @@ export const _scrapeTopicWithFirecrawl = internalAction({
           });
         });
       }
+      console.timeEnd("_scrapeTopicWithFirecrawl:parseResults");
 
       // Store the flattened results in the searchResults table
+      console.time("_scrapeTopicWithFirecrawl:insertResults");
       await ctx.runMutation(internal.searchResults._insertSearchResults, {
         topicId: args.topicId,
         results: flattenedResults,
       });
+      console.timeEnd("_scrapeTopicWithFirecrawl:insertResults");
 
       // Update topic status
+      console.time("_scrapeTopicWithFirecrawl:updateStatus:completed");
       await ctx.runMutation(internal.topicsDb._updateTopicScrapeStatus, {
         topicId: args.topicId,
         scrapeStatus: "completed",
       });
+      console.timeEnd("_scrapeTopicWithFirecrawl:updateStatus:completed");
 
       // Schedule the next scrape based on the topic's frequency
       const updatedTopic = await ctx.runQuery(internal.topicsDb._getTopicById, {
@@ -287,25 +299,35 @@ export const createTopic = action({
     ),
   },
   handler: async (ctx, args): Promise<Id<"topics">> => {
+    console.time("createTopic");
+    console.time("createTopic:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("createTopic:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
 
     const userId = user.userId || user._id.toString();
 
-    // Get user's current team from settings
-    const currentTeam = await ctx.runQuery(api.userSettings.getCurrentTeam, {});
+    // Get user's current team from settings (using internal query to avoid duplicate auth)
+    console.time("createTopic:getCurrentTeam");
+    const currentTeam = await ctx.runQuery(
+      internal.userSettings._getCurrentTeamInternal,
+      { userId },
+    );
+    console.timeEnd("createTopic:getCurrentTeam");
 
     if (!currentTeam) {
       throw new Error("User settings not found");
     }
 
     // Check if user has access to create more topics (Autumn limit check)
+    console.time("createTopic:autumnCheckLimit");
     const { data: checkData, error: checkError } = await autumn.check({
       customer_id: currentTeam._id,
       feature_id: "topics",
     });
+    console.timeEnd("createTopic:autumnCheckLimit");
 
     if (checkError) {
       throw new Error(`Failed to check topic limit: ${checkError.message}`);
@@ -318,6 +340,7 @@ export const createTopic = action({
     }
 
     // Create the topic in the database with pending scrape status
+    console.time("createTopic:createTopicInDb");
     const topicId = await ctx.runMutation(internal.topicsDb._createTopicInDb, {
       teamId: currentTeam._id,
       title: args.title,
@@ -325,16 +348,20 @@ export const createTopic = action({
       createdBy: userId,
       frequency: args.frequency,
     });
+    console.timeEnd("createTopic:createTopicInDb");
 
     // Track the topic creation in Autumn
+    console.time("createTopic:autumnTrack");
     await autumn.track({
       customer_id: currentTeam._id,
       feature_id: "topics",
       value: 1,
     });
+    console.timeEnd("createTopic:autumnTrack");
 
     // Schedule Firecrawl scraping to run immediately in the background
     // This allows topic creation to return instantly without waiting for the API
+    console.time("createTopic:scheduleFirstScrape");
     await ctx.scheduler.runAfter(
       0,
       internal.topicsActions._scrapeTopicWithFirecrawl,
@@ -342,7 +369,8 @@ export const createTopic = action({
         topicId,
       },
     );
-
+    console.timeEnd("createTopic:scheduleFirstScrape");
+    console.timeEnd("createTopic");
     return topicId;
   },
 });
@@ -353,15 +381,19 @@ export const deleteTopic = action({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
+    console.time("deleteTopic:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("deleteTopic:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
 
     // Get the topic to check permissions and get team info
+    console.time("deleteTopic:getTopic");
     const topic = await ctx.runQuery(internal.topicsDb._getTopicById, {
       topicId: args.topicId,
     });
+    console.timeEnd("deleteTopic:getTopic");
 
     if (!topic) {
       throw new Error("Topic not found");
@@ -375,7 +407,9 @@ export const deleteTopic = action({
     const userId = user.userId || user._id.toString();
 
     // Get user's current team from settings
+    console.time("deleteTopic:getCurrentTeam");
     const currentTeam = await ctx.runQuery(api.userSettings.getCurrentTeam, {});
+    console.timeEnd("deleteTopic:getCurrentTeam");
 
     if (!currentTeam) {
       throw new Error("User settings not found");
@@ -387,16 +421,20 @@ export const deleteTopic = action({
     }
 
     // Soft delete the topic in the database
+    console.time("deleteTopic:deleteTopicInDb");
     await ctx.runMutation(internal.topicsDb._deleteTopicInDb, {
       topicId: args.topicId,
     });
+    console.timeEnd("deleteTopic:deleteTopicInDb");
 
     // Decrement the topic usage in Autumn
+    console.time("deleteTopic:autumnTrack");
     await autumn.track({
       customer_id: currentTeam._id,
       feature_id: "topics",
       value: -1,
     });
+    console.timeEnd("deleteTopic:autumnTrack");
 
     return { success: true };
   },

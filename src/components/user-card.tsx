@@ -8,19 +8,24 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
-import { LogOut, Mail, ChevronUp } from "lucide-react";
+import { LogOut, Mail, ChevronUp, Sun, Moon, Monitor } from "lucide-react";
 import { InvitationsModal } from "./invitations-modal";
+import { useTheme } from "@/hooks/use-theme";
 
 export function UserCard() {
   const navigate = useNavigate();
   const [invitationsModalOpen, setInvitationsModalOpen] = useState(false);
   const { data: session } = authClient.useSession();
+  const { theme, setTheme } = useTheme();
 
   // Get pending invitations count
   const { data: invitations } = useQuery(
@@ -98,6 +103,27 @@ export function UserCard() {
           align="start"
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56"
         >
+          <DropdownMenuLabel>Theme</DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={theme}
+            onValueChange={(value) =>
+              setTheme(value as "light" | "dark" | "system")
+            }
+          >
+            <DropdownMenuRadioItem value="light">
+              <Sun className="mr-2 h-4 w-4" />
+              <span>Light</span>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="dark">
+              <Moon className="mr-2 h-4 w-4" />
+              <span>Dark</span>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="system">
+              <Monitor className="mr-2 h-4 w-4" />
+              <span>System</span>
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+          <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setInvitationsModalOpen(true)}>
             <Mail className="mr-2 h-4 w-4" />
             <span>Invitations</span>

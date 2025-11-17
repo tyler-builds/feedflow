@@ -84,17 +84,36 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            {isSignUp ? "Create an account" : "Welcome back"}
-          </CardTitle>
-          <CardDescription className="text-center">
-            {isSignUp
-              ? "Enter your information to create your account"
-              : "Enter your credentials to access your account"}
-          </CardDescription>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted/20">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-6 pb-6">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="p-3 rounded-2xl bg-primary/10 ring-1 ring-primary/20">
+              <img
+                src="/logo192.png"
+                alt="Feedflow Logo"
+                className="w-14 h-14"
+              />
+            </div>
+            <div className="text-center space-y-2">
+              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                Feedflow
+              </h1>
+              <p className="text-xs text-muted-foreground max-w-xs">
+                Real-time collaborative news and insights platform
+              </p>
+            </div>
+          </div>
+          <div className="space-y-2 pt-2 border-t">
+            <CardTitle className="text-xl font-semibold text-center">
+              {isSignUp ? "Create your account" : "Welcome back"}
+            </CardTitle>
+            <CardDescription className="text-center text-sm">
+              {isSignUp
+                ? "Get started with your Feedflow account"
+                : "Sign in to continue to your account"}
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">

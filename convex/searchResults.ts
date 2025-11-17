@@ -25,6 +25,7 @@ export const _insertSearchResults = internalMutation({
     const now = Date.now();
 
     // Insert all search results
+    console.time(`_insertSearchResults:bulkInsert(${args.results.length})`);
     for (const result of args.results) {
       await ctx.db.insert("searchResults", {
         topicId: args.topicId,
@@ -41,6 +42,7 @@ export const _insertSearchResults = internalMutation({
         createdAt: now,
       });
     }
+    console.timeEnd(`_insertSearchResults:bulkInsert(${args.results.length})`);
   },
 });
 
@@ -50,13 +52,17 @@ export const getSearchResultsByTopic = query({
     topicId: v.id("topics"),
   },
   handler: async (ctx, args) => {
+    console.time("getSearchResultsByTopic:getAuthUser");
     const user = await authComponent.getAuthUser(ctx);
+    console.timeEnd("getSearchResultsByTopic:getAuthUser");
     if (!user) {
       throw new Error("Not authenticated");
     }
 
     // Get the topic to verify permissions
+    console.time("getSearchResultsByTopic:getTopic");
     const topic = await ctx.db.get(args.topicId);
+    console.timeEnd("getSearchResultsByTopic:getTopic");
     if (!topic) {
       throw new Error("Topic not found");
     }
@@ -69,28 +75,34 @@ export const getSearchResultsByTopic = query({
     const userId = user.userId || user._id.toString();
 
     // Check if user is a member of the team
+    console.time("getSearchResultsByTopic:checkMembership");
     const membership = await ctx.db
       .query("teamMembers")
       .withIndex("by_team_and_user", (q) =>
         q.eq("teamId", topic.teamId).eq("userId", userId),
       )
       .first();
+    console.timeEnd("getSearchResultsByTopic:checkMembership");
 
     if (!membership) {
       throw new Error("Not a member of this team");
     }
 
     // Get all search results for this topic
+    console.time("getSearchResultsByTopic:fetchResults");
     const results = await ctx.db
       .query("searchResults")
       .withIndex("by_topic", (q) => q.eq("topicId", args.topicId))
       .collect();
+    console.timeEnd("getSearchResultsByTopic:fetchResults");
 
     // Get all comments for this topic in a single query
+    console.time("getSearchResultsByTopic:fetchComments");
     const allComments = await ctx.db
       .query("comments")
       .withIndex("by_topic", (q) => q.eq("topicId", args.topicId))
       .collect();
+    console.timeEnd("getSearchResultsByTopic:fetchComments");
 
     // Count comments per search result
     const commentCountMap = new Map<string, number>();
