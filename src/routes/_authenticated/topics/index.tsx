@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CreateTopicModal } from "@/components/create-topic-modal";
+import { ConfirmDeleteTopicDialog } from "@/components/confirm-delete-topic-dialog";
 import { Plus, Trash2, Calendar } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/topics/")({
@@ -23,6 +24,12 @@ export const Route = createFileRoute("/_authenticated/topics/")({
 
 function TopicsPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [topicToDelete, setTopicToDelete] = useState<{
+    id: any;
+    name: string;
+  } | null>(null);
 
   // Get all topics
   const { data: topics } = useSuspenseQuery<
@@ -36,14 +43,24 @@ function TopicsPage() {
 
   const deleteTopic = useAction(api.topicsActions.deleteTopic);
 
-  const handleDelete = async (topicId: any) => {
-    if (!confirm("Are you sure you want to delete this topic?")) return;
+  const handleDeleteClick = (topicId: any, topicName: string) => {
+    setTopicToDelete({ id: topicId, name: topicName });
+    setDeleteDialogOpen(true);
+  };
 
+  const handleConfirmDelete = async () => {
+    if (!topicToDelete) return;
+
+    setIsDeleting(true);
     try {
-      await deleteTopic({ topicId });
+      await deleteTopic({ topicId: topicToDelete.id });
+      setDeleteDialogOpen(false);
+      setTopicToDelete(null);
     } catch (error: any) {
       console.error("Failed to delete topic:", error);
       alert(error.message || "Failed to delete topic");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -100,7 +117,7 @@ function TopicsPage() {
                         size="sm"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleDelete(topic._id);
+                          handleDeleteClick(topic._id, topic.title);
                         }}
                         className="shrink-0 hover:bg-destructive/20 dark:hover:bg-destructive/20"
                       >
@@ -151,6 +168,14 @@ function TopicsPage() {
       <CreateTopicModal
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
+      />
+
+      <ConfirmDeleteTopicDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        topicName={topicToDelete?.name}
+        isDeleting={isDeleting}
       />
     </div>
   );

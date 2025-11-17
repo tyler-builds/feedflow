@@ -104,7 +104,12 @@ export function UserCard() {
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56"
         >
           <DropdownMenuLabel>Theme</DropdownMenuLabel>
-          <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+          <DropdownMenuRadioGroup
+            value={theme}
+            onValueChange={(value) =>
+              setTheme(value as "light" | "dark" | "system")
+            }
+          >
             <DropdownMenuRadioItem value="light">
               <Sun className="mr-2 h-4 w-4" />
               <span>Light</span>
