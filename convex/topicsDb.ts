@@ -338,3 +338,27 @@ export const _deleteTopicInDb = internalMutation({
     console.timeEnd("_deleteTopicInDb:patchTopic");
   },
 });
+
+// Internal mutation to pause a topic
+export const _pauseTopicInDb = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.topicId, {
+      pausedAt: Date.now(),
+    });
+  },
+});
+
+// Internal mutation to unpause a topic
+export const _unpauseTopicInDb = internalMutation({
+  args: {
+    topicId: v.id("topics"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.topicId, {
+      pausedAt: undefined,
+    });
+  },
+});

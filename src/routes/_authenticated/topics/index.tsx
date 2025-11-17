@@ -16,7 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { CreateTopicModal } from "@/components/create-topic-modal";
 import { ConfirmDeleteTopicDialog } from "@/components/confirm-delete-topic-dialog";
-import { Plus, Trash2, Calendar } from "lucide-react";
+import { Plus, Trash2, Calendar, Pause, Play, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/topics/")({
   component: TopicsPage,
@@ -26,6 +26,7 @@ function TopicsPage() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [pausingTopicId, setPausingTopicId] = useState<string | null>(null);
   const [topicToDelete, setTopicToDelete] = useState<{
     id: any;
     name: string;
@@ -42,6 +43,8 @@ function TopicsPage() {
   >(convexQuery(api.topicsDb.getTopics, {}) as any);
 
   const deleteTopic = useAction(api.topicsActions.deleteTopic);
+  const pauseTopic = useAction(api.topicsActions.pauseTopic);
+  const unpauseTopic = useAction(api.topicsActions.unpauseTopic);
 
   const handleDeleteClick = (topicId: any, topicName: string) => {
     setTopicToDelete({ id: topicId, name: topicName });
@@ -61,6 +64,27 @@ function TopicsPage() {
       alert(error.message || "Failed to delete topic");
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handlePauseToggle = async (
+    e: React.MouseEvent,
+    topicId: any,
+    isPaused: boolean,
+  ) => {
+    e.preventDefault();
+    setPausingTopicId(topicId);
+    try {
+      if (isPaused) {
+        await unpauseTopic({ topicId });
+      } else {
+        await pauseTopic({ topicId });
+      }
+    } catch (error: any) {
+      console.error("Failed to toggle pause:", error);
+      alert(error.message || "Failed to toggle pause");
+    } finally {
+      setPausingTopicId(null);
     }
   };
 
@@ -112,17 +136,45 @@ function TopicsPage() {
                       <CardTitle className="text-lg line-clamp-2 group-hover:text-primary transition-colors">
                         {topic.title}
                       </CardTitle>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeleteClick(topic._id, topic.title);
-                        }}
-                        className="shrink-0 hover:bg-destructive/20 dark:hover:bg-destructive/20"
-                      >
-                        <Trash2 className="h-4 w-4 text-destructive" />
-                      </Button>
+                      <div className="flex gap-1 shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) =>
+                            handlePauseToggle(
+                              e,
+                              topic._id,
+                              topic.pausedAt !== undefined,
+                            )
+                          }
+                          disabled={pausingTopicId === topic._id}
+                          className="hover:bg-secondary"
+                          title={
+                            topic.pausedAt !== undefined
+                              ? "Resume topic"
+                              : "Pause topic"
+                          }
+                        >
+                          {pausingTopicId === topic._id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : topic.pausedAt !== undefined ? (
+                            <Play className="h-4 w-4" />
+                          ) : (
+                            <Pause className="h-4 w-4" />
+                          )}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteClick(topic._id, topic.title);
+                          }}
+                          className="hover:bg-destructive/20 dark:hover:bg-destructive/20"
+                        >
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
@@ -139,17 +191,24 @@ function TopicsPage() {
                             {new Date(topic.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <Badge
-                          variant={
-                            topic.scrapeStatus === "completed"
-                              ? "default"
-                              : topic.scrapeStatus === "failed"
-                                ? "destructive"
-                                : "secondary"
-                          }
-                        >
-                          {topic.scrapeStatus}
-                        </Badge>
+                        <div className="flex items-center gap-1">
+                          {topic.pausedAt !== undefined && (
+                            <Badge variant="outline" className="text-xs">
+                              Paused
+                            </Badge>
+                          )}
+                          <Badge
+                            variant={
+                              topic.scrapeStatus === "completed"
+                                ? "default"
+                                : topic.scrapeStatus === "failed"
+                                  ? "destructive"
+                                  : "secondary"
+                            }
+                          >
+                            {topic.scrapeStatus}
+                          </Badge>
+                        </div>
                       </div>
                       {topic.creatorName && (
                         <p className="text-xs text-muted-foreground">

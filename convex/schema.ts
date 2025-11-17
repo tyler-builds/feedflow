@@ -56,6 +56,7 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
     deletedAt: v.optional(v.number()), // For soft deletes
+    pausedAt: v.optional(v.number()), // For pausing/resuming topics
     scrapeStatus: v.union(
       v.literal("pending"),
       v.literal("completed"),
