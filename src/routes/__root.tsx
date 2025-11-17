@@ -19,6 +19,7 @@ import { authClient } from "@/lib/auth-client";
 import { NotFound } from "@/components/not-found";
 import { AutumnProvider } from "autumn-js/react";
 import { api } from "../../convex/_generated/api";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "../styles.css?url";
 
@@ -79,20 +80,22 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   const context = useRouteContext({ from: Route.id });
   return (
-    <ConvexBetterAuthProvider
-      client={context.convexClient}
-      authClient={authClient}
-    >
-      <AutumnProvider
-        includeCredentials
-        convex={context.convexClient}
-        convexApi={api.autumn}
+    <ThemeProvider>
+      <ConvexBetterAuthProvider
+        client={context.convexClient}
+        authClient={authClient}
       >
-        <RootDocument>
-          <Outlet />
-        </RootDocument>
-      </AutumnProvider>
-    </ConvexBetterAuthProvider>
+        <AutumnProvider
+          includeCredentials
+          convex={context.convexClient}
+          convexApi={api.autumn}
+        >
+          <RootDocument>
+            <Outlet />
+          </RootDocument>
+        </AutumnProvider>
+      </ConvexBetterAuthProvider>
+    </ThemeProvider>
   );
 }
 
