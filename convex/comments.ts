@@ -204,6 +204,7 @@ export const addComment = mutation({
     searchResultId: v.id("searchResults"),
     content: v.string(),
     parentCommentId: v.optional(v.id("comments")),
+    highlightedText: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     console.time("addComment:getAuthUser");
@@ -277,6 +278,7 @@ export const addComment = mutation({
       userId,
       content: args.content.trim(),
       parentCommentId: args.parentCommentId,
+      highlightedText: args.highlightedText,
       createdAt: now,
       updatedAt: now,
     });

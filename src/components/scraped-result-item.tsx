@@ -11,9 +11,12 @@ import {
   Calendar,
   ChevronDown,
   MessageSquare,
+  Highlighter as HighlighterIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import Highlighter from "react-highlight-words";
 import type { Id } from "../../convex/_generated/dataModel";
+import { Button } from "@/components/ui/button";
 
 interface ScrapedResultItemProps {
   result: {
@@ -31,19 +34,74 @@ interface ScrapedResultItemProps {
   };
   commentCount: number;
   onClick?: (searchResultId: Id<"searchResults">) => void;
+  activeAnnotationText?: string;
+  onCreateAnnotation?: (highlightedText: string) => void;
 }
 
 export function ScrapedResultItem({
   result,
   commentCount,
   onClick,
+  activeAnnotationText,
+  onCreateAnnotation,
 }: ScrapedResultItemProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showAnnotateButton, setShowAnnotateButton] = useState(false);
+  const [selectedText, setSelectedText] = useState("");
+  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const keyPointsRef = useRef<HTMLDivElement>(null);
   const isNews = result.type === "news";
 
   const hasSummary = !!result.summary;
   const hasKeyPoints = !!(result.keyPoints && result.keyPoints.length > 0);
   const hasExpandableContent = hasSummary || hasKeyPoints;
+
+  // Auto-expand when there's an active annotation
+  useEffect(() => {
+    if (activeAnnotationText && !isOpen) {
+      setIsOpen(true);
+    }
+  }, [activeAnnotationText, isOpen]);
+
+  const handleTextSelection = (e: React.MouseEvent) => {
+    const selection = window.getSelection();
+    const text = selection?.toString().trim();
+
+    if (text && text.length > 0) {
+      // Check if the selection is within summary or key points
+      const range = selection?.getRangeAt(0);
+      const container = range?.commonAncestorContainer;
+
+      const isInSummary = summaryRef.current?.contains(container as Node);
+      const isInKeyPoints = keyPointsRef.current?.contains(container as Node);
+
+      if (isInSummary || isInKeyPoints) {
+        setSelectedText(text);
+
+        // Get the position of the selection to show the button
+        const rect = range?.getBoundingClientRect();
+        if (rect) {
+          setButtonPosition({
+            top: rect.bottom + window.scrollY + 5,
+            left: rect.left + window.scrollX + rect.width / 2,
+          });
+        }
+        setShowAnnotateButton(true);
+      }
+    } else {
+      setShowAnnotateButton(false);
+    }
+  };
+
+  const handleCreateAnnotation = () => {
+    if (selectedText && onCreateAnnotation) {
+      onCreateAnnotation(selectedText);
+      setShowAnnotateButton(false);
+      setSelectedText("");
+      window.getSelection()?.removeAllRanges();
+    }
+  };
 
   return (
     <Collapsible
@@ -131,17 +189,35 @@ export function ScrapedResultItem({
 
             {/* Full summary - no line clamp when expanded */}
             {result.summary && (
-              <div className="pt-2 border-t">
+              <div
+                className="pt-2 border-t"
+                ref={summaryRef}
+                onMouseUp={handleTextSelection}
+              >
                 <h4 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">
                   Summary
                 </h4>
-                <p className="text-sm">{result.summary}</p>
+                <p className="text-sm">
+                  {activeAnnotationText ? (
+                    <Highlighter
+                      searchWords={[activeAnnotationText]}
+                      textToHighlight={result.summary}
+                      highlightClassName="bg-yellow-200 dark:bg-yellow-800"
+                    />
+                  ) : (
+                    result.summary
+                  )}
+                </p>
               </div>
             )}
 
             {/* All key points when expanded */}
             {result.keyPoints && result.keyPoints.length > 0 && (
-              <div className="pt-2 border-t">
+              <div
+                className="pt-2 border-t"
+                ref={keyPointsRef}
+                onMouseUp={handleTextSelection}
+              >
                 <h4 className="text-xs font-semibold mb-2 text-muted-foreground uppercase">
                   Key Points
                 </h4>
@@ -149,7 +225,17 @@ export function ScrapedResultItem({
                   {result.keyPoints.map((point, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-primary shrink-0">•</span>
-                      <span>{point}</span>
+                      <span>
+                        {activeAnnotationText ? (
+                          <Highlighter
+                            searchWords={[activeAnnotationText]}
+                            textToHighlight={point}
+                            highlightClassName="bg-yellow-200 dark:bg-yellow-800"
+                          />
+                        ) : (
+                          point
+                        )}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -180,6 +266,28 @@ export function ScrapedResultItem({
           <span className="text-muted-foreground/50">#{result.position}</span>
         </div>
       </div>
+
+      {/* Floating annotate button */}
+      {showAnnotateButton && (
+        <div
+          className="fixed z-50"
+          style={{
+            top: `${buttonPosition.top}px`,
+            left: `${buttonPosition.left}px`,
+            transform: "translateX(-50%)",
+          }}
+        >
+          <Button
+            size="sm"
+            variant="default"
+            onClick={handleCreateAnnotation}
+            className="shadow-lg"
+          >
+            <HighlighterIcon className="h-3 w-3 mr-1" />
+            Annotate
+          </Button>
+        </div>
+      )}
     </Collapsible>
   );
 }

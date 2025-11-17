@@ -19,6 +19,8 @@ import {
 import { useState, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { CreateAnnotationModal } from "@/components/create-annotation-modal";
+import { useMutation } from "convex/react";
 
 export const Route = createFileRoute("/_authenticated/topics/$topicId")({
   component: TopicPage,
@@ -75,6 +77,14 @@ function TopicPage() {
   const { topicId } = Route.useParams();
   const [selectedSearchResultId, setSelectedSearchResultId] =
     useState<Id<"searchResults"> | null>(null);
+  const [activeAnnotationText, setActiveAnnotationText] = useState<
+    string | null
+  >(null);
+  const [showAnnotationModal, setShowAnnotationModal] = useState(false);
+  const [selectedTextForAnnotation, setSelectedTextForAnnotation] =
+    useState("");
+
+  const addCommentMutation = useMutation(api.comments.addComment);
 
   const { data: topic } = useSuspenseQuery(
     convexQuery(api.topicsDb.getTopic, {
@@ -90,6 +100,26 @@ function TopicPage() {
 
   const handleResultClick = (searchResultId: Id<"searchResults">) => {
     setSelectedSearchResultId(searchResultId);
+  };
+
+  const handleCreateAnnotation = (highlightedText: string) => {
+    setSelectedTextForAnnotation(highlightedText);
+    setShowAnnotationModal(true);
+  };
+
+  const handleSubmitAnnotation = async (comment: string) => {
+    if (!selectedSearchResultId) return;
+
+    await addCommentMutation({
+      topicId: topicId as Id<"topics">,
+      searchResultId: selectedSearchResultId,
+      content: comment,
+      highlightedText: selectedTextForAnnotation,
+    });
+  };
+
+  const handleActiveAnnotationChange = (highlightedText: string | null) => {
+    setActiveAnnotationText(highlightedText);
   };
 
   return (
@@ -172,6 +202,16 @@ function TopicPage() {
                       result={result}
                       commentCount={result.commentCount}
                       onClick={handleResultClick}
+                      activeAnnotationText={
+                        selectedSearchResultId === result._id
+                          ? activeAnnotationText || undefined
+                          : undefined
+                      }
+                      onCreateAnnotation={
+                        selectedSearchResultId === result._id
+                          ? handleCreateAnnotation
+                          : undefined
+                      }
                     />
                   ))}
                 </div>
@@ -223,10 +263,19 @@ function TopicPage() {
               onClose={() => setSelectedSearchResultId(null)}
               topicId={topicId as Id<"topics">}
               searchResultId={selectedSearchResultId}
+              onActiveAnnotationChange={handleActiveAnnotationChange}
             />
           </Suspense>
         </div>
       )}
+
+      {/* Annotation Modal */}
+      <CreateAnnotationModal
+        open={showAnnotationModal}
+        onClose={() => setShowAnnotationModal(false)}
+        selectedText={selectedTextForAnnotation}
+        onSubmit={handleSubmitAnnotation}
+      />
     </div>
   );
 }
