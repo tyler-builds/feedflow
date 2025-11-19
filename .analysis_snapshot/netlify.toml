@@ -1,0 +1,5 @@
+[build]
+  command = "bunx vite build --config vite.config.netlify.ts"
+  publish = "dist/client"
+[functions]
+  directory = ".netlify/v1/functions"
